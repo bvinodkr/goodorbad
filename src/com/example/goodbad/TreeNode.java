@@ -2,14 +2,20 @@ package com.example.goodbad;
 
 import java.util.ArrayList;
 
-//db schema: table containing the list of stories
-//storyid, treelevellikes, #of leaf nodes (number of endings), #comments, treenodeid, #numberofcontributors
+//data model: table containing the list of stories
+//storyid, treenodeid, treelevellikes, #of leaf nodes (number of endings), #comments, , #numberofcontributors
 // we will need info button for story:
 // provides info about when it got created, by whom, #of contributors, longest story line etc
 
+//above information can be obtained from the tree db
+// select nodes where parentid = null
+//treelevellikes = sum of likes where storyid = X
+//#leafnodes = sum of nodes where isLeafNode=true and storyid = X
+//
 
-//db schema: 
-//nodeid, parentid, storyid, text, user, numberoflikes, list of comments
+
+//data model: 
+//nodeid, parentid, storyid, text, isLeafNode, numberoflikes, userid, list of comments, 
 
 //get whole tree by doing select with storyid
 
