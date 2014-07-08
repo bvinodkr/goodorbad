@@ -78,10 +78,15 @@ public ArrayList<TreeNode> getPathContaining (TreeNode node)
 public void addChild (TreeNode parent, String text)
 {
 	TreeNode child = new TreeNode ();
+	child.setLeaf(true);
 	child.setText(text);
 	child.setRootId(parent.getRootId());
 	child.setNumLikes(0);
 	child.setTotalLikes(parent.getTotalLikes());
+	parent.setLeaf(false);
 	parent.getChildren().add(child);
 }
+
+
+
 }

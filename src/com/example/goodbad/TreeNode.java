@@ -11,11 +11,15 @@ import java.util.ArrayList;
 // select nodes where parentid = null
 //treelevellikes = sum of likes where storyid = X
 //#leafnodes = sum of nodes where isLeafNode=true and storyid = X
-//
+// unfortunately parse does not support sum operation.
+//hence best way is to always update this entry every time the tree gets updated
 
 
 //data model: 
 //nodeid, parentid, storyid, text, isLeafNode, numberoflikes, userid, list of comments, 
+
+//access control: which user can see it. use unix permissions user, group, global
+//initial version everything is global. can make it private in the future
 
 //get whole tree by doing select with storyid
 
@@ -36,6 +40,7 @@ public class TreeNode {
 	private int numLikes;
 	//candidate for making generic later
 	private String text;
+	private boolean isLeaf;
 
 	public TreeNode getParentNode() {
 		return parentNode;
@@ -67,6 +72,12 @@ public class TreeNode {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public boolean isLeaf() {
+		return isLeaf;
+	}
+	public void setLeaf(boolean isLeaf) {
+		this.isLeaf = isLeaf;
 	}
 
 	
