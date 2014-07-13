@@ -9,4 +9,10 @@ public class MyListFragment extends TreeNodeListFragment {
 		super.onCreate(savedInstanceState);
 		
 	}
+
+	@Override
+	public void populateTreeNodes(String max_id) {
+		// TODO Auto-generated method stub
+		
+	}
 }

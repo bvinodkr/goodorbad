@@ -10,10 +10,9 @@ public class MyApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		//before initialize
-		ParseObject.registerSubclass(AdjacentTreeNode.class);
+		ParseObject.registerSubclass(TreeNode.class);
 		
-		Parse.initialize(this, "nRGrjc1BxXdf1VMDJ67L7QXLr6sBR7pwpmAt99kl", "eUBjW0bnGVSNei7TBCioOsiELPrILcuG46qjf76k");
-		
-
+		Parse.initialize(this, "i6BacXY95FaVkJ8D71BFxZxE8ONXjYfOCpE3oZlt", "IFQWFl3V8CkVofzZ7FNzDG5B5Ud9Ud49a8W0oOun");
+	
 	}
 }

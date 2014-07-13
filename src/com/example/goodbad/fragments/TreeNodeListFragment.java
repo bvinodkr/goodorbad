@@ -1,6 +1,7 @@
 package com.example.goodbad.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,8 +39,9 @@ public abstract class TreeNodeListFragment extends Fragment {
 			nodes = new ArrayList<TreeNode> ();
 			aNodes = new TreeNodeArrayAdapter(getActivity(), nodes);
 	}
-	
-	public void addAll (ArrayList<TreeNode> nodes)
+    public abstract void populateTreeNodes (String max_id);
+    
+	public void addAll (List<TreeNode> nodes)
 	{
 		aNodes.addAll(nodes);
 	}
