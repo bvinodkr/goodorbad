@@ -5,9 +5,16 @@
     android:orientation="vertical" >
     
         <ListView
-        android:id="@+id/lvNodes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+            android:id="@+id/lvNodes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:cacheColorHint="#00000000"
+            android:divider="@drawable/separator_line"
+            android:dividerHeight="6.0sp" >
 
     </ListView>
 
