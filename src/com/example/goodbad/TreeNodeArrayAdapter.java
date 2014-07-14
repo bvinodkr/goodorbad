@@ -50,7 +50,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		TextView tvBody = (TextView)v.findViewById(R.id.tvBody);
 //		TextView tvRelativeTime = (TextView)v.findViewById(R.id.tvRelativeTime);
 		ivProfileImage.setImageResource(android.R.color.transparent);
-		tvUserName.setText("Vinod");
+		tvUserName.setText("Aaroosh");
 		tvBody.setText (node.getText());
 		if (position%2 == 0)
 		{

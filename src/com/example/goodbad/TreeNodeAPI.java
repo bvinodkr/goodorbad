@@ -4,21 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONObject;
-
-import android.widget.Toast;
-
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
-
 public class TreeNodeAPI {
 
 	public TreeNode getSibling (TreeNode node, int direction)
 	{
 		TreeNode ret = null;
+		if (node.getParent () == null)
+		{
+			return ret;
+		}
 		ArrayList<TreeNode> children = ((TreeNode)node.getParent()).getChildren();
 		int i = 0;
 		if (direction > 0)
@@ -66,6 +60,7 @@ public class TreeNodeAPI {
 			path.add (0, root);
 			root = (TreeNode)root.getParent();
 		}
+		path.add(node);
 		//find leftmost child
 		TreeNode leftMost = null;
 		if (node.getChildren() != null)
@@ -75,7 +70,7 @@ public class TreeNodeAPI {
 		while (leftMost != null)
 		{
 			path.add(leftMost);
-			if (leftMost.getChildren() != null)
+			if (leftMost.getChildren() != null && leftMost.getChildren().size() > 0)
 			{
 				leftMost = leftMost.getChildren().get(0);
 			}
@@ -95,14 +90,11 @@ public class TreeNodeAPI {
 		{
 			parent.setLeafNode(false);
 		}
-		parent.getChildren().add(child);		
+		parent.addChild(child);		
 		return child;
 	}
 
-	/* convert from adjacent list form to tree 
-	 * 1. create 2 hashmaps, one indexes adjacentnodes, other the treenodes
-	 * for each adjacentreenode, assign node as child of parent using other hashmap
-	 */
+
 	public TreeNode toTree (List<TreeNode> nodes)
 	{
 		TreeNode root = null;
@@ -110,30 +102,25 @@ public class TreeNodeAPI {
 		for (int i = 0; i < nodes.size(); i++)
 		{
 			adjTreeMap.put(nodes.get(i).getObjectId(),nodes.get(i));
+//			Log.d ("DEBUG", "story id: " + nodes.get(i).getStoryId() + " object id = " + nodes.get(i).getObjectId());
 		}
 
 		for (int i = 0; i < nodes.size(); i++)
 		{
-			ParseObject parentObj = nodes.get(i).getParent();
-			TreeNode paTree;
-			if (parentObj == JSONObject.NULL)
-			{
-				paTree = null;
-			}
-			else
-			{
-				String parent = parentObj.getObjectId();
-				paTree = adjTreeMap.get(parent);
-			}
-			String id = nodes.get(i).getObjectId();
+			TreeNode child = nodes.get(i);
 
-			TreeNode child = adjTreeMap.get(id);
-			if (paTree != null)
+			String paId = child.getParentId();
+			if (paId != null)
 			{
-				paTree.getChildren().add(child);
+				TreeNode paTree = adjTreeMap.get(paId);
+				child.setParent(paTree);
+//				Log.d ("DEBUG", "add child " + child.getObjectId() + "  to parent:" + paTree.getObjectId());
+				paTree.addChild(child);
+//				Log.d("DEBUG", "num of children for parent = " + paTree.getChildren().size());
 			}
 			else
 			{
+//				Log.d ("DEBUG", "found root: " + child.getObjectId() + " for storyid=" + child.getStoryId());
 				root = child;
 			}
 		}
@@ -141,22 +128,8 @@ public class TreeNodeAPI {
 		return root;
 	}
 	
-	public ArrayList<TreeNode> getLeafNodes (List<TreeNode> nodes)
-	{
-		ArrayList<TreeNode> ret = new ArrayList<TreeNode> ();
-		
-		
-		return ret;
-	}
-	
-	public void getStoriesFromDb (FindCallback<TreeNode> callback)
-	{
-		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereEqualTo("parent", JSONObject.NULL);
-		query.findInBackground(callback);
-	}
-	
 
+	
 
 }
 

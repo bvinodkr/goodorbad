@@ -24,7 +24,7 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
 
-//		addDummyData ();
+		addDummyData ();
 		setupTabs ();
 	}
 
@@ -61,10 +61,10 @@ public class MainActivity extends FragmentActivity {
 	
 	private void addDummyData ()
 	{
-/*		addStory ("story1");
-		addStory ("story2");
-		addStory("story3");
-		*/
+//		addStory ("story1");
+//		addStory ("story2");
+//		addStory("story3");
+		
 /*
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		query.whereEqualTo("parent", JSONObject.NULL);

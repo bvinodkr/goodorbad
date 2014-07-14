@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
@@ -38,7 +40,8 @@ import com.parse.ParseObject;
 @ParseClassName("TreeNode")
 public class TreeNode extends ParseObject {
 
-	private ArrayList<TreeNode> children = new ArrayList<TreeNode> ();
+	private ArrayList<TreeNode> children;
+	private TreeNode parent;
 	
 	//tree level stats, only stored in root node
 //	private int numTreeLeafNodes;
@@ -47,21 +50,31 @@ public class TreeNode extends ParseObject {
 	
 	//leaf level stats, only stored in leaf node
 
-	 public ParseObject getParent ()
+	 public String getParentId ()
 	 {
-		 return getParseObject("parent");
+		 return getString("parentid");
 	 }
 	 
-	 public void setParent (TreeNode parent)
+	 public void setParentId (TreeNode parent)
 	 {
 		 if (parent == null)
 		 {
-			put ("parent", JSONObject.NULL); 
+			put ("parentid", JSONObject.NULL); 
 		 }
 		 else
 		 {
-			 put ("parent", parent);
+			 put ("parentid", parent.getObjectId());
 		 }
+	 }
+	 
+	 public TreeNode getParent ()
+	 {
+		 return parent;
+	 }
+	 
+	 public void setParent (TreeNode p)
+	 {
+		 parent = p;
 	 }
 	 
 	 public int getLikes ()
@@ -136,28 +149,37 @@ public class TreeNode extends ParseObject {
 		put ("storyLikes", storyLikes);
 	}
 	
-	public ArrayList<TreeNode> getChildren() {
+	public ArrayList<TreeNode> getChildren ()
+	{
 		return children;
+	}
+	
+	public void addChild (TreeNode child)
+	{
+		children.add(child);
 	}
 	
 	public TreeNode ()
 	{
 		super ();
+		children = new ArrayList<TreeNode> ();
 	}
 	
 	public TreeNode (String text, TreeNode parent)
 	{
 		setText(text);
-		setParent(parent);
+		setParentId(parent);
 		setLeafNode(true);
+		children = new ArrayList<TreeNode> ();
 	}
 	
 	public TreeNode (String text, TreeNode parent, String rootid)
 	{
 		setText(text);
-		setParent(parent);
+		setParentId(parent);
 		setLeafNode(true);
 		setStoryId(rootid);
+		children = new ArrayList<TreeNode> ();
 	}
 	
 }
