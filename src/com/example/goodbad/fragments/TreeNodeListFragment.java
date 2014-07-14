@@ -34,10 +34,6 @@ public abstract class TreeNodeListFragment extends Fragment {
 		return v;
 	}
 	
-	public ListView getListView ()
-	{
-		return lvNodes;
-	}
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

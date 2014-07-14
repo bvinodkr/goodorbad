@@ -16,6 +16,7 @@ import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity {
 
@@ -31,6 +32,7 @@ public class MainActivity extends FragmentActivity {
 	private void addStory (String x)
 	{
 		TreeNode root = new TreeNode (x  + " , good-root", null);
+		
 
 
 		//		Log.d("DEBUG", root.getObjectId());
@@ -40,11 +42,13 @@ public class MainActivity extends FragmentActivity {
 
 			TreeNodeAPI api = new TreeNodeAPI ();
 			TreeNode firstPara = api.addChild(root, x + " bad-para1");
+			
 			//save both root and firstPara
 			root.save();
 			firstPara.save();
 			
 			TreeNode secondPara = api.addChild(firstPara, x + " good-para2");
+			
 			firstPara.save();
 			secondPara.save();
 			

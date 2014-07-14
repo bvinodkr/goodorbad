@@ -3,6 +3,7 @@ package com.example.goodbad;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,7 +57,17 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		{
 			v.setBackgroundColor(v.getResources().getColor (android.R.color.holo_orange_light));
 		}
+		v.setTag(node.getStoryId());
 //		tvRelativeTime.setText("5 m");
+		v.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent (getContext(), StoryLineViewActivity.class);
+				i.putExtra("storyId", (String)v.getTag());
+				v.getContext().startActivity(i);
+			}
+		});
 		return v;
 	}
 

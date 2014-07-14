@@ -1,6 +1,7 @@
 package com.example.goodbad;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -82,6 +83,9 @@ public class TreeNodeAPI {
 		return path;
 	}
 
+	/*
+	 * need to save both parent and child
+	 */
 	public TreeNode addChild (TreeNode parent, String text)
 	{
 		TreeNode child = new TreeNode (text, parent, parent.getStoryId());
@@ -128,8 +132,20 @@ public class TreeNodeAPI {
 		return root;
 	}
 	
-
+	public List<TreeNode> getLeafNodes (List<TreeNode> nodes)
+	{
+		ArrayList<TreeNode> ret = new ArrayList<TreeNode> ();
+		for (TreeNode n: nodes)
+		{
+			if (n.isLeafNode())
+			{
+				ret.add(n);
+			}
+		}
+		return ret;
+	}
 	
+
 
 }
 

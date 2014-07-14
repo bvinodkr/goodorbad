@@ -3,5 +3,6 @@
 
     <string name="app_name">GoodBad</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_story_line_view">StoryLineViewActivity</string>
 
 </resources>
