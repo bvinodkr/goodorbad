@@ -1,6 +1,9 @@
 package com.example.goodbad;
 
+
 import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -15,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.PopupWindow;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.example.goodbad.fragments.ComposeStoryFragment;
@@ -22,6 +26,9 @@ import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentLi
 import com.example.goodbad.fragments.MyStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.listeners.FragmentTabListener;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener {
 
@@ -30,8 +37,10 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 		//setBehindContentView(R.layout.activity_main);
+		addDummyData ();
 		setupTabs ();
 
 		//		SlidingMenu sm = getSlidingMenu();
@@ -125,7 +134,38 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	    });
 	    popupMenu.show();*/
 	}
-	
+
+	private void addStory(String x)
+	{
+		TreeNode root = new TreeNode (x  + " , good-root", null);
+
+
+		//		Log.d("DEBUG", root.getObjectId());
+		try {
+			root.save ();
+			root.setStoryId(root.getObjectId());
+
+			TreeNodeAPI api = new TreeNodeAPI ();
+			TreeNode firstPara = api.addChild(root, x + " bad-para1");
+			//save both root and firstPara
+			root.save();
+			firstPara.save();
+			
+			TreeNode secondPara = api.addChild(firstPara, x + " good-para2");
+			firstPara.save();
+			secondPara.save();
+			
+			TreeNode secondParav1 = api.addChild(firstPara, x + " good-para2-v1");
+			secondParav1.save();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+
+	}
+
 	private void populatePopUpWindowItems() {
 		popUpWindowItemList.clear();
 		popUpWindowItemList.add(new PopUpWindowItem("Gallery", R.drawable.gallery));
@@ -155,7 +195,37 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		composeStoryFragment.show(fm, "fragment_compose_tweet");
 	}
 
-	private void setupTabs() { 
+	private void addDummyData ()
+	{
+		/*addStory ("story1");
+		addStory ("story2");
+		addStory("story3");
+	
+		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
+		query.whereEqualTo("parent", JSONObject.NULL);
+		query.findInBackground( new FindCallback<TreeNode>() {
+
+			public void done(List<TreeNode> items, ParseException arg1) {
+				// TODO Auto-generated method stub
+				if (arg1 == null)
+				{
+
+					TreeNode item = items.get(0);
+					Toast.makeText(MainActivity.this, items.size() + "", Toast.LENGTH_SHORT).show ();
+					TreeNode firstPara = new TreeNode ("This is second line, bad", item);
+					firstPara.setStoryId(item);
+					firstPara.saveInBackground();
+
+				}
+				else
+				{
+					Toast.makeText(MainActivity.this, "error:" + arg1.getMessage(), Toast.LENGTH_SHORT).show ();
+				}
+			}
+		});*/
+	}
+
+	private void setupTabs() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Good/Bad");
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -165,10 +235,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.newTab()
 				.setText("Trending")
 				.setIcon(R.drawable.ic_global)
-				.setTag("GlobalFragment")
+				.setTag("TrendingFragment")
 				.setTabListener(new FragmentTabListener<TrendingStoryListFragment>(R.id.flContainer, this,
 						"home", TrendingStoryListFragment.class));
-
 		actionBar.addTab(tab1);
 		actionBar.selectTab(tab1);
 

@@ -1,11 +1,13 @@
 package com.example.goodbad.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
@@ -13,7 +15,7 @@ import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeArrayAdapter;
 
-public class BaseListFragment extends Fragment {
+public abstract class BaseListFragment extends Fragment {
 	private ArrayList<TreeNode> nodesList;
 	private TreeNodeArrayAdapter aaNodes;
 	private ListView lvNodes;
@@ -33,14 +35,20 @@ public class BaseListFragment extends Fragment {
 		lvNodes = (ListView)v.findViewById(R.id.lvNodes);
 		lvNodes.setAdapter(aaNodes);
 
+	
 		return v;
 	}
 	
+
 	public void addNodestoAdapter(ArrayList<TreeNode> extenderNodesList) {
 		aaNodes.addAll(extenderNodesList);
 	}
-
-	public ListView getListView() {
+	
+	public ListView getListView ()
+	{
 		return lvNodes;
-	}	
+	}
+    
+    public abstract void populateTreeNodes (String max_id);
+
 }

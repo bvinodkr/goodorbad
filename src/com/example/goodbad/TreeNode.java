@@ -2,6 +2,13 @@ package com.example.goodbad;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
+import android.util.Log;
+
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 //data model: table containing the list of stories
 //storyid, treenodeid, treelevellikes, #of leaf nodes (number of endings), #comments, , #numberofcontributors
 // we will need info button for story:
@@ -30,56 +37,149 @@ import java.util.ArrayList;
 //2. fetch the path from leaf node to root
 
 
+@ParseClassName("TreeNode")
+public class TreeNode extends ParseObject {
 
-public class TreeNode {
-
-	private TreeNode parentNode;
 	private ArrayList<TreeNode> children;
-	private TreeNode rootId; //story id
-	private int totalLikes;
-	private int numLikes;
-	//candidate for making generic later
-	private String text;
-	private boolean isLeaf;
+	private TreeNode parent;
+	
+	//tree level stats, only stored in root node
+//	private int numTreeLeafNodes;
+//	private int numTreeComments;
+//	private int numTreeContributors;
+	
+	//leaf level stats, only stored in leaf node
 
-	public TreeNode getParentNode() {
-		return parentNode;
+	 public String getParentId ()
+	 {
+		 return getString("parentid");
+	 }
+	 
+	 public void setParentId (TreeNode parent)
+	 {
+		 if (parent == null)
+		 {
+			put ("parentid", JSONObject.NULL); 
+		 }
+		 else
+		 {
+			 put ("parentid", parent.getObjectId());
+		 }
+	 }
+	 
+	 public TreeNode getParent ()
+	 {
+		 return parent;
+	 }
+	 
+	 public void setParent (TreeNode p)
+	 {
+		 parent = p;
+	 }
+	 
+	 public int getLikes ()
+	 {
+		 return getInt("likes");
+	 }
+	 
+	 public void setLikes (int likes)
+	 {
+		 put ("likes", likes);
+	 }
+	 
+	 public String getStoryId ()
+	 {
+		 return getString ("storyid");
+	 }
+	 
+	 public void setStoryId (String storyid)
+	 {
+		 put ("storyid", storyid);
+	 }
+	 
+	 public String getText ()
+	 {
+		 return getString("text");
+	 }
+	 
+	 public void setText (String text)
+	 {
+		 put ("text", text);
+	 }
+	 
+	 public boolean isLeafNode ()
+	 {
+		 return getBoolean("isLeafNode");
+	 }
+	 
+	 public void setLeafNode (boolean set)
+	 {
+		 put ("isLeafNode", set);
+	 }
+	 
+	public int getNumComments() {
+		return getInt ("numComments");
 	}
-	public ArrayList<TreeNode> getChildren() {
+	public void setNumComments(int numComments) {
+		put ("numComments",  numComments);
+	}
+	public int getNumTreeLeafNodes() {
+		return getInt ("numTreeLeafNodes");
+	}
+	public void setNumTreeLeafNodes(int numTreeLeafNodes) {
+		put ("numTreeLeafNodes", numTreeLeafNodes);
+	}
+	
+	public int getNumTreeComments() {
+		return getInt("numTreeComments");
+	}
+	public void setNumTreeComments(int numTreeComments) {
+		put ("numTreeComments", numTreeComments);
+	}
+	public int getNumTreeContributors() {
+		return getInt ("numTreeContributors");
+	}
+	public void setNumTreeContributors(int numTreeContributors) {
+		put ("numTreeContributors",numTreeContributors);
+	}
+	public int getStoryLikes() {
+		return getInt ("storyLikes");
+	}
+	public void setStoryLikes(int storyLikes) {
+		put ("storyLikes", storyLikes);
+	}
+	
+	public ArrayList<TreeNode> getChildren ()
+	{
 		return children;
 	}
-
-	public int getTotalLikes() {
-		return totalLikes;
-	}
-	public void setTotalLikes(int totalLikes) {
-		this.totalLikes = totalLikes;
-	}
-	public int getNumLikes() {
-		return numLikes;
-	}
-	public void setNumLikes(int numLikes) {
-		this.numLikes = numLikes;
-	}
-	public TreeNode getRootId() {
-		return rootId;
-	}
-	public void setRootId(TreeNode rootId) {
-		this.rootId = rootId;
-	}
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
-	public boolean isLeaf() {
-		return isLeaf;
-	}
-	public void setLeaf(boolean isLeaf) {
-		this.isLeaf = isLeaf;
-	}
-
 	
+	public void addChild (TreeNode child)
+	{
+		children.add(child);
+	}
+	
+	public TreeNode ()
+	{
+		super ();
+		children = new ArrayList<TreeNode> ();
+	}
+	
+	public TreeNode (String text, TreeNode parent)
+	{
+		setText(text);
+		setParentId(parent);
+		setLeafNode(true);
+		children = new ArrayList<TreeNode> ();
+	}
+	
+	public TreeNode (String text, TreeNode parent, String rootid)
+	{
+		setText(text);
+		setParentId(parent);
+		setLeafNode(true);
+		setStoryId(rootid);
+		children = new ArrayList<TreeNode> ();
+	}
 	
 }

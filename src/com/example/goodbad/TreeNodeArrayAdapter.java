@@ -94,7 +94,9 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			}
 		}); 
 		
-		tvUserName.setText("Vinod");
+		tvUserName.setText("Vinod");		
+		//ivProfileImage.setImageResource(android.R.color.transparent);
+		//tvUserName.setText("Aaroosh");
 		tvBody.setText (node.getText());
 		
 		tvBody.setVisibility(0);
