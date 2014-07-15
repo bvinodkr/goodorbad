@@ -27,10 +27,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.goodbad.TestActivity"
-            android:label="@string/title_activity_test" >
-        </activity>
-        <activity
             android:name="com.example.goodbad.PopUpActivity"
             android:label="@string/title_activity_pop_up" >
         </activity>

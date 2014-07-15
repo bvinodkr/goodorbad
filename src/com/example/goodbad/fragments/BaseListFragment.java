@@ -18,7 +18,6 @@ import com.example.goodbad.TreeNodeArrayAdapter;
 public abstract class BaseListFragment extends Fragment {
 	private ArrayList<TreeNode> nodesList;
 	private TreeNodeArrayAdapter aaNodes;
-	private ListView lvNodes;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,25 +27,12 @@ public abstract class BaseListFragment extends Fragment {
 		aaNodes = new TreeNodeArrayAdapter(getActivity(), nodesList);
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_nodes_list, container, false);
-
-		lvNodes = (ListView)v.findViewById(R.id.lvNodes);
-		lvNodes.setAdapter(aaNodes);
-
-	
-		return v;
-	}
-	
-
 	public void addNodestoAdapter(ArrayList<TreeNode> extenderNodesList) {
 		aaNodes.addAll(extenderNodesList);
 	}
-	
-	public ListView getListView ()
-	{
-		return lvNodes;
+		
+	public TreeNodeArrayAdapter getTreeNodeArrayAdapter() {
+		return aaNodes;
 	}
     
     public abstract void populateTreeNodes (String max_id);

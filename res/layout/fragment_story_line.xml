@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/llstoryLineFragment" >
+
+    <ListView
+        android:id="@+id/lvStoryLineFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:cacheColorHint="#00000000"
+        android:divider="@drawable/separator_line"
+        android:dividerHeight="6.0sp"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp" >
+    </ListView>
+
+</LinearLayout>

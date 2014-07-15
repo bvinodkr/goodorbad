@@ -2,13 +2,13 @@ package com.example.goodbad;
 
 
 import java.util.ArrayList;
-import java.util.List;
-import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.Menu;
@@ -18,19 +18,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.PopupWindow;
-import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
 import com.example.goodbad.fragments.MyStoryListFragment;
+import com.example.goodbad.fragments.StoryLineListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
+import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
-import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 
-public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener {
+public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
 	
@@ -40,8 +39,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 		setContentView(R.layout.activity_main);
 		//setBehindContentView(R.layout.activity_main);
-		addDummyData ();
-		setupTabs ();
+		addDummyData();
+		setupTabs();
 
 		//		SlidingMenu sm = getSlidingMenu();
 		//		sm.setShadowWidthRes(R.dimen.shadow_width);
@@ -161,9 +160,6 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		
-
 	}
 
 	private void populatePopUpWindowItems() {
@@ -181,8 +177,6 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
     intent.setType("image/*");
     return intent;
 	}*/
-
-	
 
 	public void onComposeIconClick(MenuItem mi) {
 		launchComposeDialog();
@@ -264,5 +258,22 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	public void onFinishComposeDialog() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
+		/*FragmentManager fm = getSupportFragmentManager();
+		TweetListFragment tweetListFragment = (TweetListFragment) fm.findFragmentById(R.id.flContainer);
+		
+		tweetListFragment.clearAdapter(); 
+		tweetListFragment.addTweetsToAdapterAtIndex(composedTweet, 0);*/
+		
+		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
+		/*Bundle args = new Bundle();
+		args.putInt(StoryLineListFragment.ARG_POSITION, position);
+		newFragment.setArguments(args);*/
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.flContainer, storyLineFragment);
+		ft.commit();
 	}
 }

@@ -3,6 +3,8 @@ package com.example.goodbad;
 import java.util.List;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -52,14 +54,32 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		}*/
 		
 		ImageView ivItemImage = (ImageView) convertView.findViewById(R.id.ivItemImage);
+		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
 		if(position==1) { 			
+			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.yosemite);
 		} else if (position==5) { 			
-				ivItemImage.setVisibility(View.VISIBLE);
-				ivItemImage.setImageResource(R.drawable.football);			
-		} else {
+			vvItemVideo.setVisibility(View.GONE);
+			ivItemImage.setVisibility(View.VISIBLE);
+			ivItemImage.setImageResource(R.drawable.football);			
+		} /*else if (position == 3) { 
 			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.VISIBLE);
+			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
+			MediaController mediaController = new MediaController(getContext());
+			mediaController.setAnchorView(vvItemVideo);
+			vvItemVideo.setMediaController(mediaController);
+			vvItemVideo.requestFocus();
+			vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
+			    // Close the progress bar and play the video
+			    public void onPrepared(MediaPlayer mp) {
+			    	vvItemVideo.start();
+			    }
+			});
+		}*/ else {
+			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.GONE);
 		}
 				
 		 
