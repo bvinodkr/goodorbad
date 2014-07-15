@@ -34,7 +34,12 @@ public class StoryLineViewActivity extends Activity {
 				// TODO Auto-generated method stub
 				if (arg1 == null)
 				{
-					addParas (items);
+					TreeNodeAPI api = new TreeNodeAPI ();
+					TreeNode root = api.toTree(items);
+					Log.d ("DEBUG", "root object id" + root.getObjectId());
+					List<TreeNode> leafNodes = api.getLeafNodes(items);
+					Log.d ("DEBUG", "num of lead nodes " + leafNodes.size());
+					addParas (api.getPathContaining(leafNodes.get(0)));
 				}
 			}
 		});

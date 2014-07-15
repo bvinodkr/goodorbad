@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import android.util.Log;
+
 public class TreeNodeAPI {
 
 	public TreeNode getSibling (TreeNode node, int direction)
@@ -64,7 +66,7 @@ public class TreeNodeAPI {
 		path.add(node);
 		//find leftmost child
 		TreeNode leftMost = null;
-		if (node.getChildren() != null)
+		if (node.getChildren() != null && node.getChildren().size() > 0)
 		{
 			leftMost = node.getChildren().get(0);
 		}
@@ -139,6 +141,7 @@ public class TreeNodeAPI {
 		{
 			if (n.isLeafNode())
 			{
+//				Log.d ("DEBUG", "leaf node object id =" + n.getObjectId());
 				ret.add(n);
 			}
 		}

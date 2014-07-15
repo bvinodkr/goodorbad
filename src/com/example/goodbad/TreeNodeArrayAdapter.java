@@ -3,6 +3,7 @@ package com.example.goodbad;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,14 +97,14 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		//tvUserName.setText("Aaroosh");
 		tvBody.setText (node.getText());
-/*
+
 		if (position%2 == 0)
 		{
-			v.setBackgroundColor(v.getResources().getColor (android.R.color.holo_orange_light));
+			convertView.setBackgroundColor(convertView.getResources().getColor (android.R.color.holo_orange_light));
 		}
-		v.setTag(node.getStoryId());
+		convertView.setTag(node.getStoryId());
 //		tvRelativeTime.setText("5 m");
-		v.setOnClickListener(new OnClickListener() {
+		convertView.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -112,8 +113,8 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				v.getContext().startActivity(i);
 			}
 		});
-		return v;
-*/
+		
+
 		
 		tvBody.setVisibility(0);
 		

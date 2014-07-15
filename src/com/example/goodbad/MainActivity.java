@@ -262,7 +262,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.addTab(tab1);
 		actionBar.selectTab(tab1);
 
-		Tab tab2 = actionBar
+/*		Tab tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
@@ -270,9 +270,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
 						"mylist", MyStoryListFragment.class));
 		actionBar.addTab(tab2);
-
+*/
 		
-/*		Tab tab2 = actionBar
+		Tab tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
@@ -281,7 +281,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 						"mylist", HomeListFragment.class));
 		actionBar.addTab(tab2);
 		actionBar.selectTab(tab2);
-		*/
+		
 		/*Tab tab3 = actionBar
 			    .newTab()
 			    .setText("New")
