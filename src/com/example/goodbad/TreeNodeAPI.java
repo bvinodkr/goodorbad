@@ -1,8 +1,11 @@
 package com.example.goodbad;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import android.util.Log;
 
 public class TreeNodeAPI {
 
@@ -63,7 +66,7 @@ public class TreeNodeAPI {
 		path.add(node);
 		//find leftmost child
 		TreeNode leftMost = null;
-		if (node.getChildren() != null)
+		if (node.getChildren() != null && node.getChildren().size() > 0)
 		{
 			leftMost = node.getChildren().get(0);
 		}
@@ -82,6 +85,9 @@ public class TreeNodeAPI {
 		return path;
 	}
 
+	/*
+	 * need to save both parent and child
+	 */
 	public TreeNode addChild (TreeNode parent, String text)
 	{
 		TreeNode child = new TreeNode (text, parent, parent.getStoryId());
@@ -128,8 +134,21 @@ public class TreeNodeAPI {
 		return root;
 	}
 	
-
+	public List<TreeNode> getLeafNodes (List<TreeNode> nodes)
+	{
+		ArrayList<TreeNode> ret = new ArrayList<TreeNode> ();
+		for (TreeNode n: nodes)
+		{
+			if (n.isLeafNode())
+			{
+//				Log.d ("DEBUG", "leaf node object id =" + n.getObjectId());
+				ret.add(n);
+			}
+		}
+		return ret;
+	}
 	
+
 
 }
 

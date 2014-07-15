@@ -5,13 +5,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
-import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeArrayAdapter;
 
@@ -27,13 +21,14 @@ public abstract class BaseListFragment extends Fragment {
 		aaNodes = new TreeNodeArrayAdapter(getActivity(), nodesList);
 	}
 
-	public void addNodestoAdapter(ArrayList<TreeNode> extenderNodesList) {
+	public void addNodestoAdapter(List<TreeNode> extenderNodesList) {
 		aaNodes.addAll(extenderNodesList);
 	}
 		
 	public TreeNodeArrayAdapter getTreeNodeArrayAdapter() {
 		return aaNodes;
 	}
+
     
     public abstract void populateTreeNodes (String max_id);
 

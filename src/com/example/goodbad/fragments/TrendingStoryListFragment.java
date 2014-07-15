@@ -71,7 +71,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 		super.onActivityCreated(savedInstanceState);
 		
 		//addNodestoList();
-		//addNodestoAdapter(storyItemList);
+		//addNodestoAdapter(storyList);
 		
 		lvNodes.setOnItemClickListener(new OnItemClickListener() {
 
@@ -187,6 +187,10 @@ public class TrendingStoryListFragment extends BaseListFragment {
 						});
 						break;
 					}
+				}
+				else
+				{
+					Log.d ("DEBUG", "error in getting stories " + arg1.getMessage());
 				}
 			}
 		});

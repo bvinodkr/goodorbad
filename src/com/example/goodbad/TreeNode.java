@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 //data model: table containing the list of stories
 //storyid, treenodeid, treelevellikes, #of leaf nodes (number of endings), #comments, , #numberofcontributors
@@ -149,6 +148,16 @@ public class TreeNode extends ParseObject {
 		put ("storyLikes", storyLikes);
 	}
 	
+	public void setUser (ParseUser user)
+	{
+		put ("user", user);
+	}
+	
+	public ParseUser getUser ()
+	{
+		return getParseUser("user");
+	}
+	
 	public ArrayList<TreeNode> getChildren ()
 	{
 		return children;
@@ -170,6 +179,7 @@ public class TreeNode extends ParseObject {
 		setText(text);
 		setParentId(parent);
 		setLeafNode(true);
+		setUser (ParseUser.getCurrentUser());
 		children = new ArrayList<TreeNode> ();
 	}
 	
@@ -179,6 +189,7 @@ public class TreeNode extends ParseObject {
 		setParentId(parent);
 		setLeafNode(true);
 		setStoryId(rootid);
+		setUser (ParseUser.getCurrentUser());
 		children = new ArrayList<TreeNode> ();
 	}
 	

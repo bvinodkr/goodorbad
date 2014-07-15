@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,9 @@ import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
+
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
@@ -48,6 +52,25 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		//		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		//		sm.setFadeDegree(0.35f);
 		//		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		
+/*		ParseObject testObj = new ParseObject ("testingParse");
+		testObj.put ("test", "foo");
+		testObj.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException arg0) {
+				if (arg0 == null)
+				{
+					Log.d ("DEBUG", "save succeeded");
+				}
+				else
+				{
+					Log.d ("DEBUG", "error in save " + arg0.getMessage()); 
+				}
+				
+			}
+		});
+		*/
 	}
 
 	@Override
@@ -137,6 +160,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	private void addStory(String x)
 	{
 		TreeNode root = new TreeNode (x  + " , good-root", null);
+		
 
 
 		//		Log.d("DEBUG", root.getObjectId());
@@ -146,11 +170,13 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 			TreeNodeAPI api = new TreeNodeAPI ();
 			TreeNode firstPara = api.addChild(root, x + " bad-para1");
+			
 			//save both root and firstPara
 			root.save();
 			firstPara.save();
 			
 			TreeNode secondPara = api.addChild(firstPara, x + " good-para2");
+			
 			firstPara.save();
 			secondPara.save();
 			
@@ -244,6 +270,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 						"mylist", MyStoryListFragment.class));
 		actionBar.addTab(tab2);
 
+		
 		/*Tab tab3 = actionBar
 			    .newTab()
 			    .setText("New")
@@ -274,6 +301,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		newFragment.setArguments(args);*/
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, storyLineFragment);
+		ft.addToBackStack(null);
 		ft.commit();
 	}
 }

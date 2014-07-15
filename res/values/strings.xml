@@ -3,9 +3,11 @@
 
     <string name="app_name">GoodBad</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_story_line_view">StoryLineViewActivity</string>
     <string name="image_desc">User Name</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="share">Share</string>
     <string name="title_activity_pop_up">PopUpActivity</string>
+
 
 </resources>

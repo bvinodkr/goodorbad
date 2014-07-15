@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 
@@ -90,8 +89,6 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
 		ivEmptyHeart.setContentDescription("false");
 		
-		ImageLoader imageLoader = ImageLoader.getInstance();
-		
 		ivEmptyHeart.setOnClickListener(new OnClickListener() {
 			
 			@Override 
@@ -114,10 +111,23 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			}
 		}); 
 		
-		tvUserName.setText("Vinod");		
+		tvUserName.setText("Vinod");		 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
-		//tvUserName.setText("Aaroosh");
 		tvBody.setText (node.getText());
+	
+		/*convertView.setTag(node.getStoryId());
+		//tvRelativeTime.setText("5 m");
+		convertView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent (getContext(), StoryLineViewActivity.class);
+				i.putExtra("storyId", (String)v.getTag());
+				v.getContext().startActivity(i);
+			}
+		});
+		*/
+
 		
 		tvBody.setVisibility(0);
 		
@@ -127,6 +137,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		} */
 		
 		return convertView;
+
 	}
 
 	
