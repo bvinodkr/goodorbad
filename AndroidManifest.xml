@@ -2,21 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.goodbad"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="3.3.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+ 
 
     <application
         android:name="com.example.goodbad.MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_app_icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/MyCustomTheme" >
         <activity
             android:name="com.example.goodbad.MainActivity"
             android:label="@string/app_name" >
@@ -29,6 +31,10 @@
         <activity
             android:name="com.example.goodbad.StoryLineViewActivity"
             android:label="@string/title_activity_story_line_view" >
+        </activity>
+        <activity
+            android:name="com.example.goodbad.PopUpActivity"
+            android:label="@string/title_activity_pop_up" >
         </activity>
     </application>
 

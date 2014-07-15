@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"    
+    android:listSelector="@android:color/transparent"
+    android:horizontalSpacing="1dip"
+    android:verticalSpacing="1dip"
+    android:paddingLeft="1dip"
+    android:paddingTop="1dip"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/ivPopUpItemImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/tvPopUpItemImageTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ivPopUpItemImage"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:text="TextView" />
+
+</RelativeLayout>

@@ -14,7 +14,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-public class HomeListFragment extends TreeNodeListFragment {
+public class HomeListFragment extends BaseListFragment {
 	
 	List<TreeNode> stories;
 	
@@ -35,7 +35,7 @@ public class HomeListFragment extends TreeNodeListFragment {
 				// TODO Auto-generated method stub
 				if (arg1 == null)
 				{
-					addAll (items);
+					addNodestoAdapter (items);
 					stories = items;
 					for (TreeNode treeRoot: items)
 					{
@@ -92,7 +92,6 @@ public class HomeListFragment extends TreeNodeListFragment {
 	@Override
 	public void populateTreeNodes(String max_id) {
 		getStories ();
-		
 	}
 	
 	
