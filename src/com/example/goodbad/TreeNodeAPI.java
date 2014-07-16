@@ -55,7 +55,12 @@ public class TreeNodeAPI {
 
 	public int getSiblingCount (TreeNode node)
 	{
-		return ((TreeNode)node.getParent()).getChildren().size() - 1;
+		int ret = 0;
+		if (node.getParent() != null && node.getParent ().getChildren().size() > 0)
+		{
+			ret = ((TreeNode)node.getParent()).getChildren().size() - 1;
+		}
+		return ret;
 	}
 
 	public ArrayList<TreeNode> getPathContaining (TreeNode node)

@@ -1,9 +1,14 @@
 package com.example.goodbad;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.ParseException;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +36,41 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	{
 		this.clear();
 		this.addAll(nodes);
+	}
+	
+	public String getRelativeTimeAgo(String rawJsonDate) {
+		String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+		SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+		sf.setLenient(true);
+	 
+		String relativeDate = "";
+		try {
+			long dateMillis = sf.parse(rawJsonDate).getTime();
+			relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+					System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (java.text.ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 
+		return relativeDate;
+	}
+	
+	public String getRelativeTimeAgo(Date date) {
+
+	 
+		String relativeDate = "";
+		try {
+			long dateMillis = date.getTime();
+			relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+					System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} 
+	 
+		return relativeDate;
 	}
 	
 	@Override
@@ -111,10 +151,14 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
 		TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+		TextView tvVersions = (TextView)convertView.findViewById(R.id.tvVersions);
+		TextView tvRelativeTime = (TextView)convertView.findViewById(R.id.tvRelativeTime);
 		final TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);		
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
 		ivEmptyHeart.setContentDescription("false");
 		
+		String relativeTime = getRelativeTimeAgo (node.getUpdatedAt());
+		tvRelativeTime.setText(relativeTime);
 		
 		ivEmptyHeart.setTag(node);
 		convertView.setTag(node);
@@ -178,6 +222,18 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		
 		if (mScreenNo == 1)
 		{
+			TreeNodeAPI api = new TreeNodeAPI ();
+			int sibCount = api.getSiblingCount(node);
+			if ( sibCount > 0)
+			{
+				String plural = (sibCount > 1)? "s":"";
+				tvVersions.setText(sibCount + " version" + plural);
+			}
+			else
+			{
+				tvVersions.setVisibility(View.GONE);
+			}
+			
 			Log.d ("debug", "in screen 1, adding swipe listeners");
 			convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {
 				  @Override
@@ -223,6 +279,12 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				  }
 				  
 				});		
+		}
+		else
+		{
+			int endings = node.getNumTreeLeafNodes();
+			String plural = (endings>0)? "s": "";
+			tvVersions.setText(endings + " ending" + plural);
 		}
 
 		return convertView;
