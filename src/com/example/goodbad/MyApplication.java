@@ -1,7 +1,10 @@
 package com.example.goodbad;
 
+import android.app.ActionBar;
 import android.app.Application;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -22,5 +25,8 @@ public class MyApplication extends Application {
 		ParseACL defaultACL = new ParseACL();
 		defaultACL.setPublicReadAccess(true);
 		ParseACL.setDefaultACL(defaultACL, true);
-	}
+		ParseUser.logOut();
+		Toast.makeText(this, "Not logged in.", Toast.LENGTH_SHORT).show();
+
+ 	}
 }

@@ -8,6 +8,10 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="share">Share</string>
     <string name="title_activity_pop_up">PopUpActivity</string>
-
+    <string name="parse_app_id">i6BacXY95FaVkJ8D71BFxZxE8ONXjYfOCpE3oZlt</string>
+    <string name="parse_client_key">IFQWFl3V8CkVofzZ7FNzDG5B5Ud9Ud49a8W0oOun</string>
+    <string name="facebook_app_id">1536078459949152</string>
+    <string name="twitter_consumer_key">ueE7e9wACqs40kOwpvaztiXEW</string>
+    <string name="twitter_consumer_secret">jfJbWWWAWx2wtLcAwX4jYw0kM8vRnZnLeepRNnf6nkcRmzYaXu</string>
 
 </resources>

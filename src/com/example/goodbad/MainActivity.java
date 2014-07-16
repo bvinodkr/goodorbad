@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,7 +22,7 @@ import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.example.goodbad.fragments.ComposeStoryFragment;
+ import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
 import com.example.goodbad.fragments.MyStoryListFragment;
 import com.example.goodbad.fragments.StoryLineListFragment;
@@ -30,14 +31,18 @@ import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryList
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
 
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
+import com.parse.ParseTwitterUtils;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
+import com.example.goodbad.ComposeDispatchActivity;
+ 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
-	
-	@Override
+ 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
 
@@ -71,7 +76,28 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			}
 		});
 		*/
+		
+	    Parse.initialize(this, getString(R.string.parse_app_id),
+	            getString(R.string.parse_client_key));
+
+	        Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
+
+	        // Optional - If you don't want to allow Facebook login, you can
+	        // remove this line (and other related ParseFacebookUtils calls)
+	        ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
+
+	        // Optional - If you don't want to allow Twitter login, you can
+	        // remove this line (and other related ParseTwitterUtils calls)
+	        ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
+	            getString(R.string.twitter_consumer_secret));
+
 	}
+	 @Override
+	  protected void onStart() {
+		    super.onStart();
+
+//	         ParseUser.logOut();
+	  }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,11 +107,16 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(miActionBarShareIcon);
 		Log.d("debug ", "is null " + shareActionProvider);
         shareActionProvider.setShareIntent(getDefaultShareIntent());*/
-
+		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
+		 if( ParseUser.getCurrentUser() != null ) {
+	         playMenu.setIcon(R.drawable.compose  ) ;
+	    }	else {playMenu.setIcon(R.drawable.login_icon  ) ;
+	    	
+	    }   
 		return super.onCreateOptionsMenu(menu);
 	}
 	
-	@Override
+ 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.miPopUpIcon:
@@ -209,12 +240,36 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	} 
 
 	private void launchComposeDialog() {
-		FragmentManager fm = getSupportFragmentManager();
+	    ParseUser user = ParseUser.getCurrentUser();
 
-		ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
-		composeStoryFragment.show(fm, "fragment_compose_tweet");
+	    if(ParseUser.getCurrentUser() != null  ) {
+
+			FragmentManager fm = getSupportFragmentManager();
+
+			ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
+			composeStoryFragment.show(fm, "fragment_compose_tweet");
+
+	    }else{
+	    Intent i = new Intent(MainActivity.this,
+	    		ComposeDispatchActivity.class);
+ 		//	String	username =user.getUsername();
+  		//	i.putExtra("result", username);
+
+	          i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+	              | Intent.FLAG_ACTIVITY_NEW_TASK);
+	          startActivity(i);
+
+  	    }
 	}
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode==RESULT_OK){
+			//if(requestCode==50){
+ 			Toast.makeText(this, "Logged in. Welcome!", Toast.LENGTH_SHORT).show();
+  			//}
+		}
+ //		super.onActivityResult(requestCode, resultCode, data);
+	}
 	private void addDummyData ()
 	{
 		/*addStory ("story1");

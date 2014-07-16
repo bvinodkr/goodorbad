@@ -19,14 +19,17 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.goodbad.PopUpImageAdapter;
 import com.example.goodbad.PopUpWindowItem;
 import com.example.goodbad.R;
+import com.parse.ParseUser;
 
 public class ComposeStoryFragment extends DialogFragment {
 
@@ -81,7 +84,10 @@ public class ComposeStoryFragment extends DialogFragment {
 		View layoutComposeStory = inflater.inflate(R.layout.fragment_compose_story, container);
 
 		ivComposePopUpItemImage = (ImageView) layoutComposeStory.findViewById(R.id.ivComposePopUpItemImage);
-
+		TextView tvCompose;
+		tvCompose=(TextView) layoutComposeStory.findViewById(R.id.tvComposeUserName);
+		String email=ParseUser.getCurrentUser().getEmail();
+		tvCompose.setText(email);
 		listener.onFinishComposeDialog();		
 
 		/*ivComposePopUpItemImage.setOnTouchListener(new OnTouchListener() {
