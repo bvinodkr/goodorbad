@@ -24,12 +24,12 @@ import android.widget.Toast;
 import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
 import com.example.goodbad.fragments.MyStoryListFragment;
+import com.example.goodbad.fragments.NewStoryListFragment;
 import com.example.goodbad.fragments.StoryLineListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
-
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		setContentView(R.layout.activity_main);
 		//setBehindContentView(R.layout.activity_main);
 		addDummyData();
-		setupTabs();
+		setupTabs(1);
 
 		//		SlidingMenu sm = getSlidingMenu();
 		//		sm.setShadowWidthRes(R.dimen.shadow_width);
@@ -52,26 +52,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		//		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		//		sm.setFadeDegree(0.35f);
 		//		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		
-/*		ParseObject testObj = new ParseObject ("testingParse");
-		testObj.put ("test", "foo");
-		testObj.saveInBackground(new SaveCallback() {
-			
-			@Override
-			public void done(ParseException arg0) {
-				if (arg0 == null)
-				{
-					Log.d ("DEBUG", "save succeeded");
-				}
-				else
-				{
-					Log.d ("DEBUG", "error in save " + arg0.getMessage()); 
-				}
-				
-			}
-		});
-		*/
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,9 +70,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.miPopUpIcon:
+			/*case R.id.miPopUpIcon:
 				onPopUpIconCick(item);
-				return true;
+				return true;*/
 			case R.id.miActionBarComposeIcon:
 				onComposeIconClick(item);
 				return true;
@@ -209,10 +191,15 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	} 
 
 	private void launchComposeDialog() {
-		FragmentManager fm = getSupportFragmentManager();
+		//FragmentManager fm = getSupportFragmentManager();
 
 		ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
-		composeStoryFragment.show(fm, "fragment_compose_tweet");
+		//composeStoryFragment.show(fm, "fragment_compose_tweet");
+		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.flContainer, composeStoryFragment);
+		ft.addToBackStack(null);
+		ft.commit();
 	}
 
 	private void addDummyData ()
@@ -245,12 +232,14 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		});*/
 	}
 
-	private void setupTabs() {
+	private void setupTabs(int tabNo) {
 		ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Good/Bad");
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
 
+		actionBar.removeAllTabs();
+		
 		Tab tab1 = actionBar
 				.newTab()
 				.setText("Trending")
@@ -258,8 +247,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.setTag("TrendingFragment")
 				.setTabListener(new FragmentTabListener<TrendingStoryListFragment>(R.id.flContainer, this,
 						"home", TrendingStoryListFragment.class));
-		actionBar.addTab(tab1);
-		actionBar.selectTab(tab1);
+		actionBar.addTab(tab1);		
 
 		Tab tab2 = actionBar
 				.newTab()
@@ -271,30 +259,45 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.addTab(tab2);
 
 		
-		/*Tab tab3 = actionBar
+		Tab tab3 = actionBar
 			    .newTab()
 			    .setText("New")
 			    .setIcon(R.drawable.ic_favorite)
-			    .setTag("FavoriteFragment")
-			    .setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
-	                        "mylist", MyStoryListFragment.class));
-			actionBar.addTab(tab3); */
+			    .setTag("NewFragment")
+			    .setTabListener(new FragmentTabListener<NewStoryListFragment>(R.id.flContainer, this,
+	                        "mylist", NewStoryListFragment.class));
+			actionBar.addTab(tab3); 
+			
+		switch(tabNo) {
+			case 1:
+				actionBar.selectTab(tab1);
+				break;
+			case 2:
+				actionBar.selectTab(tab2);
+				break;
+			case 3:
+				actionBar.selectTab(tab3);
+				break;
+			default:
+				break;
+		}	
 	}
 
 	@Override
-	public void onFinishComposeDialog() {
-		// TODO Auto-generated method stub
-
+	public void onFinishComposeDialog(String composeData, boolean fromPost) {
+		if(!fromPost) {
+			/*
+			 * put data into parse here
+			 */
+			setupTabs(1);
+		} else {
+			setupTabs(3); 
+		}
 	}
 
 	@Override
 	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
-		/*FragmentManager fm = getSupportFragmentManager();
-		TweetListFragment tweetListFragment = (TweetListFragment) fm.findFragmentById(R.id.flContainer);
-		
-		tweetListFragment.clearAdapter(); 
-		tweetListFragment.addTweetsToAdapterAtIndex(composedTweet, 0);*/
-		
+	
 		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
 		storyLineFragment.newInstance(selectedTrendingItem);
 		/*Bundle args = new Bundle();

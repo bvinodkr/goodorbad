@@ -8,14 +8,14 @@
         app:showAsAction="ifRoom"
         android:title="Compose">
     </item>
-    <item
+  <!--   <item
         android:id="@+id/miPopUpIcon"
         android:icon="@drawable/ic_action_popup"
         android:menuCategory="container"
         android:orderInCategory="2"
         app:showAsAction="ifRoom|withText"
         android:title="PopUp Button" >
-   	</item>
+   	</item> -->
 
     <!--
     <item

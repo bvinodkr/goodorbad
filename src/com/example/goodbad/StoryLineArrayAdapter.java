@@ -2,11 +2,14 @@ package com.example.goodbad;
 
 import java.util.List;
 
+import com.example.goodbad.fragments.InlineComposeDialogFragment;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +21,15 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
+public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 	
 	private int mScreenNo;
+	private FragmentManager mFragmentManager;
 
-	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo) {
+	public StoryLineArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo, FragmentManager fragmentManager) {
 		super(context, R.layout.treenode_item, treeNodes);
 		this.mScreenNo = screenNo;
+		this.mFragmentManager = fragmentManager;
 	}
 	
 	@Override
@@ -96,7 +101,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
 		TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-		final TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);		
+		final TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
 		ivEmptyHeart.setContentDescription("false");
 		
@@ -125,7 +130,17 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		tvUserName.setText("Vinod");		 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
-		//tvBody.setVisibility(0);
+		
+		ImageView ivForkStory = (ImageView) convertView.findViewById(R.id.ivForkStory);
+		ivForkStory.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance("InLineCompose");
+				inlineComposeStoryFragment.show(mFragmentManager, "dialog_fragment");				
+			}
+		});
+		
 		
 		Log.d("debug", node.getText()); 
 		/*if (position%2 == 0) {
