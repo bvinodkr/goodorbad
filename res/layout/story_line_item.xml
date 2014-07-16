@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlTreeNodeItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/round_edges" >
 
     <RelativeLayout
         android:id="@+id/rlHeader"
@@ -96,7 +97,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/rlBody"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:background="#CCCCCC" >
 
 
         <ImageView
@@ -113,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="2dp"            
-            android:text=""
+            android:text="5"
             android:textSize="8sp" />
         
         <TextView

@@ -3,7 +3,10 @@ package com.example.goodbad;
 import java.util.List;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +14,17 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
+import android.widget.VideoView;
 
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
+	
+	private int mScreenNo;
 
-	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes) {
+	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo) {
 		super(context, R.layout.treenode_item, treeNodes);
-		
+		this.mScreenNo = screenNo;
 	}
 	
 	@Override
@@ -50,15 +55,41 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			rlTreeNodeItemBody.addView(imageView);
 		}*/
 		
+		if(mScreenNo == 0) {
+			convertView.setBackgroundResource(R.drawable.border_ui);
+			convertView.findViewById(R.id.llFollowers).setBackgroundColor(Color.LTGRAY);
+		} else if(mScreenNo == 1) {
+			convertView.setBackgroundResource(R.drawable.round_edges);
+			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
+		}
+		
 		ImageView ivItemImage = (ImageView) convertView.findViewById(R.id.ivItemImage);
+		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
 		if(position==1) { 			
+			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.yosemite);
 		} else if (position==5) { 			
-				ivItemImage.setVisibility(View.VISIBLE);
-				ivItemImage.setImageResource(R.drawable.football);			
-		} else {
+			vvItemVideo.setVisibility(View.GONE);
+			ivItemImage.setVisibility(View.VISIBLE);
+			ivItemImage.setImageResource(R.drawable.football);			
+		} /*else if (position == 3) { 
 			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.VISIBLE);
+			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
+			MediaController mediaController = new MediaController(getContext());
+			mediaController.setAnchorView(vvItemVideo);
+			vvItemVideo.setMediaController(mediaController);
+			vvItemVideo.requestFocus();
+			vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
+			    // Close the progress bar and play the video
+			    public void onPrepared(MediaPlayer mp) {
+			    	vvItemVideo.start();
+			    }
+			});
+		}*/ else {
+			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.GONE);
 		}
 				
 		 
@@ -69,9 +100,9 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
 		ivEmptyHeart.setContentDescription("false");
 		
-		ImageLoader imageLoader = ImageLoader.getInstance();
 		
 		ivEmptyHeart.setTag(node);
+
 		ivEmptyHeart.setOnClickListener(new OnClickListener() {
 			
 			@Override 
@@ -102,19 +133,15 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			}
 		}); 
 		
-//		tvUserName.setText("Vinod");	
+	
 		
 		tvUserName.setText (node.getUser().getUsername());
-		//ivProfileImage.setImageResource(android.R.color.transparent);
-		//tvUserName.setText("Aaroosh");
-		tvBody.setText (node.getText());
 
-		if (position%2 == 0)
-		{
-			convertView.setBackgroundColor(convertView.getResources().getColor (android.R.color.holo_orange_light));
-		}
-		convertView.setTag(node.getStoryId());
-//		tvRelativeTime.setText("5 m");
+		//ivProfileImage.setImageResource(android.R.color.transparent);
+		tvBody.setText (node.getText());
+	
+		/*convertView.setTag(node.getStoryId());
+		//tvRelativeTime.setText("5 m");
 		convertView.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -124,7 +151,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				v.getContext().startActivity(i);
 			}
 		});
-		
+		*/
 
 		
 		tvBody.setVisibility(0);

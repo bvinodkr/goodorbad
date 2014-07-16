@@ -5,50 +5,28 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
-import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeArrayAdapter;
 
 public abstract class BaseListFragment extends Fragment {
-	private ArrayList<TreeNode> nodesList;
-	private TreeNodeArrayAdapter aaNodes;
-	private ListView lvNodes;
+	/*private ArrayList<TreeNode> nodesList;
+	private TreeNodeArrayAdapter aaNodes;*/
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		nodesList = new ArrayList<TreeNode> ();
-		aaNodes = new TreeNodeArrayAdapter(getActivity(), nodesList);
+		//nodesList = new ArrayList<TreeNode> ();		
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_nodes_list, container, false);
-
-		lvNodes = (ListView)v.findViewById(R.id.lvNodes);
-		lvNodes.setAdapter(aaNodes);
-
-	
-		return v;
+	/*public void addNodestoAdapter(List<TreeNode> extenderNodesList) {
+		//aaNodes.addAll(extenderNodesList);
 	}
-	
-
-
-	public void addNodestoAdapter(List<TreeNode> extenderNodesList) {
-		aaNodes.addAll(extenderNodesList);
-	}
-	
-	public ListView getListView ()
-	{
-		return lvNodes;
-	}
+		
+	public TreeNodeArrayAdapter getTreeNodeArrayAdapter() {
+		return aaNodes;
+	}*/
 
     
     public abstract void populateTreeNodes (String max_id);

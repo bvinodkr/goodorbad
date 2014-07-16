@@ -29,10 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.goodbad.StoryLineViewActivity"
-            android:label="@string/title_activity_story_line_view" >
-        </activity>
-        <activity
             android:name="com.example.goodbad.PopUpActivity"
             android:label="@string/title_activity_pop_up" >
         </activity>

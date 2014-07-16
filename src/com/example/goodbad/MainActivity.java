@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,15 +23,17 @@ import android.widget.Toast;
 
 import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
-import com.example.goodbad.fragments.HomeListFragment;
 import com.example.goodbad.fragments.MyStoryListFragment;
+import com.example.goodbad.fragments.StoryLineListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
+import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
+
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
-public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener {
+public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
 	
@@ -39,8 +43,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 		setContentView(R.layout.activity_main);
 		//setBehindContentView(R.layout.activity_main);
-		addDummyData ();
-		setupTabs ();
+		addDummyData();
+		setupTabs();
 
 		//		SlidingMenu sm = getSlidingMenu();
 		//		sm.setShadowWidthRes(R.dimen.shadow_width);
@@ -182,9 +186,6 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		
-
 	}
 
 	private void populatePopUpWindowItems() {
@@ -202,8 +203,6 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
     intent.setType("image/*");
     return intent;
 	}*/
-
-	
 
 	public void onComposeIconClick(MenuItem mi) {
 		launchComposeDialog();
@@ -262,7 +261,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.addTab(tab1);
 		actionBar.selectTab(tab1);
 
-/*		Tab tab2 = actionBar
+		Tab tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
@@ -270,17 +269,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
 						"mylist", MyStoryListFragment.class));
 		actionBar.addTab(tab2);
-*/
-		
-		Tab tab2 = actionBar
-				.newTab()
-				.setText("Favorites")
-				.setIcon(R.drawable.ic_favorite)
-				.setTag("FavoriteFragment")
-				.setTabListener(new FragmentTabListener<HomeListFragment>(R.id.flContainer, this,
-						"mylist", HomeListFragment.class));
-		actionBar.addTab(tab2);
-//		actionBar.selectTab(tab2);
+
+
+
 		
 		/*Tab tab3 = actionBar
 			    .newTab()
@@ -296,5 +287,24 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	public void onFinishComposeDialog() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
+		/*FragmentManager fm = getSupportFragmentManager();
+		TweetListFragment tweetListFragment = (TweetListFragment) fm.findFragmentById(R.id.flContainer);
+		
+		tweetListFragment.clearAdapter(); 
+		tweetListFragment.addTweetsToAdapterAtIndex(composedTweet, 0);*/
+		
+		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
+		storyLineFragment.newInstance(selectedTrendingItem);
+		/*Bundle args = new Bundle();
+		args.putInt(StoryLineListFragment.ARG_POSITION, position);
+		newFragment.setArguments(args);*/
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.flContainer, storyLineFragment);
+		ft.addToBackStack(null);
+		ft.commit();
 	}
 }
