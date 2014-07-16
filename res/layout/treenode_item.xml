@@ -127,16 +127,6 @@
             android:textSize="12sp"
             android:text="5 Endings" />
         
-        <TextView
-            android:id="@+id/tvForks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginBottom="2dp"
-            android:layout_gravity="bottom"
-            android:textSize="12sp"
-            android:text="5 Forks" />
-
         <ImageView
             android:id="@+id/ivForkStory"
             android:layout_width="wrap_content"
