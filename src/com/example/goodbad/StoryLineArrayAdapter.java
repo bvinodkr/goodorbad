@@ -1,15 +1,13 @@
 package com.example.goodbad;
 
+import java.util.Date;
 import java.util.List;
 
-import com.example.goodbad.fragments.InlineComposeDialogFragment;
-
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.content.Intent;
 import android.graphics.Color;
+import android.net.ParseException;
 import android.support.v4.app.FragmentManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +15,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
+
+import com.example.goodbad.fragments.InlineComposeDialogFragment;
+import com.loopj.android.image.SmartImageView;
 
 public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 	
@@ -30,6 +31,25 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		super(context, R.layout.treenode_item, treeNodes);
 		this.mScreenNo = screenNo;
 		this.mFragmentManager = fragmentManager;
+	}
+	
+	public void addStory (List<TreeNode> nodes)
+	{
+		this.clear();
+		this.addAll(nodes);
+	}
+	
+	public String getRelativeTimeAgo(Date date) {
+		String relativeDate = "";
+		try {
+			long dateMillis = date.getTime();
+			relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+					System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} 
+	 
+		return relativeDate;
 	}
 	
 	@Override
@@ -68,9 +88,17 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
 		}
 		
-		ImageView ivItemImage = (ImageView) convertView.findViewById(R.id.ivItemImage);
+		SmartImageView ivItemImage = (SmartImageView) convertView.findViewById(R.id.ivItemImage);
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
-		if(position==1) { 			
+		vvItemVideo.setVisibility(View.GONE);
+		ivItemImage.setVisibility(View.GONE);
+		if (node.getImageUrl() != null)
+		{
+//			Log.d ("DEBUG", "image url = " + node.getImageUrl());
+			ivItemImage.setVisibility(View.VISIBLE);
+			ivItemImage.setImageUrl(node.getImageUrl());
+		}
+/*		if(position==1) { 			
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.yosemite);
@@ -78,7 +106,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.football);			
-		} /*else if (position == 3) { 
+		} else if (position == 3) { 
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.VISIBLE);
 			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
@@ -92,24 +120,34 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			    	vvItemVideo.start();
 			    }
 			});
-		}*/ else {
+		} else {
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.GONE);
 		}
-				
+*/				
 		 
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
 		TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+		TextView tvVersions = (TextView)convertView.findViewById(R.id.tvVersions);
+		TextView tvRelativeTime = (TextView)convertView.findViewById(R.id.tvRelativeTime);
+		String relativeTime = getRelativeTimeAgo (node.getUpdatedAt());
+		tvRelativeTime.setText(relativeTime);
+		
 		final TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
 		ivEmptyHeart.setContentDescription("false");
-		
+		ivEmptyHeart.setTag(node);
+
 		ivEmptyHeart.setOnClickListener(new OnClickListener() {
 			
 			@Override 
 			public void onClick(View v) {
-				int likes = Integer.parseInt(tvLikes.getText().toString());
+				int likes = 0;
+				if (!tvLikes.getText().toString().isEmpty())
+				{
+				  likes = Integer.parseInt(tvLikes.getText().toString());
+				}
 				boolean isLiked = Boolean.parseBoolean(ivEmptyHeart.getContentDescription().toString());
 				if(isLiked) {
 					if(likes > 0) { 
@@ -124,10 +162,13 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 					ivEmptyHeart.setImageResource(R.drawable.ic_action_filled_heart);
 					tvLikes.setText(likes+"");
 				}
+				TreeNode tree = (TreeNode)v.getTag();
+				tree.setLikes(likes);
+				tree.saveInBackground();
 			}
 		}); 
 		
-		tvUserName.setText("Vinod");		 
+		tvUserName.setText (node.getUser().getUsername());		 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
 		
@@ -142,10 +183,62 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		});
 		
 		
-		Log.d("debug", node.getText()); 
+//		Log.d("debug", node.getText()); 
 		/*if (position%2 == 0) {
 			convertView.setBackgroundColor(0xFF99CCFF);
 		} */
+		
+		TreeNodeAPI api = new TreeNodeAPI ();
+		int sibCount = api.getSiblingCount(node);
+		if ( sibCount > 0)
+		{
+			String plural = (sibCount > 1)? "s":"";
+			tvVersions.setText(sibCount + " version" + plural);
+		}
+		else
+		{
+			tvVersions.setVisibility(View.GONE);
+		}
+		
+		Log.d ("debug", "in screen 1, adding swipe listeners");
+		convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {
+			  
+			  
+			  @Override
+			  public void onSwipeLeft() {
+//			    Toast.makeText(getContext(), "Left", Toast.LENGTH_SHORT).show();
+			    Log.d ("debug", "swipe left invoked");
+			    TreeNode n = getTreeNode();
+			    TreeNodeAPI api = new TreeNodeAPI ();
+			    TreeNode sibling = api.getSibling(n, 1);
+			    if (sibling != null)
+			    {
+			    	List<TreeNode> path = api.getPathContaining(sibling);
+			    	addStory (path);
+			    }
+			  }
+			  
+			  
+			  
+			  @Override
+			  public void onSwipeRight() {
+			    Toast.makeText(getContext(), "Right", Toast.LENGTH_SHORT).show();
+			    TreeNode n = getTreeNode();
+			    Log.d ("debug", "swipe right invoked " + n.getObjectId());
+			    TreeNodeAPI api = new TreeNodeAPI ();
+			    TreeNode sibling = api.getSibling(n, -1);
+			    if (sibling != null)
+			    {
+			    	List<TreeNode> path = api.getPathContaining(sibling);
+			    	addStory (path);
+			    }
+			    else
+			    {
+			    	Log.d ("debug", "sibling is null");
+			    }
+			  }
+			  
+			});
 		
 		return convertView;
 
