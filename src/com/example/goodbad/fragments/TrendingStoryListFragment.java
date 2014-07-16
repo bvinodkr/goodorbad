@@ -149,6 +149,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 				if (arg1 == null) {
 					aaNodes.addAll((ArrayList<TreeNode>)items);
 					storyItemList = (ArrayList<TreeNode>)items;
+					/*
 					for (TreeNode treeRoot: items) {
 						Log.d ("DEBUG", "storyid = " + treeRoot.getObjectId());
 						if (treeRoot.getUser () != null)
@@ -201,6 +202,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 						});
 						break;
 					}
+					*/
 				}
 				else
 				{

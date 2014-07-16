@@ -207,63 +207,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		
 		if (mScreenNo == 1)
 		{
-			TreeNodeAPI api = new TreeNodeAPI ();
-			int sibCount = api.getSiblingCount(node);
-			if ( sibCount > 0)
-			{
-				String plural = (sibCount > 1)? "s":"";
-				tvVersions.setText(sibCount + " version" + plural);
-			}
-			else
-			{
-				tvVersions.setVisibility(View.GONE);
-			}
-			
-			Log.d ("debug", "in screen 1, adding swipe listeners");
-			convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {
-				  @Override
-				  public void onSwipeDown() {
-				    Toast.makeText(getContext(), "Down", Toast.LENGTH_SHORT).show();
-				  }
-				  
-				  @Override
-				  public void onSwipeLeft() {
-//				    Toast.makeText(getContext(), "Left", Toast.LENGTH_SHORT).show();
-				    Log.d ("debug", "swipe left invoked");
-				    TreeNode n = getTreeNode();
-				    TreeNodeAPI api = new TreeNodeAPI ();
-				    TreeNode sibling = api.getSibling(n, 1);
-				    if (sibling != null)
-				    {
-				    	List<TreeNode> path = api.getPathContaining(sibling);
-				    	addStory (path);
-				    }
-				  }
-				  
-				  @Override
-				  public void onSwipeUp() {
-				    Toast.makeText(getContext(), "Up", Toast.LENGTH_SHORT).show();
-				  }
-				  
-				  @Override
-				  public void onSwipeRight() {
-				    Toast.makeText(getContext(), "Right", Toast.LENGTH_SHORT).show();
-				    TreeNode n = getTreeNode();
-				    Log.d ("debug", "swipe right invoked " + n.getObjectId());
-				    TreeNodeAPI api = new TreeNodeAPI ();
-				    TreeNode sibling = api.getSibling(n, -1);
-				    if (sibling != null)
-				    {
-				    	List<TreeNode> path = api.getPathContaining(sibling);
-				    	addStory (path);
-				    }
-				    else
-				    {
-				    	Log.d ("debug", "sibling is null");
-				    }
-				  }
-				  
-				});		
+		
 		}
 		else
 		{

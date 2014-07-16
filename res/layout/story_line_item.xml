@@ -64,15 +64,15 @@
             android:textSize="14sp"
             android:text="Sentence/Para in story" />
 
-         <ImageView
+         <com.loopj.android.image.SmartImageView xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/ivItemImage"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
              android:layout_marginTop="5dp"
              android:paddingBottom="5dp"
              android:layout_below="@+id/tvBody"
              android:layout_centerVertical="true"
              android:layout_marginLeft="24dp"
+             android:layout_width="100dp"
+    		android:layout_height="100dp"
              android:src="@drawable/ic_launcher" />
          
          <VideoView

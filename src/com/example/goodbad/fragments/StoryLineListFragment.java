@@ -190,7 +190,7 @@ public class StoryLineListFragment extends BaseListFragment {
 		for (TreeNode n: nodes)
 		{
 			storyLineNodeList.add(n);
-			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
+//			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
 			aaNodes.notifyDataSetChanged();
 		}
 	}
