@@ -3,18 +3,30 @@ package com.example.goodbad.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.Toast;
 
+import com.example.goodbad.PopUpImageAdapter;
+import com.example.goodbad.PopUpWindowItem;
 import com.example.goodbad.R;
+import com.example.goodbad.StoryLineArrayAdapter;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
-import com.example.goodbad.TreeNodeArrayAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -23,9 +35,10 @@ public class StoryLineListFragment extends BaseListFragment {
 
 	private ArrayList<TreeNode> storyLineNodeList = new ArrayList<TreeNode> ();
 	private ListView lvNodes;
-	private TreeNodeArrayAdapter aaNodes;
+	private StoryLineArrayAdapter aaNodes;
 	private TreeNode selectedStory;
-	
+	private PopupWindow popupWindow = null;
+	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
 	
 	public void newInstance(TreeNode selectedStory) {
 		this.selectedStory = selectedStory;
@@ -64,7 +77,15 @@ public class StoryLineListFragment extends BaseListFragment {
 		View storyLineView = inflater.inflate(R.layout.fragment_story_line, container, false);
 		
 		//addNodestoList();
-		aaNodes = new TreeNodeArrayAdapter(getActivity(), storyLineNodeList, 1);
+		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
+		
+		//throw away
+		TreeNode node1 = new TreeNode();
+		node1.setLikes(4);
+		node1.setText("");
+		storyLineNodeList.add(node1);
+		//
+		
 		aaNodes.addAll(storyLineNodeList);
 		//addNodestoAdapter(storyLineNodeList);
 		
@@ -90,10 +111,80 @@ public class StoryLineListFragment extends BaseListFragment {
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
 		
+		/*
+		 * set up the pop up item image 
+		 */
+		ImageView ivStoryLinePopUpImage = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePopUpImage);
+
+		ivStoryLinePopUpImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				int location[] = {0,0};
+				v.getLocationOnScreen(location);
+				
+				inflatePopUpWindow(inflater, container, location);
+			}
+		});
+		
 		return storyLineView;		
 	}
 	
-	public void addParas (List<TreeNode> nodes)
+	private void inflatePopUpWindow(LayoutInflater inflater, ViewGroup container, int location[]) {
+		// Inflate the popup_layout.xml
+		if(popupWindow!=null && popupWindow.isShowing()) {
+			popupWindow.dismiss();
+		} else {
+			View popUpView = inflater.inflate(R.layout.pop_up_layout, container, false);
+		
+			// Creating the PopupWindow
+			popupWindow = new PopupWindow(getActivity());
+			popupWindow.setContentView(popUpView);
+			popupWindow.setWidth(360);
+			popupWindow.setHeight(220);
+			popupWindow.setOutsideTouchable(true);
+			popupWindow.setFocusable(true);									
+
+			/*// Clear the default translucent background
+			popupWindow.setBackgroundDrawable(new BitmapDrawable());
+			popupWindow.showAsDropDown(getCurrentFocus());*/
+
+
+			//v.getLocationOnScreen(location);
+
+			// Displaying the popup at the specified location, + offsets.
+			popupWindow.showAtLocation(popUpView, Gravity.NO_GRAVITY, location[0]-300, location[1]-220);
+
+			populatePopUpWindowItems();
+
+			GridView gridview = (GridView) popUpView.findViewById(R.id.gvPopUp);		
+			gridview.setAdapter(new PopUpImageAdapter(getActivity(), popUpWindowItemList));
+
+			gridview.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+					Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+					
+					FragmentManager fm = getActivity().getSupportFragmentManager();
+					InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance("InLineCompose");
+					inlineComposeStoryFragment.show(fm, "dialog_fragment");
+					//composeStoryFragment.setTargetFragment(fragment, requestCode);
+				}
+			});
+		}
+	}
+	
+	private void populatePopUpWindowItems() {
+		popUpWindowItemList.clear();
+		popUpWindowItemList.add(new PopUpWindowItem("Gallery", R.drawable.gallery1));
+		popUpWindowItemList.add(new PopUpWindowItem("Photo", R.drawable.camera));
+		popUpWindowItemList.add(new PopUpWindowItem("Video", R.drawable.video));
+		popUpWindowItemList.add(new PopUpWindowItem("Audio", R.drawable.voice));
+		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
+		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
+	}
+	
+	public void addParas(List<TreeNode> nodes)
 	{
 		for (TreeNode n: nodes)
 		{
@@ -103,11 +194,22 @@ public class StoryLineListFragment extends BaseListFragment {
 		}
 	}
 	
+	
 	@Override
 	public void populateTreeNodes(String max_id) {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {	
+		super.onCreateOptionsMenu(menu, inflater);
+		
+		inflater.inflate(R.menu.story_line_action_bar, menu);
+		
+		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
+	}
+	
 	
 	private void addNodestoList() {
 		TreeNode n1 = new TreeNode ();

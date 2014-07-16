@@ -4,25 +4,13 @@
     android:layout_height="match_parent"
     android:id="@+id/rlComposeStoryFragment" >
 
-    <EditText
-        android:id="@+id/etComposeStory"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="148dp"
-        android:ems="10"
-        android:inputType="textMultiLine" >
-
-        <requestFocus />
-    </EditText>
-
     <ImageView
         android:id="@+id/ivComposePopUpItemImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/etComposeStory"
         android:layout_alignParentRight="true"
-        android:src="@drawable/compose" />
+        android:src="@drawable/attach" />
 
     <ImageView
         android:id="@+id/ivComposeProfileImage"
@@ -42,5 +30,26 @@
         android:layout_marginLeft="22dp"
         android:layout_toRightOf="@+id/ivComposeProfileImage"
         android:text="TextView" />
+
+    <EditText
+        android:id="@+id/etComposeStory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/ivComposePopUpItemImage"
+        android:ems="10"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+    <ImageView
+        android:id="@+id/ivInsertedImageComposeStory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

@@ -123,7 +123,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.yosemite);
-		} else if (position==5) { 			
+		} else if (position==3) { 			
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.football);			
@@ -198,22 +198,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
-	
-		/*convertView.setTag(node.getStoryId());
-		//tvRelativeTime.setText("5 m");
-		convertView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent (getContext(), StoryLineViewActivity.class);
-				i.putExtra("storyId", (String)v.getTag());
-				v.getContext().startActivity(i);
-			}
-		});
-		*/
-
-		
-		tvBody.setVisibility(0);
+		//tvBody.setVisibility(0);
 		
 //		Log.d("debug", node.getText()); 
 		/*if (position%2 == 0) {

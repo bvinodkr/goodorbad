@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rlTreeNodeItem"
+    android:id="@+id/rlStoryLineItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/round_edges" >
+    android:layout_height="match_parent" >
 
     <RelativeLayout
         android:id="@+id/rlHeader"
@@ -31,7 +30,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@+id/ivProfileImage"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:text="UserName" />
 
         <TextView
@@ -40,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:textSize="8sp"
+            android:textSize="12sp"
             android:layout_marginRight="6dp"
             android:text="5 m" />
         
@@ -62,7 +61,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="8dp"
             android:paddingBottom="4dp"
-            android:textSize="10sp"
+            android:textSize="14sp"
             android:text="Sentence/Para in story" />
 
          <ImageView
@@ -92,13 +91,12 @@
     <LinearLayout
         android:id="@+id/llFollowers"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"  
+        android:layout_height="25dp"  
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/rlBody"
-        android:orientation="horizontal"
-        android:background="#CCCCCC" >
+        android:orientation="horizontal" >
 
 
         <ImageView
@@ -116,7 +114,7 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="2dp"            
             android:text="5"
-            android:textSize="8sp" />
+            android:textSize="12sp" />
         
         <TextView
             android:id="@+id/tvVersions"
@@ -125,8 +123,26 @@
             android:layout_marginLeft="50dp"
             android:layout_marginBottom="2dp"
             android:layout_gravity="bottom"
-            android:textSize="8sp"
+            android:textSize="12sp"
             android:text="5 Endings" />
+        
+        <TextView
+            android:id="@+id/tvForks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="bottom"
+            android:textSize="12sp"
+            android:text="5 Forks" />
+
+        <ImageView
+            android:id="@+id/ivForkStory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_gravity="bottom"           
+            android:src="@drawable/ic_action_popup" />
 
     </LinearLayout>
 
