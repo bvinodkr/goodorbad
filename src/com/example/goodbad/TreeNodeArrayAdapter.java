@@ -6,6 +6,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,12 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
+	
+	private int mScreenNo;
 
-	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes) {
+	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo) {
 		super(context, R.layout.treenode_item, treeNodes);
-		
+		this.mScreenNo = screenNo;
 	}
 	
 	@Override
@@ -51,6 +54,14 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			imageView.setLayoutParams(lpImageView);
 			rlTreeNodeItemBody.addView(imageView);
 		}*/
+		
+		if(mScreenNo == 0) {
+			convertView.setBackgroundResource(R.drawable.border_ui);
+			convertView.findViewById(R.id.llFollowers).setBackgroundColor(Color.LTGRAY);
+		} else if(mScreenNo == 1) {
+			convertView.setBackgroundResource(R.drawable.round_edges);
+			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
+		}
 		
 		ImageView ivItemImage = (ImageView) convertView.findViewById(R.id.ivItemImage);
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);

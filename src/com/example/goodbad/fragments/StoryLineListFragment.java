@@ -1,9 +1,11 @@
 package com.example.goodbad.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +13,23 @@ import android.widget.ListView;
 
 import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
+import com.example.goodbad.TreeNodeAPI;
+import com.example.goodbad.TreeNodeArrayAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 public class StoryLineListFragment extends BaseListFragment {
 
 	private ArrayList<TreeNode> storyLineNodeList = new ArrayList<TreeNode> ();
 	private ListView lvNodes;
+	private TreeNodeArrayAdapter aaNodes;
+	private TreeNode selectedStory;
+	
+	
+	public void newInstance(TreeNode selectedStory) {
+		this.selectedStory = selectedStory;
+	}
 	
 	/*private StoryLineListFragmentListener listener;
 	
@@ -49,13 +63,44 @@ public class StoryLineListFragment extends BaseListFragment {
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 		View storyLineView = inflater.inflate(R.layout.fragment_story_line, container, false);
 		
-		addNodestoList();
-		addNodestoAdapter(storyLineNodeList);
+		//addNodestoList();
+		aaNodes = new TreeNodeArrayAdapter(getActivity(), storyLineNodeList, 1);
+		aaNodes.addAll(storyLineNodeList);
+		//addNodestoAdapter(storyLineNodeList);
+		
+		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
+		query.whereEqualTo("storyid", selectedStory.getStoryId());
+
+		query.findInBackground( new FindCallback<TreeNode>() {
+
+			public void done(List<TreeNode> items, ParseException arg1) {
+				// TODO Auto-generated method stub
+				if (arg1 == null)
+				{
+					TreeNodeAPI api = new TreeNodeAPI ();
+					TreeNode root = api.toTree(items);
+					Log.d ("DEBUG", "root object id" + root.getObjectId());
+					List<TreeNode> leafNodes = api.getLeafNodes(items);
+					Log.d ("DEBUG", "num of lead nodes " + leafNodes.size());
+					addParas (api.getPathContaining(leafNodes.get(0)));
+				}
+			}
+		});
 		
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
-		lvNodes.setAdapter(getTreeNodeArrayAdapter());
+		lvNodes.setAdapter(aaNodes);
 		
 		return storyLineView;		
+	}
+	
+	public void addParas (List<TreeNode> nodes)
+	{
+		for (TreeNode n: nodes)
+		{
+			storyLineNodeList.add(n);
+			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
+			aaNodes.notifyDataSetChanged();
+		}
 	}
 	
 	@Override

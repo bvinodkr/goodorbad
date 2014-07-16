@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
+import com.example.goodbad.TreeNodeArrayAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -29,6 +30,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 	private TrendingStoryListFragmentListener listener;
 	private TreeNode selectedTrendingItem;
 	private ListView lvNodes;
+	private TreeNodeArrayAdapter aaNodes;
 	
 	public interface TrendingStoryListFragmentListener {
 		void onSelectedTrendingItem(TreeNode selectedTrendingItem);
@@ -43,9 +45,10 @@ public class TrendingStoryListFragment extends BaseListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View trendingView = inflater.inflate(R.layout.fragment_trending_list, container, false);
-
+		
+		aaNodes = new TreeNodeArrayAdapter(getActivity(), storyItemList, 0);
 		lvNodes = (ListView) trendingView.findViewById(R.id.lvTrendingListFragment);
-		lvNodes.setAdapter(getTreeNodeArrayAdapter());
+		lvNodes.setAdapter(aaNodes);
 
 		return trendingView;
 	}
@@ -141,7 +144,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 
 			public void done(List<TreeNode> items, ParseException arg1) {			
 				if (arg1 == null) {
-					addNodestoAdapter((ArrayList<TreeNode>)items);
+					aaNodes.addAll((ArrayList<TreeNode>)items);
 					storyItemList = (ArrayList<TreeNode>)items;
 					for (TreeNode treeRoot: items) {
 						Log.d ("DEBUG", "storyid = " + treeRoot.getObjectId());

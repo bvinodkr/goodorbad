@@ -296,6 +296,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		tweetListFragment.addTweetsToAdapterAtIndex(composedTweet, 0);*/
 		
 		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
+		storyLineFragment.newInstance(selectedTrendingItem);
 		/*Bundle args = new Bundle();
 		args.putInt(StoryLineListFragment.ARG_POSITION, position);
 		newFragment.setArguments(args);*/
