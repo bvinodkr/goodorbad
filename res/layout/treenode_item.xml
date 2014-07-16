@@ -113,9 +113,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="2dp"            
-            android:text="5"
+            android:text=""
             android:textSize="12sp" />
-        
+         
         <TextView
             android:id="@+id/tvVersions"
             android:layout_width="wrap_content"

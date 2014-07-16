@@ -139,7 +139,10 @@ public class TrendingStoryListFragment extends BaseListFragment {
 	
 	private void getStories() {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereEqualTo("parentid", JSONObject.NULL); 
+
+		query.whereEqualTo("parentid", JSONObject.NULL);
+		query.include("user");
+
 		query.findInBackground( new FindCallback<TreeNode>() {
 
 			public void done(List<TreeNode> items, ParseException arg1) {			
@@ -148,6 +151,14 @@ public class TrendingStoryListFragment extends BaseListFragment {
 					storyItemList = (ArrayList<TreeNode>)items;
 					for (TreeNode treeRoot: items) {
 						Log.d ("DEBUG", "storyid = " + treeRoot.getObjectId());
+						if (treeRoot.getUser () != null)
+						{
+							Log.d ("DEBUG", "user name" + treeRoot.getUser().getUsername());
+						}
+						else
+						{
+							Log.d ("DEBUG", "user name null");
+						}
 						ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 						query.whereEqualTo("storyid", treeRoot.getStoryId());
 

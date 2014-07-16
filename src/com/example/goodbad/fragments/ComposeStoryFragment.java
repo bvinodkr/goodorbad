@@ -200,6 +200,7 @@ public class ComposeStoryFragment extends Fragment {
 		
 		String composeData = etComposeStory.getText()  + " : url :"  + ivInsertedImageComposeStory.getContentDescription();		
 		listener.onFinishComposeDialog(composeData, true);
+		
 	}
 
 }

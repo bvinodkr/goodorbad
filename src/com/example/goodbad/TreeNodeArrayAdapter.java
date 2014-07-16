@@ -100,11 +100,19 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
 		ivEmptyHeart.setContentDescription("false");
 		
+		
+		ivEmptyHeart.setTag(node);
+
 		ivEmptyHeart.setOnClickListener(new OnClickListener() {
 			
 			@Override 
 			public void onClick(View v) {
-				int likes = Integer.parseInt(tvLikes.getText().toString());
+				int likes = 0;
+				if (!tvLikes.getText().toString().isEmpty())
+				{
+				  likes = Integer.parseInt(tvLikes.getText().toString());
+				}
+				
 				boolean isLiked = Boolean.parseBoolean(ivEmptyHeart.getContentDescription().toString());
 				if(isLiked) {
 					if(likes > 0) { 
@@ -119,10 +127,16 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 					ivEmptyHeart.setImageResource(R.drawable.ic_action_filled_heart);
 					tvLikes.setText(likes+"");
 				}
+				TreeNode tree = (TreeNode)v.getTag();
+				tree.setLikes(likes);
+				tree.saveInBackground();
 			}
 		}); 
 		
-		tvUserName.setText("Vinod");		 
+	
+		
+		tvUserName.setText (node.getUser().getUsername());
+
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
 		//tvBody.setVisibility(0);

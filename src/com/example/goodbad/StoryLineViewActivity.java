@@ -41,6 +41,10 @@ public class StoryLineViewActivity extends Activity {
 					Log.d ("DEBUG", "num of lead nodes " + leafNodes.size());
 					addParas (api.getPathContaining(leafNodes.get(0)));
 				}
+				else
+				{
+					Log.d ("DEBUG", "error = " + arg1.getMessage());
+				}
 			}
 		});
 		

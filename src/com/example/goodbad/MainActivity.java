@@ -258,6 +258,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 						"mylist", MyStoryListFragment.class));
 		actionBar.addTab(tab2);
 
+
+
 		
 		Tab tab3 = actionBar
 			    .newTab()
