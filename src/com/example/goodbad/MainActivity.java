@@ -42,6 +42,8 @@ import com.example.goodbad.ComposeDispatchActivity;
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
+	private static boolean mReturnedFromParse = false;
+	
  	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
@@ -50,6 +52,10 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		//setBehindContentView(R.layout.activity_main);
 		addDummyData();
 		setupTabs();
+		
+		if(mReturnedFromParse) {
+			//launchComposeDialog();
+		}
 
 		//		SlidingMenu sm = getSlidingMenu();
 		//		sm.setShadowWidthRes(R.dimen.shadow_width);
@@ -92,12 +98,12 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	            getString(R.string.twitter_consumer_secret));
 
 	}
-	 @Override
-	  protected void onStart() {
-		    super.onStart();
-
-//	         ParseUser.logOut();
-	  }
+ 	
+ 	public static void onParseLogin(boolean returnedFromParse) {
+ 		mReturnedFromParse = returnedFromParse;
+ 	}
+ 	
+ 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
