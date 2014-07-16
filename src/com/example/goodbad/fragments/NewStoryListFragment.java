@@ -40,8 +40,7 @@ public class NewStoryListFragment extends BaseListFragment {
 		View newStoriesView = inflater.inflate(R.layout.fragment_story_line, container, false);
 		
 		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 1);
-		
-		aaNodes.addAll(newStoryItemList);
+			
 		//addNodestoAdapter(storyLineNodeList);
 		
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
@@ -63,6 +62,7 @@ public class NewStoryListFragment extends BaseListFragment {
 			}
 		});
 		
+		aaNodes.addAll(newStoryItemList);
 		lvNodes = (ListView) newStoriesView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
 

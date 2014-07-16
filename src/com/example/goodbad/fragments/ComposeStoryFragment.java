@@ -1,11 +1,16 @@
 package com.example.goodbad.fragments;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +26,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.goodbad.PopUpImageAdapter;
@@ -36,6 +40,9 @@ public class ComposeStoryFragment extends Fragment {
 	private PopupWindow popupWindow = null;
 	private ImageView ivInsertedImageComposeStory;
 	private EditText etComposeStory;
+	private boolean fromPost = false;
+	
+	public final static int PICK_PHOTO_CODE = 1046;
 	
 	public interface ComposeStoryFragmentListener {
 		void onFinishComposeDialog(String composeData, boolean fromPost);
@@ -86,7 +93,7 @@ public class ComposeStoryFragment extends Fragment {
 		super.onDestroyView();
 		
 		String composeData = etComposeStory.getText()  + " : url :"  + ivInsertedImageComposeStory.getContentDescription();		
-		listener.onFinishComposeDialog(composeData, false);	
+		listener.onFinishComposeDialog(composeData, fromPost);	
 	}
 	
 	@Override
@@ -94,10 +101,12 @@ public class ComposeStoryFragment extends Fragment {
 
 		View composeStoryView = inflater.inflate(R.layout.fragment_compose_story, container, false);
 
+		fromPost = false;
+		
 		ivInsertedImageComposeStory = (ImageView) composeStoryView.findViewById(R.id.ivInsertedImageComposeStory);
 		ivInsertedImageComposeStory.setVisibility(View.INVISIBLE);
 		ivInsertedImageComposeStory.setContentDescription("some url");
-		
+				
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
 		
 		ivComposePopUpItemImage = (ImageView) composeStoryView.findViewById(R.id.ivComposePopUpItemImage);
@@ -150,7 +159,9 @@ public class ComposeStoryFragment extends Fragment {
 			gridview.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 					Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
-					ivComposePopUpItemImage.setVisibility(View.VISIBLE);
+					onGalleryIconClick(v);
+					ivInsertedImageComposeStory.setVisibility(View.VISIBLE);
+					popupWindow.dismiss();
 				}
 			});
 		}
@@ -197,10 +208,38 @@ public class ComposeStoryFragment extends Fragment {
 
 	public void onPostStoryIconClick(MenuItem mi) {
 		Toast.makeText(getActivity(), "Post Story", Toast.LENGTH_SHORT).show();	
-		
+		fromPost = true;
 		String composeData = etComposeStory.getText()  + " : url :"  + ivInsertedImageComposeStory.getContentDescription();		
-		listener.onFinishComposeDialog(composeData, true);
-		
+		listener.onFinishComposeDialog(composeData, fromPost);		
+	}
+	
+	public void onGalleryIconClick(View view) {
+	    // Create intent for picking a photo from the gallery
+	    Intent intent = new Intent(Intent.ACTION_PICK,
+	        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+	    // Bring up gallery to select a photo
+	    startActivityForResult(intent, PICK_PHOTO_CODE);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (data != null) {
+	        Uri photoUri = data.getData();
+	        // Do something with the photo based on Uri
+	        Bitmap selectedImage;
+			try {
+				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+				
+				// Load the selected image into a preview	        
+		        ivInsertedImageComposeStory.setImageBitmap(selectedImage);  
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
 	}
 
 }

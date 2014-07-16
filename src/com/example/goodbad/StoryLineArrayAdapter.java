@@ -78,7 +78,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.football);			
-		} /*else if (position == 3) { 
+		} else if (position == 0) { 
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.VISIBLE);
 			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
@@ -86,13 +86,27 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			mediaController.setAnchorView(vvItemVideo);
 			vvItemVideo.setMediaController(mediaController);
 			vvItemVideo.requestFocus();
-			vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
+			/*vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
 			    // Close the progress bar and play the video
-			    public void onPrepared(MediaPlayer mp) {
+			    public void onPrepared(MediaPlayer mp) {*/
 			    	vvItemVideo.start();
-			    }
-			});
-		}*/ else {
+			   /* }
+			});*/
+		}  else if (position == 4) { 
+			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.VISIBLE);
+			vvItemVideo.setVideoPath("http://techslides.com/demos/sample-videos/small.mp4");
+			MediaController mediaController = new MediaController(getContext());
+			mediaController.setAnchorView(vvItemVideo);
+			vvItemVideo.setMediaController(mediaController);
+			vvItemVideo.requestFocus();
+			/*vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
+			    // Close the progress bar and play the video
+			    public void onPrepared(MediaPlayer mp) {*/
+			    	vvItemVideo.start();
+			   /* }
+			});*/
+		} else {
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.GONE);
 		}
