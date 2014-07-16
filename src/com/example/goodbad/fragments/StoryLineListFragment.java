@@ -80,8 +80,10 @@ public class StoryLineListFragment extends BaseListFragment {
 		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
 				
 		aaNodes.addAll(storyLineNodeList);
+		TreeNodeAPI api = new TreeNodeAPI ();
+		addParas (api.getPathContaining(selectedStory));
 		//addNodestoAdapter(storyLineNodeList);
-		
+	/*	
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		query.whereEqualTo("storyid", selectedStory.getStoryId());
 		query.include("user");
@@ -100,7 +102,7 @@ public class StoryLineListFragment extends BaseListFragment {
 				}
 			}
 		});
-		
+		*/
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
 		
