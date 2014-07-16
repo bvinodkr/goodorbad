@@ -10,11 +10,17 @@ import android.view.View.OnTouchListener;
 public class OnSwipeTouchListener implements OnTouchListener {
 
     private GestureDetector gestureDetector;
-    
-    public OnSwipeTouchListener(Context c) {
+    private TreeNode node;
+    public OnSwipeTouchListener(Context c, TreeNode n) {
       gestureDetector = new GestureDetector(c, new GestureListener());
+      node = n;
     }
  
+    public TreeNode getTreeNode ()
+    {
+    	return node;
+    }
+    
     public boolean onTouch(final View view, final MotionEvent motionEvent) {
         return gestureDetector.onTouchEvent(motionEvent);
     }

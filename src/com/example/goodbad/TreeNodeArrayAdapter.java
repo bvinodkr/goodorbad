@@ -3,9 +3,6 @@ package com.example.goodbad;
 import java.util.List;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,9 +11,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
+
+import com.loopj.android.image.SmartImageView;
 
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	
@@ -25,6 +24,13 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo) {
 		super(context, R.layout.treenode_item, treeNodes);
 		this.mScreenNo = screenNo;
+		Log.d ("DEBUG", "screen no " + mScreenNo);
+	}
+	
+	public void addStory (List<TreeNode> nodes)
+	{
+		this.clear();
+		this.addAll(nodes);
 	}
 	
 	@Override
@@ -63,9 +69,17 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
 		}
 		
-		ImageView ivItemImage = (ImageView) convertView.findViewById(R.id.ivItemImage);
+		SmartImageView ivItemImage = (SmartImageView) convertView.findViewById(R.id.ivItemImage);
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
-		if(position==1) { 			
+		vvItemVideo.setVisibility(View.GONE);
+		ivItemImage.setVisibility(View.GONE);
+		if (node.getImageUrl() != null)
+		{
+			Log.d ("DEBUG", "image url = " + node.getImageUrl());
+			ivItemImage.setVisibility(View.VISIBLE);
+			ivItemImage.setImageUrl(node.getImageUrl());
+		}
+		/*if(position==1) { 			
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.yosemite);
@@ -73,7 +87,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.football);			
-		} /*else if (position == 3) { 
+		} else if (position == 3) { 
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.VISIBLE);
 			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
@@ -87,11 +101,12 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			    	vvItemVideo.start();
 			    }
 			});
-		}*/ else {
+		} else {
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.GONE);
 		}
-				
+		*/
+		
 		 
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
@@ -102,7 +117,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		
 		
 		ivEmptyHeart.setTag(node);
-
+		convertView.setTag(node);
 		ivEmptyHeart.setOnClickListener(new OnClickListener() {
 			
 			@Override 
@@ -156,11 +171,60 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		
 		tvBody.setVisibility(0);
 		
-		Log.d("debug", node.getText()); 
+//		Log.d("debug", node.getText()); 
 		/*if (position%2 == 0) {
 			convertView.setBackgroundColor(0xFF99CCFF);
 		} */
 		
+		if (mScreenNo == 1)
+		{
+			Log.d ("debug", "in screen 1, adding swipe listeners");
+			convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {
+				  @Override
+				  public void onSwipeDown() {
+				    Toast.makeText(getContext(), "Down", Toast.LENGTH_SHORT).show();
+				  }
+				  
+				  @Override
+				  public void onSwipeLeft() {
+//				    Toast.makeText(getContext(), "Left", Toast.LENGTH_SHORT).show();
+				    Log.d ("debug", "swipe left invoked");
+				    TreeNode n = getTreeNode();
+				    TreeNodeAPI api = new TreeNodeAPI ();
+				    TreeNode sibling = api.getSibling(n, 1);
+				    if (sibling != null)
+				    {
+				    	List<TreeNode> path = api.getPathContaining(sibling);
+				    	addStory (path);
+				    }
+				  }
+				  
+				  @Override
+				  public void onSwipeUp() {
+				    Toast.makeText(getContext(), "Up", Toast.LENGTH_SHORT).show();
+				  }
+				  
+				  @Override
+				  public void onSwipeRight() {
+				    Toast.makeText(getContext(), "Right", Toast.LENGTH_SHORT).show();
+				    TreeNode n = getTreeNode();
+				    Log.d ("debug", "swipe right invoked " + n.getObjectId());
+				    TreeNodeAPI api = new TreeNodeAPI ();
+				    TreeNode sibling = api.getSibling(n, -1);
+				    if (sibling != null)
+				    {
+				    	List<TreeNode> path = api.getPathContaining(sibling);
+				    	addStory (path);
+				    }
+				    else
+				    {
+				    	Log.d ("debug", "sibling is null");
+				    }
+				  }
+				  
+				});		
+		}
+
 		return convertView;
 
 	}

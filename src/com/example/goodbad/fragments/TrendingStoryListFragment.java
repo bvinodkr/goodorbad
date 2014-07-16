@@ -83,7 +83,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 					int position, long id) {
 				
 				selectedTrendingItem = storyItemList.get(position);
-				Toast.makeText(getActivity(), position+"", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getActivity(), position+"", Toast.LENGTH_SHORT).show();
 				
 				listener.onSelectedTrendingItem(selectedTrendingItem);
 			}

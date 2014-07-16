@@ -70,7 +70,7 @@ public class StoryLineListFragment extends BaseListFragment {
 		
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		query.whereEqualTo("storyid", selectedStory.getStoryId());
-
+		query.include("user");
 		query.findInBackground( new FindCallback<TreeNode>() {
 
 			public void done(List<TreeNode> items, ParseException arg1) {

@@ -101,6 +101,16 @@ public class TreeNode extends ParseObject {
 		 return getString("text");
 	 }
 	 
+	 public String getImageUrl ()
+	 {
+		 return getString ("imageurl");
+	 }
+	 
+	 public void setImageUrl (String url)
+	 {
+		 put ("imageurl", url);
+	 }
+	 
 	 public void setText (String text)
 	 {
 		 put ("text", text);
