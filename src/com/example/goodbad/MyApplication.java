@@ -18,10 +18,10 @@ public class MyApplication extends Application {
 		ParseObject.registerSubclass(TreeNode.class);
 		
 		Parse.initialize(this, "i6BacXY95FaVkJ8D71BFxZxE8ONXjYfOCpE3oZlt", "IFQWFl3V8CkVofzZ7FNzDG5B5Ud9Ud49a8W0oOun");
-/*		ParseUser.enableAutomaticUser();
+		ParseUser.enableAutomaticUser();
 		ParseUser.getCurrentUser().increment("RunCount");
 		ParseUser.getCurrentUser().saveInBackground();
-*/		ParseACL defaultACL = new ParseACL();
+		ParseACL defaultACL = new ParseACL();
 		defaultACL.setPublicReadAccess(true);
 		ParseACL.setDefaultACL(defaultACL, true);
 		

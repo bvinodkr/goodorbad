@@ -280,7 +280,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.setTabListener(new FragmentTabListener<HomeListFragment>(R.id.flContainer, this,
 						"mylist", HomeListFragment.class));
 		actionBar.addTab(tab2);
-		actionBar.selectTab(tab2);
+//		actionBar.selectTab(tab2);
 		
 		/*Tab tab3 = actionBar
 			    .newTab()
