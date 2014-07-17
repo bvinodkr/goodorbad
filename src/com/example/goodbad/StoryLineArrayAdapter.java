@@ -94,54 +94,33 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
 		vvItemVideo.setVisibility(View.GONE);
 		ivItemImage.setVisibility(View.GONE);
-		if (node.getImageUrl() != null)
+		String imageUrl = node.getImageUrl();
+		
+		{
+			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.GONE);
+		}
+		
+		if (imageUrl != null)
 		{
 			//Log.d ("DEBUG", "image url = " + node.getImageUrl());
-			ivItemImage.setVisibility(View.VISIBLE);
-			ivItemImage.setImageUrl(node.getImageUrl());
+			if (imageUrl.contains("mp4"))
+			{
+				vvItemVideo.setVisibility(View.VISIBLE);
+				vvItemVideo.setVideoPath(imageUrl);
+				MediaController mediaController = new MediaController(getContext());
+				mediaController.setAnchorView(vvItemVideo);
+				vvItemVideo.setMediaController(mediaController);
+				vvItemVideo.requestFocus();
+				vvItemVideo.start();
+			}
+			else
+			{
+				ivItemImage.setVisibility(View.VISIBLE);
+				ivItemImage.setImageUrl(imageUrl);
+			}
 		}
-		/*if(position==1) { 			
-			vvItemVideo.setVisibility(View.GONE);
-			ivItemImage.setVisibility(View.VISIBLE);
-			ivItemImage.setImageResource(R.drawable.yosemite);
-		} else if (position==3) { 			
-			vvItemVideo.setVisibility(View.GONE);
-			ivItemImage.setVisibility(View.VISIBLE);
-			ivItemImage.setImageResource(R.drawable.football);			
-		} else */ 
-		if (position == 0) {
-			ivItemImage.setVisibility(View.GONE);
-			vvItemVideo.setVisibility(View.VISIBLE);
-			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
-			
-			//Bitmap bmThumbnail = ThumbnailUtils.createVideoThumbnail("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4", Thumbnails.MINI_KIND);
-	        //ivItemImage.setImageBitmap(bmThumbnail);
-	        //ivItemImage.setVisibility(View.VISIBLE);
-			
-			MediaController mediaController = new MediaController(getContext());
-			mediaController.setAnchorView(vvItemVideo);
-			vvItemVideo.setMediaController(mediaController);
-			vvItemVideo.requestFocus();
-			vvItemVideo.start();
-			
-		}  else if (position == 4) { 
-			ivItemImage.setVisibility(View.GONE);
-			vvItemVideo.setVisibility(View.VISIBLE);
-			vvItemVideo.setVideoPath("http://techslides.com/demos/sample-videos/small.mp4");
-			MediaController mediaController = new MediaController(getContext());
-			mediaController.setAnchorView(vvItemVideo);
-			vvItemVideo.setMediaController(mediaController);
-			vvItemVideo.requestFocus();
-			/*vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
-			    // Close the progress bar and play the video
-			    public void onPrepared(MediaPlayer mp) {*/
-			    	vvItemVideo.start();
-			   /* }
-			});*/			    
-		} else {
-			ivItemImage.setVisibility(View.GONE);
-			vvItemVideo.setVisibility(View.GONE);
-		}
+
 				
 		/*ivItemImage.setOnClickListener(new OnClickListener() {
 			
@@ -216,15 +195,23 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			}
 		});
 		
-		String name = node.getUser().getString("name");
-		if (name == null || name.isEmpty())
+		if (node.getUser () != null)
 		{
-			tvUserName.setText (node.getUser().getEmail());
+			String name = node.getUser().getString("name");
+			if (name == null || name.isEmpty())
+			{
+				tvUserName.setText (node.getUser().getEmail());
+			}
+			else
+			{
+				tvUserName.setText (node.getUser().getString("name"));
+			}
 		}
 		else
 		{
-			tvUserName.setText (node.getUser().getString("name"));
+			tvUserName.setText("anonymous");
 		}
+
 		
 //		Log.d("debug", node.getText()); 
 		/*if (position%2 == 0) {
@@ -243,8 +230,8 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			tvVersions.setVisibility(View.GONE);
 		}*/
 		
-		Log.d ("debug", "in screen 1, adding swipe listeners");
-		convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {
+//		Log.d ("debug", "in screen 1, adding swipe listeners");
+/*		convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {
 			  
 			  
 			  @Override
@@ -282,7 +269,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			  }
 			  
 			});
-		
+		*/
 		return convertView;
 
 	}

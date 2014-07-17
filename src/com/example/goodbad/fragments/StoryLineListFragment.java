@@ -28,9 +28,6 @@ import com.example.goodbad.R;
 import com.example.goodbad.StoryLineArrayAdapter;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 public class StoryLineListFragment extends BaseListFragment {
 
@@ -84,8 +81,9 @@ public class StoryLineListFragment extends BaseListFragment {
 		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
 
 		TreeNodeAPI api = new TreeNodeAPI ();
-		api.getPathContaining(selectedStory);
-		addParas (api.getPathContaining(selectedStory));
+		ArrayList<TreeNode> path = api.getPathContaining(selectedStory);
+//		Log.d ("DEBUG", "num of nodes in path = " + path.size());
+		addParas (path);
 
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
@@ -186,9 +184,9 @@ public class StoryLineListFragment extends BaseListFragment {
 	
 	public void addParas(List<TreeNode> nodes)
 	{
+		storyLineNodeList.clear();
 		for (TreeNode n: nodes)
 		{
-			storyLineNodeList.clear();
 			storyLineNodeList.add(n);
 //			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
 			aaNodes.notifyDataSetChanged();
