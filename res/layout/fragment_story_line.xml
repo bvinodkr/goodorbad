@@ -65,6 +65,7 @@
         android:layout_above="@+id/rlStoryLineFooter"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:background="@color/black_color"
         android:cacheColorHint="#00000000"
         android:divider="@drawable/separator_line"
         android:dividerHeight="6.0sp"

@@ -30,33 +30,68 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:textSize="12sp"
             android:layout_marginRight="6dp"
-            android:text="5 m" />
+            android:text="5 m"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/tvStoryTitle"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:text="By -"
+            android:textColor="@color/com_parse_ui_twitter_login_button"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/ivProfileImage"
             android:layout_below="@+id/tvStoryTitle"
             android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tvby"
             android:text="UserName"
             android:textColor="@color/com_parse_ui_twitter_login_button"
             android:textSize="12sp" />
- 
+
+        <TextView
+            android:id="@+id/tvq1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:text="&quot;"
+            android:textColor="@color/com_parse_ui_twitter_login_button"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvStoryTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/ivProfileImage"
+            android:layout_toRightOf="@+id/tvq1"
             android:text="5 m"
-            android:textSize="14sp" />
-            
+            android:textColor="@color/com_parse_ui_twitter_login_button"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvq2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/tvStoryTitle"
+            android:text="&quot;"
+            android:textColor="@color/com_parse_ui_twitter_login_button"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -67,7 +102,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/rlHeader"
         android:background="@color/black_color"
-        android:paddingTop="4dp" >
+        android:paddingTop="6dp" >
 
         <TextView
             android:id="@+id/tvBody"
@@ -80,35 +115,34 @@
             android:textColor="@color/white_color"
             android:textSize="14sp" />
 
-         <com.loopj.android.image.SmartImageView
-             xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/ivItemImage"
-             android:layout_width="150dp"
-             android:layout_height="150dp"
-             android:layout_below="@+id/tvBody"
-             android:layout_centerVertical="true"
-             android:layout_marginLeft="70dp"
-             android:layout_marginTop="5dp"
-             android:paddingBottom="5dp"
-             android:src="@drawable/ic_launcher" />
-         
-         <VideoView
-             android:id="@+id/vvItemVideo"
-             android:layout_width="250dp"
-             android:layout_height="250dp"
-             android:layout_marginTop="5dp"
-             android:layout_marginLeft="50dp"
-             android:layout_marginBottom="5dp"
-             android:layout_below="@+id/tvBody"
-             android:layout_toRightOf="@+id/ivItemImage"
-             android:layout_centerVertical="true" />
-        
-    </RelativeLayout>    
-    
+        <com.loopj.android.image.SmartImageView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/ivItemImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_below="@+id/tvBody"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="5dp"
+            android:paddingBottom="5dp"
+            android:src="@drawable/ic_launcher" />
+
+        <VideoView
+            android:id="@+id/vvItemVideo"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_below="@+id/tvBody"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/ivItemImage" />
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/llFollowers"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"  
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/rlBody"

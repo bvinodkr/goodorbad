@@ -25,51 +25,55 @@
         android:text="TextView"
         android:textColor="@color/com_parse_ui_twitter_login_button" />
 
-    <ImageView
+    <!--
+         <ImageView
         android:id="@+id/ivInsertedImageComposeStory"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_launcher" />
+    -->
 
     <EditText
         android:id="@+id/etStoryTitleCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ivInsertedImageComposeStory"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/tvComposeUserName"
+        android:layout_below="@+id/ivComposeProfileImage"
+        android:layout_marginLeft="23dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-         android:inputType="textMultiLine"
+        android:hint="Give your story a title"
+        android:inputType="textMultiLine"
         android:textColor="@color/white_color" />
-         android:hint="Give your story a title" />
 
     <ImageView
         android:id="@+id/ivInsertedImageComposeStory"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_alignLeft="@+id/tvComposeUserName"
-        android:layout_below="@+id/etStoryTitleCompose"
+        android:layout_below="@+id/etComposeStory"
         android:layout_marginTop="24dp"
         android:src="@drawable/ic_launcher" />
- 
-   <EditText
-       android:id="@+id/etComposeStory"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignLeft="@+id/ivComposePopUpItemImage"
-       android:layout_alignParentLeft="true"
-       android:layout_below="@+id/ivInsertedImageComposeStory"
-       android:layout_marginLeft="23dp"
-       android:layout_marginTop="20dp"
-       android:layout_toLeftOf="@+id/ivComposePopUpItemImage"
-       android:ems="10"
-       android:hint="Story here.."
-       android:inputType="textMultiLine" >
 
+    <EditText
+        android:id="@+id/etComposeStory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ivComposePopUpItemImage"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/etStoryTitleCompose"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@+id/ivComposePopUpItemImage"
+        android:ems="10"
+        android:height="100dp"
+        android:hint="Story here.."
+        android:inputType="textMultiLine"
+        android:textColor="@color/white_color" >
     </EditText>
 
     <ImageView
@@ -81,4 +85,3 @@
         android:src="@drawable/attach" />
 
 </RelativeLayout>
-

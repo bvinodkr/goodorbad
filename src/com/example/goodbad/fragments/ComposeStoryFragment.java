@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -195,6 +196,12 @@ public class ComposeStoryFragment extends Fragment {
 		
 		//this is to hide the menu item of main activity on this fragment
 		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
+		menu.findItem(R.id.miPostStoryIcon).setVisible(true);
+
+		MenuItem  playMenu = menu.findItem(R.id.miPostStoryIcon);
+		 
+ 	 playMenu.setTitle(Html.fromHtml("<font color='#FFFFFF'>Post</font>"));
+
 	}
 
 	@Override
