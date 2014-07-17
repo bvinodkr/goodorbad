@@ -12,6 +12,9 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+ import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
+import com.parse.PushService;
 
 public class MyApplication extends Application {
 	@Override
@@ -31,6 +34,7 @@ public class MyApplication extends Application {
 		ParseACL.setDefaultACL(defaultACL, true);
 		 ParseUser.logOut();
 		Toast.makeText(this, "Not logged in.", Toast.LENGTH_SHORT).show();
-
+	//	PushService.setDefaultPushCallback(this, MainActivity.class);
+		ParseInstallation.getCurrentInstallation().saveInBackground();
  	}
 }
