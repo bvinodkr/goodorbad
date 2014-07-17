@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/rlHeader"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
 
@@ -23,17 +23,6 @@
             android:src="@drawable/ic_launcher" />
 
         <TextView
-            android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_toRightOf="@+id/ivProfileImage"
-            android:textSize="12sp"
-            android:text="UserName" />
-
-        <TextView
             android:id="@+id/tvRelativeTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,6 +31,28 @@
             android:textSize="12sp"
             android:layout_marginRight="6dp"
             android:text="5 m" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:layout_below="@+id/tvStoryTitle"
+            android:layout_marginLeft="5dp"
+            android:text="UserName"
+            android:textSize="12sp"
+            android:textColor="#CCCCCC" />
+
+        <TextView
+            android:id="@+id/tvStoryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:text="5 m"
+            android:textSize="14sp" />
         
     </RelativeLayout>
 
@@ -67,11 +78,11 @@
          <com.loopj.android.image.SmartImageView
              xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/ivItemImage"
-             android:layout_width="300dp"
-             android:layout_height="300dp"
+             android:layout_width="200dp"
+             android:layout_height="200dp"
              android:layout_below="@+id/tvBody"
              android:layout_centerVertical="true"
-             android:layout_marginLeft="35dp"
+             android:layout_marginLeft="70dp"
              android:layout_marginTop="5dp"
              android:paddingBottom="5dp"
              android:src="@drawable/ic_launcher" />
@@ -92,7 +103,7 @@
     <LinearLayout
         android:id="@+id/llFollowers"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"  
+        android:layout_height="30dp"  
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"

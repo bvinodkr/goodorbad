@@ -1,17 +1,13 @@
 package com.example.goodbad.fragments;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -123,12 +119,31 @@ public class StoryLineListFragment extends BaseListFragment {
 		
 		final EditText etStoryLineCompose = (EditText) storyLineView.findViewById(R.id.etStoryLineCompose);
 		
-		etStoryLineCompose.setOnClickListener(new OnClickListener() {
-			
+		etStoryLineCompose.addTextChangedListener(new TextWatcher() {
+
 			@Override
-			public void onClick(View v) {
-				ivStoryLinePopUpImage.setVisibility(View.INVISIBLE);
-				ivStoryLinePost.setVisibility(View.VISIBLE);				
+			public void onTextChanged(CharSequence s, int start, int before, int count) {				
+				int currentCharCount = etStoryLineCompose.getText().toString().length();
+				if(currentCharCount > 0) {
+					ivStoryLinePopUpImage.setVisibility(View.INVISIBLE);
+					ivStoryLinePost.setVisibility(View.VISIBLE);
+				} else {
+					ivStoryLinePopUpImage.setVisibility(View.VISIBLE);
+					ivStoryLinePost.setVisibility(View.INVISIBLE);
+				}			
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 		

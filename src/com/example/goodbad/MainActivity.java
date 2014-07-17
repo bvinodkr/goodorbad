@@ -333,7 +333,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	}
 
 	@Override
-	public void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost) {
+	public void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost) {
 		if(!fromPost) {
 
 			setupTabs(1);
@@ -348,6 +348,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 			root.setUser(ParseUser.getCurrentUser());
 			root.setImageUrl(imageUrl);
+			root.setTitle(composeStoryTitle);
 			root.saveInBackground(new SaveCallback() {
 
 				@Override

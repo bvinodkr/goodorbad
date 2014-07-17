@@ -5,14 +5,6 @@
     android:id="@+id/rlComposeStoryFragment" >
 
     <ImageView
-        android:id="@+id/ivComposePopUpItemImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/etComposeStory"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/attach" />
-
-    <ImageView
         android:id="@+id/ivComposeProfileImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,24 +24,48 @@
         android:text="TextView" />
 
     <EditText
-        android:id="@+id/etComposeStory"
+        android:id="@+id/etStoryTitleCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/ivComposePopUpItemImage"
+        android:layout_alignLeft="@+id/ivInsertedImageComposeStory"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvComposeUserName"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:inputType="textMultiLine" >
-
-        <requestFocus />
-    </EditText>
+        android:hint="Give your story a title" />
 
     <ImageView
         android:id="@+id/ivInsertedImageComposeStory"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/tvComposeUserName"
+        android:layout_below="@+id/etStoryTitleCompose"
+        android:layout_marginTop="24dp"
         android:src="@drawable/ic_launcher" />
+
+   <EditText
+       android:id="@+id/etComposeStory"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignLeft="@+id/ivComposePopUpItemImage"
+       android:layout_alignParentLeft="true"
+       android:layout_below="@+id/ivInsertedImageComposeStory"
+       android:layout_marginLeft="23dp"
+       android:layout_marginTop="20dp"
+       android:layout_toLeftOf="@+id/ivComposePopUpItemImage"
+       android:ems="10"
+       android:hint="Story here.."
+       android:inputType="textMultiLine" >
+
+    </EditText>
+
+    <ImageView
+        android:id="@+id/ivComposePopUpItemImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/etComposeStory"
+        android:layout_alignRight="@+id/etStoryTitleCompose"
+        android:src="@drawable/attach" />
 
 </RelativeLayout>

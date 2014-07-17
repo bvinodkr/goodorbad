@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -41,13 +43,14 @@ public class ComposeStoryFragment extends Fragment {
 	private ImageView ivComposePopUpItemImage;	
 	private PopupWindow popupWindow = null;
 	private ImageView ivInsertedImageComposeStory;
+	private EditText etStoryTitleCompose;
 	private EditText etComposeStory;
 	private boolean fromPost = false;
 	private TextView tvUserName;
 	public final static int PICK_PHOTO_CODE = 1046;
 	
 	public interface ComposeStoryFragmentListener {
-		void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost);
+		void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost);
 	}
 
 	public ComposeStoryFragment() {
@@ -93,7 +96,7 @@ public class ComposeStoryFragment extends Fragment {
 	public void onDestroyView() {
 		super.onDestroyView();
 		if(!fromPost) {		
-			listener.onFinishComposeDialog("NA", "NA", fromPost);
+			listener.onFinishComposeDialog("NA", "NA", "NA", fromPost);
 		}
 	}
 	
@@ -107,6 +110,11 @@ public class ComposeStoryFragment extends Fragment {
 		
 		ivInsertedImageComposeStory = (ImageView) composeStoryView.findViewById(R.id.ivInsertedImageComposeStory);
 		ivInsertedImageComposeStory.setVisibility(View.INVISIBLE);
+		
+		etStoryTitleCompose = (EditText) composeStoryView.findViewById(R.id.etStoryTitleCompose);
+		InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(etStoryTitleCompose, 0);
+		etStoryTitleCompose.requestFocus();
 		
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
           tvUserName = (TextView) composeStoryView.findViewById(R.id.tvComposeUserName);
@@ -205,11 +213,17 @@ public class ComposeStoryFragment extends Fragment {
 	}
 
 	public void onPostStoryIconClick(MenuItem mi) {
-		Toast.makeText(getActivity(), "Post Story", Toast.LENGTH_SHORT).show();	
-		fromPost = true;
-		String composeData = etComposeStory.getText().toString();
-		String imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();		
-		listener.onFinishComposeDialog(composeData, imageUrl, fromPost);		
+		Toast.makeText(getActivity(), "Post Story", Toast.LENGTH_SHORT).show();			
+		if(etComposeStory.getText()!=null &&
+				etStoryTitleCompose.getText()!=null &&
+				ivInsertedImageComposeStory.getContentDescription()!=null) {
+			fromPost = true;
+			
+			String composeData = etComposeStory.getText().toString();
+			String composeStoryTitle = etStoryTitleCompose.getText().toString();
+			String imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();		
+			listener.onFinishComposeDialog(composeData, composeStoryTitle, imageUrl, fromPost);
+		}
 	}
 	
 	public void onGalleryIconClick(View view) {
