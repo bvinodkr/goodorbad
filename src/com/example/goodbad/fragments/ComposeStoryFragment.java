@@ -43,7 +43,7 @@ public class ComposeStoryFragment extends Fragment {
 	private ImageView ivInsertedImageComposeStory;
 	private EditText etComposeStory;
 	private boolean fromPost = false;
-	
+	private TextView tvUserName;
 	public final static int PICK_PHOTO_CODE = 1046;
 	
 	public interface ComposeStoryFragmentListener {
@@ -70,7 +70,6 @@ public class ComposeStoryFragment extends Fragment {
 		//this is to hide the set up tabs on this fragment that are present on main activity
 		ActionBar actionBar = getActivity().getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
 		setHasOptionsMenu(true);
 	}
 	
@@ -112,7 +111,8 @@ public class ComposeStoryFragment extends Fragment {
 		ivInsertedImageComposeStory.setContentDescription("some url");
 				
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
-		
+          tvUserName = (TextView) composeStoryView.findViewById(R.id.tvComposeUserName);
+          tvUserName.setText(ParseUser.getCurrentUser().getString("name"));
 		ivComposePopUpItemImage = (ImageView) composeStoryView.findViewById(R.id.ivComposePopUpItemImage);
 
 		ivComposePopUpItemImage.setOnClickListener(new OnClickListener() {
