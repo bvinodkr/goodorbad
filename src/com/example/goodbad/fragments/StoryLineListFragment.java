@@ -1,12 +1,17 @@
 package com.example.goodbad.fragments;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +26,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.goodbad.PopUpImageAdapter;
@@ -30,9 +34,6 @@ import com.example.goodbad.R;
 import com.example.goodbad.StoryLineArrayAdapter;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 public class StoryLineListFragment extends BaseListFragment {
 
@@ -41,7 +42,10 @@ public class StoryLineListFragment extends BaseListFragment {
 	private StoryLineArrayAdapter aaNodes;
 	private TreeNode selectedStory;
 	private PopupWindow popupWindow = null;
+	private ImageView ivInsertedStoryLineDialog;
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
+	
+	public final static int PICK_PHOTO_CODE = 1046;
 	
 	public void newInstance(TreeNode selectedStory) {
 		this.selectedStory = selectedStory;
@@ -89,9 +93,14 @@ public class StoryLineListFragment extends BaseListFragment {
 		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
 
 		TreeNodeAPI api = new TreeNodeAPI ();
-		api.getPathContaining(selectedStory);
-		addParas (api.getPathContaining(selectedStory)); 
 
+		ArrayList<TreeNode> path = api.getPathContaining(selectedStory);
+		//Log.d ("DEBUG", "num of nodes in path = " + path.size());
+		addParas (path);
+		
+		/*ivInsertedStoryLineDialog = (ImageView) storyLineView.findViewById(R.id.ivInsertedStoryLineDialog);
+		ivInsertedStoryLineDialog.setVisibility(View.GONE);*/
+		
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
 		
@@ -136,8 +145,16 @@ public class StoryLineListFragment extends BaseListFragment {
 				ivStoryLinePost.setVisibility(View.INVISIBLE);		
 				
 				/*
-				 * parse here
+				 * add to parse
 				 */
+				TreeNodeAPI api = new TreeNodeAPI();
+				TreeNode childNode = api.addChild(selectedStory, data);
+				childNode.saveInBackground();
+				selectedStory.saveInBackground();
+				selectedStory = childNode;
+				
+				storyLineNodeList.add(childNode);
+				aaNodes.notifyDataSetChanged();
 			}
 		});
 		
@@ -203,6 +220,8 @@ public class StoryLineListFragment extends BaseListFragment {
 					InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance("InLineCompose");
 					inlineComposeStoryFragment.show(fm, "dialog_fragment");
 					//composeStoryFragment.setTargetFragment(fragment, requestCode);
+					
+					//onGalleryIconClick(v);
 				}
 			});
 		}
@@ -218,11 +237,42 @@ public class StoryLineListFragment extends BaseListFragment {
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
 	}
 	
+	/*public void onGalleryIconClick(View view) {
+	    // Create intent for picking a photo from the gallery
+	    Intent intent = new Intent(Intent.ACTION_PICK,
+	        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+	    // Bring up gallery to select a photo
+	    startActivityForResult(intent, PICK_PHOTO_CODE);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (data != null) {
+	        Uri photoUri = data.getData();
+	        // Do something with the photo based on Uri
+	        Bitmap selectedImage;
+			try {
+				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+				
+				// Load the selected image into a preview	
+				ivInsertedStoryLineDialog.setVisibility(View.VISIBLE);
+				ivInsertedStoryLineDialog.setImageBitmap(selectedImage); 
+		        ivInsertedStoryLineDialog.setContentDescription(photoUri.toString());
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+	}*/
+	
 	public void addParas(List<TreeNode> nodes)
 	{
+		storyLineNodeList.clear();
 		for (TreeNode n: nodes)
 		{
-			storyLineNodeList.clear();
 			storyLineNodeList.add(n);
 //			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
 			aaNodes.notifyDataSetChanged();

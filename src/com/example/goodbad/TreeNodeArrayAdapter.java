@@ -1,5 +1,8 @@
 package com.example.goodbad;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -125,8 +128,18 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			if(node.getImageUrl().contains("http")) {
 				ivItemImage.setImageUrl(node.getImageUrl());
 			} else {
-				//Bitmap bitmap1 = BitmapFactory.decodeFile(node.getImageUrl());
-				//ivItemImage.setImageURI(node.getIma);
+				//ivItemImage.setImageUrl(getPath(Uri.parse(node.getImageUrl())));
+				String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
+				try {
+					Bitmap image = BitmapFactory.decodeStream(new URL(path).openConnection().getInputStream());
+					ivItemImage.setImageBitmap(image);
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		/*if(position==1) { 			

@@ -82,7 +82,7 @@ public class NewStoryListFragment extends BaseListFragment {
 
 	private void getStories() {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L));
+		query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 12*60*60*1000l));
 		query.whereEqualTo("parentid", JSONObject.NULL);
 		query.include("user");
 

@@ -25,6 +25,7 @@ public class MyApplication extends Application {
 		ParseACL defaultACL = new ParseACL();
 		defaultACL.setPublicReadAccess(true);
 		ParseACL.setDefaultACL(defaultACL, true);
+
 		//ParseUser.logOut();
 		Toast.makeText(this, "Not logged in.", Toast.LENGTH_SHORT).show();
 	//	PushService.setDefaultPushCallback(this, MainActivity.class);

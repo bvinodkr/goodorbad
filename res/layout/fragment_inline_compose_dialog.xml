@@ -40,4 +40,13 @@
         android:layout_alignParentRight="true"
         android:text="Done" />
 
+    <ImageView
+        android:id="@+id/ivInsertedStoryLineDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnDoneInLineCompose"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="42dp"
+        android:src="@drawable/ic_launcher" />
+
 </RelativeLayout>

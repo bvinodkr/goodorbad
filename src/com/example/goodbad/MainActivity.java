@@ -292,14 +292,14 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.selectTab(tab1);
 		Log.d("debug ", "crapped out 4");
 
-		Tab tab2 = actionBar
+		/*Tab tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
 				.setTag("FavoriteFragment")
 				.setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
 						"mylist", MyStoryListFragment.class));
-		actionBar.addTab(tab2);
+		actionBar.addTab(tab2);*/
 
 		Log.d("debug ", "crapped out 5");
 
@@ -319,9 +319,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		case 1:
 			actionBar.selectTab(tab1);
 			break;
-		case 2:
+		/*case 2:
 			actionBar.selectTab(tab2);
-			break;
+			break;*/
 		case 3:
 			actionBar.selectTab(tab3);
 			break;
