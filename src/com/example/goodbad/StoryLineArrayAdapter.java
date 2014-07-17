@@ -166,13 +166,13 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 					if(likes > 0) { 
 						likes--;
 						ivEmptyHeart.setContentDescription("false");
-						ivEmptyHeart.setImageResource(R.drawable.ic_action_empty_heart);
+						ivEmptyHeart.setImageResource(R.drawable.empty_heart);
 						tvLikes.setText(likes+"");
 					}
 				} else {
 					likes++;
 					ivEmptyHeart.setContentDescription("true");				
-					ivEmptyHeart.setImageResource(R.drawable.ic_action_filled_heart);
+					ivEmptyHeart.setImageResource(R.drawable.full_heart);
 					tvLikes.setText(likes+"");
 				}
 				TreeNode tree = (TreeNode)v.getTag();
@@ -190,7 +190,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			
 			@Override
 			public void onClick(View v) {
-				InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance("InLineCompose");
+				InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(null);
 				inlineComposeStoryFragment.show(mFragmentManager, "dialog_fragment");				
 			}
 		});

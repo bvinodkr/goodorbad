@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="8dp"
-            android:paddingBottom="4dp"
+            android:paddingBottom="10dp"
             android:text="Sentence/Para in story"
             android:textSize="14sp" />
 
@@ -111,11 +111,12 @@
 
         <ImageView
             android:id="@+id/ivEmptyHeart"
-            android:layout_width="13dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="30dp"
-            android:src="@drawable/ic_action_empty_heart" />
+            android:src="@drawable/empty_heart" />
 
         <TextView
             android:id="@+id/tvLikes"
@@ -123,6 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"
+            android:layout_marginLeft="2dp"
             android:text=""
             android:textSize="12sp" />
 

@@ -31,22 +31,20 @@
         android:layout_toLeftOf="@+id/btnDoneInLineCompose"
         android:ems="10" />
 
+    <ImageView
+        android:id="@+id/ivInsertedDialog"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/ivUserImageInlineCompose"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_launcher" />
+
     <Button
         android:id="@+id/btnDoneInLineCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/etDataInlineCompose"
         android:layout_alignBottom="@+id/etDataInlineCompose"
         android:layout_alignParentRight="true"
         android:text="Done" />
-
-    <ImageView
-        android:id="@+id/ivInsertedStoryLineDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnDoneInLineCompose"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="42dp"
-        android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>
