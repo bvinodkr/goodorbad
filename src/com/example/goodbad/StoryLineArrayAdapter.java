@@ -216,6 +216,15 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			}
 		});
 		
+		String name = node.getUser().getString("name");
+		if (name == null || name.isEmpty())
+		{
+			tvUserName.setText (node.getUser().getEmail());
+		}
+		else
+		{
+			tvUserName.setText (node.getUser().getString("name"));
+		}
 		
 //		Log.d("debug", node.getText()); 
 		/*if (position%2 == 0) {

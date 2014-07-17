@@ -295,7 +295,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			 */
 			
 			final TreeNode root = new TreeNode (composeData, null);
-			//root.setImageUrl();
+			root.setUser(ParseUser.getCurrentUser());
+			root.setImageUrl(imageUrl);
 
 			//		Log.d("DEBUG", root.getObjectId());
 
