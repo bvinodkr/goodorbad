@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlComposeStoryFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/rlComposeStoryFragment" >
+    android:layout_height="match_parent" >
 
     <ImageView
         android:id="@+id/ivComposeProfileImage"
@@ -11,15 +11,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="5dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_profile_icon" />
 
     <TextView
         android:id="@+id/tvComposeUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="22dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/ivComposeProfileImage"
         android:text="TextView" />
 
@@ -69,3 +69,4 @@
         android:src="@drawable/attach" />
 
 </RelativeLayout>
+
