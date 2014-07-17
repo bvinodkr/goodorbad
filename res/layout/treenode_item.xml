@@ -2,14 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlTreeNodeItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/black_color" >
 
     <RelativeLayout
         android:id="@+id/rlHeader"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:background="@color/black_color" >
 
         <ImageView
             android:id="@+id/ivProfileImage"
@@ -31,6 +33,7 @@
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@+id/ivProfileImage"
             android:text="UserName"
+            android:textColor="@color/com_parse_ui_twitter_login_button"
             android:textSize="12sp" />
 
         <TextView
@@ -51,6 +54,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/rlHeader"
+        android:background="@color/black_color"
         android:paddingTop="4dp" >
 
         <TextView
@@ -61,6 +65,7 @@
             android:layout_marginLeft="8dp"
             android:paddingBottom="4dp"
             android:text="Sentence/Para in story"
+            android:textColor="@color/white_color"
             android:textSize="14sp" />
 
         <com.loopj.android.image.SmartImageView
@@ -122,6 +127,7 @@
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="120dp"
             android:text="5 Endings"
+            android:textColor="@color/com_parse_ui_twitter_login_button"
             android:textSize="12sp" />
 
         <ImageView

@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -272,23 +275,26 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		Log.d("debug ", "crapped out 1");
 
 		ActionBar actionBar = getActionBar();
-		actionBar.setTitle("Good/Bad");
+		//actionBar.setTitle("Story Tellers");
+		actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Story Tellers</font>"));
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
+		 actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
 		Log.d("debug ", "crapped out 2");
 
 		actionBar.removeAllTabs();
 
 		Log.d("debug ", "crapped out 3");
-
 		Tab tab1 = actionBar
 				.newTab()
 				.setText("Trending")
 				.setIcon(R.drawable.ic_global)
+				 
 				.setTag("TrendingFragment")
 				.setTabListener(new FragmentTabListener<TrendingStoryListFragment>(R.id.flContainer, this,
 						"home", TrendingStoryListFragment.class));
 		actionBar.addTab(tab1);	
+		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#2DAAE2")));
 		actionBar.selectTab(tab1);
 		Log.d("debug ", "crapped out 4");
 

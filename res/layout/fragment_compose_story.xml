@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlComposeStoryFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/black_color" >
 
     <ImageView
         android:id="@+id/ivComposePopUpItemImage"
@@ -29,7 +30,16 @@
         android:layout_marginLeft="22dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/ivComposeProfileImage"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="@color/com_parse_ui_twitter_login_button" />
+
+    <ImageView
+        android:id="@+id/ivInsertedImageComposeStory"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_launcher" />
 
     <EditText
         android:id="@+id/etComposeStory"
@@ -39,17 +49,7 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/ivComposePopUpItemImage"
         android:ems="10"
-        android:inputType="textMultiLine" >
-
-        <requestFocus />
-    </EditText>
-
-    <ImageView
-        android:id="@+id/ivInsertedImageComposeStory"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_launcher" />
+        android:inputType="textMultiLine"
+        android:textColor="@color/white_color" />
 
 </RelativeLayout>

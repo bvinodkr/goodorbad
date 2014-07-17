@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,9 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		super(context, R.layout.treenode_item, treeNodes);
 		this.mScreenNo = screenNo;
 		this.mFragmentManager = fragmentManager;
+//		LinearLayout llFollowers;
+//		llFollowers= (LinearLayout)  ((View) fragmentManager).findViewById(R.id.llFollowers);
+//		llFollowers.setVisibility(0);
 	}
 	
 	public void addStory (List<TreeNode> nodes)

@@ -4,23 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-   <android.support.v4.view.ViewPager
+
+    <android.support.v4.view.ViewPager
         android:id="@+id/vpPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        >
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
         <android.support.v4.view.PagerTabStrip
-        android:id="@+id/pager_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp" />
-        
+            android:id="@+id/pager_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/com_parse_ui_twitter_login_button"
+            android:paddingBottom="4dp" />
     </android.support.v4.view.ViewPager>
 
     <RelativeLayout
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="#6699CC"
+        android:background="@color/com_parse_ui_twitter_login_button"
         android:orientation="horizontal" >
 
         <EditText
@@ -48,7 +48,7 @@
             android:layout_alignParentRight="true"
             android:paddingTop="4dp"
             android:src="@drawable/attach" />
-        
+
         <ImageView
             android:id="@+id/ivStoryLinePost"
             android:layout_width="wrap_content"
@@ -56,7 +56,6 @@
             android:layout_alignParentRight="true"
             android:paddingTop="4dp"
             android:src="@drawable/post" />
-
     </RelativeLayout>
 
     <ListView
@@ -65,6 +64,7 @@
         android:layout_height="401dp"
         android:layout_above="@+id/rlStoryLineFooter"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:cacheColorHint="#00000000"
         android:divider="@drawable/separator_line"
         android:dividerHeight="6.0sp"

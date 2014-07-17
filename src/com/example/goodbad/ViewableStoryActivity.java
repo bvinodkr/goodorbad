@@ -1,33 +1,26 @@
 package com.example.goodbad;
+  
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.goodbad.fragments.StoryLineListFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
-public class StoryLineViewActivity extends FragmentActivity {
+public class ViewableStoryActivity extends ActionBarActivity {
 
 	TreeNode root;
 	int numEndings;
@@ -35,7 +28,7 @@ public class StoryLineViewActivity extends FragmentActivity {
 	ListView lvNodes;
 	ArrayList<String> items;
 	ArrayAdapter<String> itemsAdapter;
-	/*
+	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,34 +64,22 @@ public class StoryLineViewActivity extends FragmentActivity {
 				android.R.layout.simple_list_item_1, items);
 		lvNodes.setAdapter(itemsAdapter);
 	}
-	*/
+	/*
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.story_line_main);
+		setContentView(R.layout.viewablestory_line_main);
 
 		String title = getIntent().getStringExtra("title");
-		ActionBar actionBar = getActionBar();
-		
 		if (title != null && !title.isEmpty())
-		{	getActionBar().setTitle(title);
-			String s ="<font color='#FFFFFF'>"+ actionBar.getTitle().toString()+ "</font>";
-			actionBar.setTitle(Html.fromHtml((s)));
+		{
+			getActionBar().setTitle(title);
 		}
 		else
 		{
-			actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Story Tellers</font>"));
+			getActionBar().setTitle("Story Browse");
 		}
-//		LinearLayout llFollowers;
-//		llFollowers= (LinearLayout) findViewById(R.id.llFollowers);
-//		llFollowers.setVisibility(0);
-				//actionBar.setTitle("Story Tellers");
-	//	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		actionBar.setDisplayShowTitleEnabled(true);
-		 actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
-
-		 
 		String storyId = getIntent().getStringExtra("storyId");
 		Log.d ("DEBUG", "story id in storyline view =" + storyId);
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
@@ -130,45 +111,7 @@ public class StoryLineViewActivity extends FragmentActivity {
 		});
 	
 	}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.action_bar_items, menu);
-
-		/*MenuItem miActionBarShareIcon = menu.findItem(R.id.miActionBarShareIcon);
-		ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(miActionBarShareIcon);
-		Log.d("debug ", "is null " + shareActionProvider);
-        shareActionProvider.setShareIntent(getDefaultShareIntent());*/
-		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
-		if( ParseUser.getCurrentUser() != null ) {
-			playMenu.setIcon(R.drawable.ic_read  ) ;
-		}	else {playMenu.setIcon(R.drawable.ic_read  ) ;
-
-		}   
-		return super.onCreateOptionsMenu(menu);
-	}
-
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int itemId = item.getItemId();
-		if (itemId == R.id.miActionBarComposeIcon) {
-		//	onReadClick(item);
-			LinearLayout llFollowers;
-			llFollowers= (LinearLayout) findViewById(R.id.llFollowers);
-			llFollowers.setVisibility(0);
-			return true;
-		} 
-
-		return super.onOptionsItemSelected(item);
-	}
-//	private void onReadClick(MenuItem item) {
-// 		 Intent i = new Intent (this, ViewableStoryActivity.class);
-//		 //pass data
-//		 i.putExtra("storyId", "l7o9gDTsIu");
-//		 i.putExtra("title", "The Horse");
-//		 startActivity(i);
-//
-//	}
+	*/
 	public class ContentPagerAdapter extends FragmentPagerAdapter {
 
 		public ContentPagerAdapter(FragmentManager fm) {
@@ -210,7 +153,7 @@ public class StoryLineViewActivity extends FragmentActivity {
  		}
 		
 	}
-	/*
+	 
 	public void addParas (List<TreeNode> nodes)
 	{
 		for (TreeNode n: nodes)
@@ -220,5 +163,5 @@ public class StoryLineViewActivity extends FragmentActivity {
 			itemsAdapter.notifyDataSetChanged();
 		}
 	}
-	*/
+	 
 }

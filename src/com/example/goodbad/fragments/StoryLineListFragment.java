@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.example.goodbad.R;
 import com.example.goodbad.StoryLineArrayAdapter;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
+import com.parse.ParseUser;
 
 public class StoryLineListFragment extends BaseListFragment {
 
@@ -290,12 +292,28 @@ public class StoryLineListFragment extends BaseListFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {	
 		super.onCreateOptionsMenu(menu, inflater);
 		
-		inflater.inflate(R.menu.story_line_action_bar, menu);
+		inflater.inflate(R.menu.action_bar_items, menu);
 		
-		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
+		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
+		if( ParseUser.getCurrentUser() != null ) {
+			playMenu.setIcon(R.drawable.ic_read  ) ;
+		}	else {playMenu.setIcon(R.drawable.ic_read  ) ;
+
+		}   
+		return;
+
 	}
-	
-	
+ 
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int itemId = item.getItemId();
+		if (itemId == R.id.miActionBarComposeIcon) {
+			//onReadClick(item);
+			return true;
+		}
+		return false; 
+	}
 	private void addNodestoList() {
 		TreeNode n1 = new TreeNode ();
 		n1.setText("This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1");
