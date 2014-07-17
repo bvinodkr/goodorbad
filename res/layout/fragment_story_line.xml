@@ -13,14 +13,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         >
-        <android.support.v4.view.PagerTabStrip
-        android:id="@+id/pager_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp" />
-        
     </android.support.v4.view.ViewPager>
 
     <RelativeLayout
@@ -65,11 +57,15 @@
         android:layout_height="401dp"
         android:layout_above="@+id/rlStoryLineFooter"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:cacheColorHint="#00000000"
         android:divider="@drawable/separator_line"
         android:dividerHeight="6.0sp"
         android:paddingBottom="6dp"
-        android:paddingTop="6dp" >
+        android:paddingTop="6dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
+
     </ListView>
 
 </RelativeLayout>

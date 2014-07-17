@@ -177,12 +177,12 @@ public class StoryLineListFragment extends BaseListFragment {
 	}
 	
 	//private RelativeLayout.LayoutParams paramsNotFullscreen; //if you're using RelativeLatout           
-	@Override
+	/*@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			 /*paramsNotFullscreen=(RelativeLayout.LayoutParams)mVideoView.getLayoutParams();
+			 paramsNotFullscreen=(RelativeLayout.LayoutParams)mVideoView.getLayoutParams();
 		        RelativeLayout.LayoutParams params=new LayoutParams(paramsNotFullscreen);
 		        params.setMargins(0, 0, 0, 0);
 		        params.height=ViewGroup.LayoutParams.MATCH_PARENT;
@@ -192,10 +192,10 @@ public class StoryLineListFragment extends BaseListFragment {
 
 		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 		        mVideoView.setLayoutParams(paramsNotFullscreen);
-		}*/
+		}
 			//newConfig.
 		}	
-	}
+	}*/
 	
 	private void inflatePopUpWindow(LayoutInflater inflater, ViewGroup container, int location[]) {
 		// Inflate the popup_layout.xml
