@@ -64,28 +64,28 @@
             android:textSize="14sp"
             android:text="Sentence/Para in story" />
 
-         <com.loopj.android.image.SmartImageView xmlns:android="http://schemas.android.com/apk/res/android"
+         <com.loopj.android.image.SmartImageView
+             xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/ivItemImage"
-
-             android:layout_marginTop="5dp"
-             android:paddingBottom="5dp"
+             android:layout_width="300dp"
+             android:layout_height="300dp"
              android:layout_below="@+id/tvBody"
              android:layout_centerVertical="true"
-             android:layout_marginLeft="24dp"
-             android:layout_width="75dp"
-    		android:layout_height="75dp"
+             android:layout_marginLeft="35dp"
+             android:layout_marginTop="5dp"
+             android:paddingBottom="5dp"
              android:src="@drawable/ic_launcher" />
          
          <VideoView
              android:id="@+id/vvItemVideo"
              android:layout_width="250dp"
-             android:layout_height="200dp"
+             android:layout_height="250dp"
              android:layout_marginTop="5dp"
-             android:layout_marginBottom="10dp"
+             android:layout_marginLeft="50dp"
+             android:layout_marginBottom="5dp"
              android:layout_below="@+id/tvBody"
              android:layout_toRightOf="@+id/ivItemImage"
-             android:layout_centerVertical="true"
-             android:layout_marginLeft="24dp" />
+             android:layout_centerVertical="true" />
         
     </RelativeLayout>    
     
@@ -105,7 +105,7 @@
             android:layout_width="13dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:src="@drawable/ic_action_empty_heart" />
 
         <TextView
@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="2dp"            
+            android:layout_marginBottom="2dp"      
             android:text=""
             android:textSize="12sp" />
          
@@ -121,7 +121,7 @@
             android:id="@+id/tvVersions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="120dp"
             android:layout_marginBottom="2dp"
             android:layout_gravity="bottom"
             android:textSize="12sp"
@@ -131,7 +131,7 @@
             android:id="@+id/ivForkStory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="120dp"
             android:layout_gravity="bottom"           
             android:src="@drawable/ic_action_popup" />
 

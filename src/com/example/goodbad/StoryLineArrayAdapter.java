@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -41,13 +42,13 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 	
 	public String getRelativeTimeAgo(Date date) {
 		String relativeDate = "";
-		try {
+		/*try {
 			long dateMillis = date.getTime();
 			relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
 					System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
 		} catch (ParseException e) {
 			e.printStackTrace();
-		} 
+		} */
 	 
 		return relativeDate;
 	}
@@ -94,11 +95,11 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		ivItemImage.setVisibility(View.GONE);
 		if (node.getImageUrl() != null)
 		{
-//			Log.d ("DEBUG", "image url = " + node.getImageUrl());
+			//Log.d ("DEBUG", "image url = " + node.getImageUrl());
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageUrl(node.getImageUrl());
 		}
-/*		if(position==1) { 			
+		/*if(position==1) { 			
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.yosemite);
@@ -106,7 +107,8 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
 			ivItemImage.setImageResource(R.drawable.football);			
-		} else if (position == 3) { 
+		} else */ 
+		if (position == 0) {
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.VISIBLE);
 			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
@@ -114,17 +116,31 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			mediaController.setAnchorView(vvItemVideo);
 			vvItemVideo.setMediaController(mediaController);
 			vvItemVideo.requestFocus();
-			vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
+			/*vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
 			    // Close the progress bar and play the video
-			    public void onPrepared(MediaPlayer mp) {
+			    public void onPrepared(MediaPlayer mp) {*/
 			    	vvItemVideo.start();
-			    }
-			});
+			   /* }
+			});*/
+		}  else if (position == 4) { 
+			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.VISIBLE);
+			vvItemVideo.setVideoPath("http://techslides.com/demos/sample-videos/small.mp4");
+			MediaController mediaController = new MediaController(getContext());
+			mediaController.setAnchorView(vvItemVideo);
+			vvItemVideo.setMediaController(mediaController);
+			vvItemVideo.requestFocus();
+			/*vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
+			    // Close the progress bar and play the video
+			    public void onPrepared(MediaPlayer mp) {*/
+			    	vvItemVideo.start();
+			   /* }
+			});*/			    
 		} else {
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.GONE);
 		}
-*/				
+				
 		 
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
@@ -168,7 +184,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			}
 		}); 
 		
-		tvUserName.setText (node.getUser().getUsername());		 
+		//tvUserName.setText (node.getUser().getUsername());		 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
 		
@@ -195,10 +211,10 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			String plural = (sibCount > 1)? "s":"";
 			tvVersions.setText(sibCount + " version" + plural);
 		}
-		else
+		/*else
 		{
 			tvVersions.setVisibility(View.GONE);
-		}
+		}*/
 		
 		Log.d ("debug", "in screen 1, adding swipe listeners");
 		convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {

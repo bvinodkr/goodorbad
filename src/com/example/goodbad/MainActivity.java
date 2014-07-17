@@ -33,6 +33,7 @@ import com.parse.ParseUser;
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
+	private ComposeStoryFragment composeStoryFragment;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
@@ -193,7 +194,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	private void launchComposeDialog() {
 		//FragmentManager fm = getSupportFragmentManager();
 
-		ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
+		composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
 		//composeStoryFragment.show(fm, "fragment_compose_tweet");
 		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -247,7 +248,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.setTag("TrendingFragment")
 				.setTabListener(new FragmentTabListener<TrendingStoryListFragment>(R.id.flContainer, this,
 						"home", TrendingStoryListFragment.class));
-		actionBar.addTab(tab1);		
+		actionBar.addTab(tab1);	
+		actionBar.selectTab(tab1);
 
 		Tab tab2 = actionBar
 				.newTab()
@@ -293,6 +295,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			 */
 			setupTabs(1);
 		} else {
+			getSupportFragmentManager().beginTransaction().remove(composeStoryFragment).commit();
 			setupTabs(3); 
 		}
 	}
