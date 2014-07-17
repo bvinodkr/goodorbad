@@ -26,11 +26,13 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.goodbad.PopUpImageAdapter;
 import com.example.goodbad.PopUpWindowItem;
 import com.example.goodbad.R;
+import com.parse.ParseUser;
 
 public class ComposeStoryFragment extends Fragment {
 
@@ -100,8 +102,9 @@ public class ComposeStoryFragment extends Fragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
+ 
 		View composeStoryView = inflater.inflate(R.layout.fragment_compose_story, container, false);
-
+ 
 		fromPost = false;
 		
 		ivInsertedImageComposeStory = (ImageView) composeStoryView.findViewById(R.id.ivInsertedImageComposeStory);

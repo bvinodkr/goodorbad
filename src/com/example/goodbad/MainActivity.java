@@ -7,8 +7,11 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +22,7 @@ import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.example.goodbad.fragments.ComposeStoryFragment;
+ import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
 import com.example.goodbad.fragments.MyStoryListFragment;
 import com.example.goodbad.fragments.NewStoryListFragment;
@@ -28,32 +31,83 @@ import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
+ 
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
+ import com.parse.ParseObject;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
+import com.example.goodbad.ComposeDispatchActivity;
+ 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
-	private ComposeStoryFragment composeStoryFragment;
-	
-	@Override
+ 	private static boolean mReturnedFromParse = false;
+ 	private ComposeStoryFragment composeStoryFragment;
+ 	
+ 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
 		//setBehindContentView(R.layout.activity_main);
-		addDummyData();
-		setupTabs(1);
-
+	//	addDummyData();
+ 		//setupTabs();
+		
+		if(mReturnedFromParse) {
+			//launchComposeDialog();
+		}
+ 		setupTabs(1);
+ 
 		//		SlidingMenu sm = getSlidingMenu();
 		//		sm.setShadowWidthRes(R.dimen.shadow_width);
 		//		sm.setShadowDrawable(R.drawable.shadow);
 		//		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		//		sm.setFadeDegree(0.35f);
 		//		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-	}
-	
+ 		
+/*		ParseObject testObj = new ParseObject ("testingParse");
+		testObj.put ("test", "foo");
+		testObj.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException arg0) {
+				if (arg0 == null)
+				{
+					Log.d ("DEBUG", "save succeeded");
+				}
+				else
+				{
+					Log.d ("DEBUG", "error in save " + arg0.getMessage()); 
+				}
+				
+			}
+		});
+		*/
+		
+	    Parse.initialize(this, getString(R.string.parse_app_id),
+	            getString(R.string.parse_client_key));
 
+	        Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
+
+	        // Optional - If you don't want to allow Facebook login, you can
+	        // remove this line (and other related ParseFacebookUtils calls)
+	        ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
+
+	        // Optional - If you don't want to allow Twitter login, you can
+	        // remove this line (and other related ParseTwitterUtils calls)
+	        ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
+	            getString(R.string.twitter_consumer_secret));
+
+	}
+ 	
+ 	public static void onParseLogin(boolean returnedFromParse) {
+ 		mReturnedFromParse = returnedFromParse;
+ 	}
+ 	
+ 
+ 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.action_bar_items, menu);
@@ -62,11 +116,16 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(miActionBarShareIcon);
 		Log.d("debug ", "is null " + shareActionProvider);
         shareActionProvider.setShareIntent(getDefaultShareIntent());*/
-
+		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
+		 if( ParseUser.getCurrentUser() != null ) {
+	         playMenu.setIcon(R.drawable.compose  ) ;
+	    }	else {playMenu.setIcon(R.drawable.login_icon  ) ;
+	    	
+	    }   
 		return super.onCreateOptionsMenu(menu);
 	}
 	
-	@Override
+ 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			/*case R.id.miPopUpIcon:
@@ -75,9 +134,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			case R.id.miActionBarComposeIcon:
 				onComposeIconClick(item);
 				return true;
-			case R.id.miPostStoryIcon:
+		 //	case R.id.miPostStoryIcon:
 				// Not implemented here
-				return false;
+		 	//	return false;
 			default:
 				break;
 		}
@@ -107,7 +166,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		// Displaying the popup at the specified location, + offsets.
 		popupWindow.showAtLocation(popUpView,  Gravity.NO_GRAVITY, 100, 110);
 		
-		populatePopUpWindowItems();  
+		populatePopUpWindowItems();
 
 		GridView gridview = (GridView) popUpView.findViewById(R.id.gvPopUp);		
 		gridview.setAdapter(new PopUpImageAdapter(this, popUpWindowItemList));
@@ -141,7 +200,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	private void addStory(String x)
 	{
 		TreeNode root = new TreeNode (x  + " , good-root", null);
-		root.setImageUrl("http://media1.santabanta.com/full1/Animals/Dogs/dogs-87a.jpg");
+		
+
 
 		//		Log.d("DEBUG", root.getObjectId());
 		try {
@@ -150,20 +210,17 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 			TreeNodeAPI api = new TreeNodeAPI ();
 			TreeNode firstPara = api.addChild(root, x + " bad-para1");
-			firstPara.setUser(ParseUser.getCurrentUser());
-			firstPara.setImageUrl("http://practicalveterinarytips.com/wp-content/uploads/2013/04/suspicious-puppy.jpg");
 			
 			//save both root and firstPara
 			root.save();
 			firstPara.save();
 			
 			TreeNode secondPara = api.addChild(firstPara, x + " good-para2");
-			secondPara.setUser(ParseUser.getCurrentUser());
+			
 			firstPara.save();
 			secondPara.save();
 			
 			TreeNode secondParav1 = api.addChild(firstPara, x + " good-para2-v1");
-			secondParav1.setUser(ParseUser.getCurrentUser());
 			secondParav1.save();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -192,20 +249,43 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	} 
 
 	private void launchComposeDialog() {
-		//FragmentManager fm = getSupportFragmentManager();
+ 	    ParseUser user = ParseUser.getCurrentUser();
 
-		composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
-		//composeStoryFragment.show(fm, "fragment_compose_tweet");
-		
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		ft.replace(R.id.flContainer, composeStoryFragment);
-		ft.addToBackStack(null);
-		ft.commit();
+	    if(ParseUser.getCurrentUser() != null  ) {
+
+			composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
+			//composeStoryFragment.show(fm, "fragment_compose_tweet");
+			
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			ft.replace(R.id.flContainer, composeStoryFragment);
+			ft.addToBackStack(null);
+			ft.commit();
+
+	    }else{
+	    Intent i = new Intent(MainActivity.this,
+	    		ComposeDispatchActivity.class);
+ 		//	String	username =user.getUsername();
+  		//	i.putExtra("result", username);
+
+	          i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+	              | Intent.FLAG_ACTIVITY_NEW_TASK);
+	          startActivity(i);
+
+  	    }
+ 
 	}
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode==RESULT_OK){
+			//if(requestCode==50){
+ 			Toast.makeText(this, "Logged in. Welcome!", Toast.LENGTH_SHORT).show();
+  			//}
+		}
+ //		super.onActivityResult(requestCode, resultCode, data);
+	}
 	private void addDummyData ()
 	{
-/*	addStory ("story1");
+		/*addStory ("story1");
 		addStory ("story2");
 		addStory("story3");
 	
@@ -234,13 +314,17 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	}
 
 	private void setupTabs(int tabNo) {
+		Log.d("debug ", "crapped out 1");
+
 		ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Good/Bad");
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
+		Log.d("debug ", "crapped out 2");
 
 		actionBar.removeAllTabs();
-		
+		Log.d("debug ", "crapped out 3");
+
 		Tab tab1 = actionBar
 				.newTab()
 				.setText("Trending")
@@ -250,6 +334,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 						"home", TrendingStoryListFragment.class));
 		actionBar.addTab(tab1);	
 		actionBar.selectTab(tab1);
+		Log.d("debug ", "crapped out 4");
 
 		Tab tab2 = actionBar
 				.newTab()
@@ -260,6 +345,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 						"mylist", MyStoryListFragment.class));
 		actionBar.addTab(tab2);
 
+		Log.d("debug ", "crapped out 5");
 
 
 		
@@ -271,7 +357,8 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			    .setTabListener(new FragmentTabListener<NewStoryListFragment>(R.id.flContainer, this,
 	                        "mylist", NewStoryListFragment.class));
 			actionBar.addTab(tab3); 
-			
+			Log.d("debug ", "crapped out 6");
+
 		switch(tabNo) {
 			case 1:
 				actionBar.selectTab(tab1);
@@ -285,28 +372,16 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			default:
 				break;
 		}	
+		Log.d("debug ", "crapped out 7");
+
 	}
 
 	@Override
-	public void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost) {
+	public void onFinishComposeDialog(String composeData, boolean fromPost) {
 		if(!fromPost) {
 			/*
 			 * put data into parse here
 			 */
-			
-			final TreeNode root = new TreeNode (composeData, null);
-			//root.setImageUrl();
-
-			//		Log.d("DEBUG", root.getObjectId());
-
-				root.saveInBackground(new SaveCallback() {
-					
-					@Override
-					public void done(ParseException arg0) {
-						root.setStoryId(root.getObjectId());
-					}
-				});
-
 			setupTabs(1);
 		} else {
 			getSupportFragmentManager().beginTransaction().remove(composeStoryFragment).commit();
@@ -314,26 +389,17 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		}
 	}
 
-	/*
 	@Override
 	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
 	
 		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
 		storyLineFragment.newInstance(selectedTrendingItem);
-		
+		/*Bundle args = new Bundle();
+		args.putInt(StoryLineListFragment.ARG_POSITION, position);
+		newFragment.setArguments(args);*/
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, storyLineFragment);
 		ft.addToBackStack(null);
 		ft.commit();
-	}
-*/
-	
-	@Override
-	public void onSelectedTrendingItem (TreeNode selectedTrendingItem)
-	{
-		 Intent i = new Intent (this, StoryLineViewActivity.class);
-		 //pass data
-		 i.putExtra("storyId", selectedTrendingItem.getStoryId());
-		 startActivity(i);
 	}
 }

@@ -193,12 +193,12 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		}); 
 		
 	
-
+ 
 		if (node.getUser() != null)
 		{
 			tvUserName.setText (node.getUser().getUsername());
 		}
-
+ 
 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
