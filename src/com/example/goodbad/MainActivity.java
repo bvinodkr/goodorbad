@@ -25,15 +25,16 @@ import android.widget.Toast;
  import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
 import com.example.goodbad.fragments.MyStoryListFragment;
+import com.example.goodbad.fragments.NewStoryListFragment;
 import com.example.goodbad.fragments.StoryLineListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
-
+ 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseObject;
+ import com.parse.ParseObject;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -42,28 +43,30 @@ import com.example.goodbad.ComposeDispatchActivity;
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
-	private static boolean mReturnedFromParse = false;
-	
+ 	private static boolean mReturnedFromParse = false;
+ 	private ComposeStoryFragment composeStoryFragment;
+ 	
  	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
 		//setBehindContentView(R.layout.activity_main);
-		addDummyData();
-		setupTabs();
+	//	addDummyData();
+ 		//setupTabs();
 		
 		if(mReturnedFromParse) {
 			//launchComposeDialog();
 		}
-
+ 		setupTabs(1);
+ 
 		//		SlidingMenu sm = getSlidingMenu();
 		//		sm.setShadowWidthRes(R.dimen.shadow_width);
 		//		sm.setShadowDrawable(R.drawable.shadow);
 		//		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		//		sm.setFadeDegree(0.35f);
 		//		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		
+ 		
 /*		ParseObject testObj = new ParseObject ("testingParse");
 		testObj.put ("test", "foo");
 		testObj.saveInBackground(new SaveCallback() {
@@ -104,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
  	}
  	
  
-
+ 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.action_bar_items, menu);
@@ -125,15 +128,15 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
  	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.miPopUpIcon:
+			/*case R.id.miPopUpIcon:
 				onPopUpIconCick(item);
-				return true;
+				return true;*/
 			case R.id.miActionBarComposeIcon:
 				onComposeIconClick(item);
 				return true;
-			case R.id.miPostStoryIcon:
+		 //	case R.id.miPostStoryIcon:
 				// Not implemented here
-				return false;
+		 	//	return false;
 			default:
 				break;
 		}
@@ -246,14 +249,17 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	} 
 
 	private void launchComposeDialog() {
-	    ParseUser user = ParseUser.getCurrentUser();
+ 	    ParseUser user = ParseUser.getCurrentUser();
 
 	    if(ParseUser.getCurrentUser() != null  ) {
 
-			FragmentManager fm = getSupportFragmentManager();
-
-			ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
-			composeStoryFragment.show(fm, "fragment_compose_tweet");
+			composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
+			//composeStoryFragment.show(fm, "fragment_compose_tweet");
+			
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			ft.replace(R.id.flContainer, composeStoryFragment);
+			ft.addToBackStack(null);
+			ft.commit();
 
 	    }else{
 	    Intent i = new Intent(MainActivity.this,
@@ -266,6 +272,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	          startActivity(i);
 
   	    }
+ 
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -306,11 +313,17 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		});*/
 	}
 
-	private void setupTabs() {
+	private void setupTabs(int tabNo) {
+		Log.d("debug ", "crapped out 1");
+
 		ActionBar actionBar = getActionBar();
 		actionBar.setTitle("Good/Bad");
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
+		Log.d("debug ", "crapped out 2");
+
+		actionBar.removeAllTabs();
+		Log.d("debug ", "crapped out 3");
 
 		Tab tab1 = actionBar
 				.newTab()
@@ -319,8 +332,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.setTag("TrendingFragment")
 				.setTabListener(new FragmentTabListener<TrendingStoryListFragment>(R.id.flContainer, this,
 						"home", TrendingStoryListFragment.class));
-		actionBar.addTab(tab1);
+		actionBar.addTab(tab1);	
 		actionBar.selectTab(tab1);
+		Log.d("debug ", "crapped out 4");
 
 		Tab tab2 = actionBar
 				.newTab()
@@ -331,31 +345,53 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 						"mylist", MyStoryListFragment.class));
 		actionBar.addTab(tab2);
 
+		Log.d("debug ", "crapped out 5");
+
+
 		
-		/*Tab tab3 = actionBar
+		Tab tab3 = actionBar
 			    .newTab()
 			    .setText("New")
 			    .setIcon(R.drawable.ic_favorite)
-			    .setTag("FavoriteFragment")
-			    .setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
-	                        "mylist", MyStoryListFragment.class));
-			actionBar.addTab(tab3); */
+			    .setTag("NewFragment")
+			    .setTabListener(new FragmentTabListener<NewStoryListFragment>(R.id.flContainer, this,
+	                        "mylist", NewStoryListFragment.class));
+			actionBar.addTab(tab3); 
+			Log.d("debug ", "crapped out 6");
+
+		switch(tabNo) {
+			case 1:
+				actionBar.selectTab(tab1);
+				break;
+			case 2:
+				actionBar.selectTab(tab2);
+				break;
+			case 3:
+				actionBar.selectTab(tab3);
+				break;
+			default:
+				break;
+		}	
+		Log.d("debug ", "crapped out 7");
+
 	}
 
 	@Override
-	public void onFinishComposeDialog() {
-		// TODO Auto-generated method stub
-
+	public void onFinishComposeDialog(String composeData, boolean fromPost) {
+		if(!fromPost) {
+			/*
+			 * put data into parse here
+			 */
+			setupTabs(1);
+		} else {
+			getSupportFragmentManager().beginTransaction().remove(composeStoryFragment).commit();
+			setupTabs(3); 
+		}
 	}
 
 	@Override
 	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
-		/*FragmentManager fm = getSupportFragmentManager();
-		TweetListFragment tweetListFragment = (TweetListFragment) fm.findFragmentById(R.id.flContainer);
-		
-		tweetListFragment.clearAdapter(); 
-		tweetListFragment.addTweetsToAdapterAtIndex(composedTweet, 0);*/
-		
+	
 		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
 		storyLineFragment.newInstance(selectedTrendingItem);
 		/*Bundle args = new Bundle();

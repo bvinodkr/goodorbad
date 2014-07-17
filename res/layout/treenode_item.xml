@@ -30,7 +30,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@+id/ivProfileImage"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:text="UserName" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:textSize="8sp"
+            android:textSize="12sp"
             android:layout_marginRight="6dp"
             android:text="5 m" />
         
@@ -61,37 +61,38 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="8dp"
             android:paddingBottom="4dp"
-            android:textSize="10sp"
+            android:textSize="14sp"
             android:text="Sentence/Para in story" />
 
-         <ImageView
+         <com.loopj.android.image.SmartImageView
+             xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/ivItemImage"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="5dp"
-             android:paddingBottom="5dp"
+             android:layout_width="300dp"
+             android:layout_height="300dp"
              android:layout_below="@+id/tvBody"
              android:layout_centerVertical="true"
-             android:layout_marginLeft="24dp"
+             android:layout_marginLeft="35dp"
+             android:layout_marginTop="5dp"
+             android:paddingBottom="5dp"
              android:src="@drawable/ic_launcher" />
          
          <VideoView
              android:id="@+id/vvItemVideo"
              android:layout_width="250dp"
-             android:layout_height="200dp"
+             android:layout_height="250dp"
              android:layout_marginTop="5dp"
-             android:layout_marginBottom="10dp"
+             android:layout_marginLeft="50dp"
+             android:layout_marginBottom="5dp"
              android:layout_below="@+id/tvBody"
              android:layout_toRightOf="@+id/ivItemImage"
-             android:layout_centerVertical="true"
-             android:layout_marginLeft="24dp" />
+             android:layout_centerVertical="true" />
         
     </RelativeLayout>    
     
     <LinearLayout
         android:id="@+id/llFollowers"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"  
+        android:layout_height="25dp"  
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
@@ -104,7 +105,7 @@
             android:layout_width="13dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:src="@drawable/ic_action_empty_heart" />
 
         <TextView
@@ -112,19 +113,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="2dp"            
-            android:text="5"
-            android:textSize="8sp" />
-        
+            android:layout_marginBottom="2dp"      
+            android:text=""
+            android:textSize="12sp" />
+         
         <TextView
             android:id="@+id/tvVersions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="120dp"
             android:layout_marginBottom="2dp"
             android:layout_gravity="bottom"
-            android:textSize="8sp"
+            android:textSize="12sp"
             android:text="5 Endings" />
+        
+        <ImageView
+            android:id="@+id/ivForkStory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="120dp"
+            android:layout_gravity="bottom"           
+            android:src="@drawable/ic_action_popup" />
 
     </LinearLayout>
 

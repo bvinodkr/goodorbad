@@ -26,7 +26,11 @@ public class TreeNodeAPI {
 				{
 					break;
 				}
-			}		
+			}
+			if ((i + 1) <= children.size ())
+			{
+				ret = children.get(i+1);
+			}
 		}
 		else
 		{
@@ -38,19 +42,25 @@ public class TreeNodeAPI {
 					break;
 				}
 			}
+			if ((i - 1) >= 0)
+			{
+				ret = children.get(i-1);
+			}
 		}
 
 		//i+1 
-		if ((i + 1) < children.size ())
-		{
-			ret = children.get(i+1);
-		}
+
 		return ret;
 	}
 
 	public int getSiblingCount (TreeNode node)
 	{
-		return ((TreeNode)node.getParent()).getChildren().size() - 1;
+		int ret = 0;
+		if (node.getParent() != null && node.getParent ().getChildren().size() > 0)
+		{
+			ret = ((TreeNode)node.getParent()).getChildren().size() - 1;
+		}
+		return ret;
 	}
 
 	public ArrayList<TreeNode> getPathContaining (TreeNode node)

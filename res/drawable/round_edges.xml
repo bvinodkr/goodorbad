@@ -9,15 +9,15 @@
 
     <stroke
         android:width="0.5dip"
-        android:color="#CCCCFF" />
+        android:color="#CCCCCC" />
 
     <gradient
         android:angle="270" />
 
     <corners
-        android:bottomLeftRadius="3dp"
-        android:bottomRightRadius="3dp"
-        android:topLeftRadius="3dp"
-        android:topRightRadius="3dp" />
+        android:bottomLeftRadius="7dp"
+        android:bottomRightRadius="7dp"
+        android:topLeftRadius="7dp"
+        android:topRightRadius="7dp" />
 
 </shape>

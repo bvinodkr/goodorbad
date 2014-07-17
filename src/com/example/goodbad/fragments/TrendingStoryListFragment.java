@@ -83,7 +83,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 					int position, long id) {
 				
 				selectedTrendingItem = storyItemList.get(position);
-				Toast.makeText(getActivity(), position+"", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getActivity(), position+"", Toast.LENGTH_SHORT).show();
 				
 				listener.onSelectedTrendingItem(selectedTrendingItem);
 			}
@@ -139,15 +139,27 @@ public class TrendingStoryListFragment extends BaseListFragment {
 	
 	private void getStories() {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereEqualTo("parentid", JSONObject.NULL); 
+
+		query.whereEqualTo("parentid", JSONObject.NULL);
+		query.include("user");
+
 		query.findInBackground( new FindCallback<TreeNode>() {
 
 			public void done(List<TreeNode> items, ParseException arg1) {			
 				if (arg1 == null) {
 					aaNodes.addAll((ArrayList<TreeNode>)items);
 					storyItemList = (ArrayList<TreeNode>)items;
+					/*
 					for (TreeNode treeRoot: items) {
 						Log.d ("DEBUG", "storyid = " + treeRoot.getObjectId());
+						if (treeRoot.getUser () != null)
+						{
+							Log.d ("DEBUG", "user name" + treeRoot.getUser().getUsername());
+						}
+						else
+						{
+							Log.d ("DEBUG", "user name null");
+						}
 						ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 						query.whereEqualTo("storyid", treeRoot.getStoryId());
 
@@ -190,6 +202,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 						});
 						break;
 					}
+					*/
 				}
 				else
 				{
