@@ -1,7 +1,10 @@
 package com.example.goodbad.fragments;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -24,10 +27,18 @@ public class NewStoryListFragment extends BaseListFragment {
 	//private TrendingStoryListFragmentListener listener;	
 	private ListView lvNodes;
 	private TreeNodeArrayAdapter aaNodes;
+	private TreeNode mAddedTreeNode;
 	
 	/*public interface TrendingStoryListFragmentListener {
 		void onSelectedTrendingItem(TreeNode selectedTrendingItem);
 	}*/
+	
+	public NewStoryListFragment newInstance(TreeNode treeNode) {
+		
+		mAddedTreeNode = treeNode;
+		
+		return null;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {		
@@ -37,33 +48,11 @@ public class NewStoryListFragment extends BaseListFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View newStoriesView = inflater.inflate(R.layout.fragment_story_line, container, false);
+		View newStoriesView = inflater.inflate(R.layout.fragment_new_list, container, false);
 		
 		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 1);
-			
-		//addNodestoAdapter(storyLineNodeList);
 		
-		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereEqualTo("storyid", "l7o9gDTsIu");
-
-		query.findInBackground( new FindCallback<TreeNode>() {
-
-			public void done(List<TreeNode> items, ParseException arg1) {
-				// TODO Auto-generated method stub
-				if (arg1 == null)
-				{
-					TreeNodeAPI api = new TreeNodeAPI ();
-					TreeNode root = api.toTree(items);
-					Log.d ("DEBUG", "root object id" + root.getObjectId());
-					List<TreeNode> leafNodes = api.getLeafNodes(items);
-					Log.d ("DEBUG", "num of lead nodes " + leafNodes.size());
-					addParas (api.getPathContaining(leafNodes.get(0)));
-				}
-			}
-		});
-		
-		aaNodes.addAll(newStoryItemList);
-		lvNodes = (ListView) newStoriesView.findViewById(R.id.lvStoryLineFragment);
+		lvNodes = (ListView) newStoriesView.findViewById(R.id.lvNewListFragment);
 		lvNodes.setAdapter(aaNodes);
 
 		return newStoriesView;
@@ -85,19 +74,44 @@ public class NewStoryListFragment extends BaseListFragment {
 		listener = null;
 	}*/
 	
-	public void addParas(List<TreeNode> nodes)
-	{
-		for (TreeNode n: nodes)
-		{
-			newStoryItemList.add(n);
-			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
-			aaNodes.notifyDataSetChanged();
-		}
-	}
-
+	
 	@Override
 	public void populateTreeNodes(String max_id) {
-		// TODO Auto-generated method stub
-		
+		getStories();
+	}
+
+	private void getStories() {
+		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
+		query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L));
+		query.whereEqualTo("parentid", JSONObject.NULL);
+		query.include("user");
+
+		query.findInBackground( new FindCallback<TreeNode>() {
+
+			public void done(List<TreeNode> items, ParseException arg1) {			
+				if (arg1 == null) {
+					aaNodes.addAll((ArrayList<TreeNode>)items);
+					newStoryItemList = (ArrayList<TreeNode>)items;
+					
+					for (TreeNode treeRoot: items) {
+						Log.d ("DEBUG", "storyid = " + treeRoot.getObjectId());
+						if (treeRoot.getUser () != null)
+						{
+							Log.d ("DEBUG", "user name " + treeRoot.getUser().getUsername());
+						}
+						else
+						{
+							Log.d ("DEBUG", "user name null");
+						}
+						break;
+					}
+					
+				}
+				else
+				{
+					Log.d ("DEBUG", "error in getting stories " + arg1.getMessage());
+				}
+			}
+		});
 	}
 }

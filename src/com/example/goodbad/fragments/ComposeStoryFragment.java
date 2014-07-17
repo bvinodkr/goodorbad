@@ -91,8 +91,9 @@ public class ComposeStoryFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-				
-		listener.onFinishComposeDialog("", "", fromPost);	
+		if(!fromPost) {		
+			listener.onFinishComposeDialog("NA", "NA", fromPost);
+		}
 	}
 	
 	@Override
@@ -104,8 +105,7 @@ public class ComposeStoryFragment extends Fragment {
 		
 		ivInsertedImageComposeStory = (ImageView) composeStoryView.findViewById(R.id.ivInsertedImageComposeStory);
 		ivInsertedImageComposeStory.setVisibility(View.INVISIBLE);
-		ivInsertedImageComposeStory.setContentDescription("some url");
-				
+		
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
 		
 		ivComposePopUpItemImage = (ImageView) composeStoryView.findViewById(R.id.ivComposePopUpItemImage);
@@ -231,7 +231,8 @@ public class ComposeStoryFragment extends Fragment {
 				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
 				
 				// Load the selected image into a preview	        
-		        ivInsertedImageComposeStory.setImageBitmap(selectedImage);  
+		        ivInsertedImageComposeStory.setImageBitmap(selectedImage); 
+		        ivInsertedImageComposeStory.setContentDescription(photoUri.toString());
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
