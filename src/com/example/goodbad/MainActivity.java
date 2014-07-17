@@ -107,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		// Displaying the popup at the specified location, + offsets.
 		popupWindow.showAtLocation(popUpView,  Gravity.NO_GRAVITY, 100, 110);
 		
-		populatePopUpWindowItems();
+		populatePopUpWindowItems();  
 
 		GridView gridview = (GridView) popUpView.findViewById(R.id.gvPopUp);		
 		gridview.setAdapter(new PopUpImageAdapter(this, popUpWindowItemList));
@@ -288,7 +288,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	}
 
 	@Override
-	public void onFinishComposeDialog(String composeData, boolean fromPost) {
+	public void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost) {
 		if(!fromPost) {
 			/*
 			 * put data into parse here

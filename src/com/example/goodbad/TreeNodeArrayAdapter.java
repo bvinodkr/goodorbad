@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.loopj.android.image.SmartImageView;
+import com.loopj.android.image.SmartImageView; 
 
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	
@@ -198,6 +198,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		{
 			tvUserName.setText (node.getUser().getUsername());
 		}
+
 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
