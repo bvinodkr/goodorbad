@@ -126,6 +126,16 @@ public class TreeNode extends ParseObject {
 		 put ("isLeafNode", set);
 	 }
 	 
+	 public void setTitle (String title)
+	 {
+		 put ("title", title);
+	 }
+	 
+	 public String getTitle ()
+	 {
+		 return getString ("title");
+	 }
+	 
 	public int getNumComments() {
 		return getInt ("numComments");
 	}

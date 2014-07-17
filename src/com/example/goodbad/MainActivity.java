@@ -387,9 +387,11 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	@Override
 	public void onSelectedTrendingItem (TreeNode selectedTrendingItem)
 	{
-		Intent i = new Intent (this, StoryLineViewActivity.class);
-		//pass data
-		i.putExtra("storyId", selectedTrendingItem.getStoryId());
-		startActivity(i);
+
+		 Intent i = new Intent (this, StoryLineViewActivity.class);
+		 //pass data
+		 i.putExtra("storyId", selectedTrendingItem.getStoryId());
+		 i.putExtra("title", selectedTrendingItem.getTitle());
+		 startActivity(i);
 	}
 }

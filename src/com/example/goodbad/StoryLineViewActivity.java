@@ -68,7 +68,16 @@ public class StoryLineViewActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.story_line_main);
-		
+
+		String title = getIntent().getStringExtra("title");
+		if (title != null && !title.isEmpty())
+		{
+			getActionBar().setTitle(title);
+		}
+		else
+		{
+			getActionBar().setTitle("Story Browse");
+		}
 		String storyId = getIntent().getStringExtra("storyId");
 		Log.d ("DEBUG", "story id in storyline view =" + storyId);
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
@@ -82,6 +91,7 @@ public class StoryLineViewActivity extends FragmentActivity {
 				{
 					TreeNodeAPI api = new TreeNodeAPI ();
 					root = api.toTree(items);
+
 					Log.d ("DEBUG", "root object id" + root.getObjectId());
 					leafNodes = api.getLeafNodes(items);
 					numEndings = leafNodes.size();
