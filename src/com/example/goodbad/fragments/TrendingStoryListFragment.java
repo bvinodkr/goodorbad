@@ -154,7 +154,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 						Log.d ("DEBUG", "storyid = " + treeRoot.getObjectId());
 						if (treeRoot.getUser () != null)
 						{
-							Log.d ("DEBUG", "user name" + treeRoot.getUser().getUsername());
+							Log.d ("DEBUG", "user name " + treeRoot.getUser().getUsername());
 						}
 						else
 						{

@@ -29,6 +29,7 @@ import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryList
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
@@ -141,7 +142,6 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	{
 		TreeNode root = new TreeNode (x  + " , good-root", null);
 		root.setImageUrl("http://media1.santabanta.com/full1/Animals/Dogs/dogs-87a.jpg");
-
 
 		//		Log.d("DEBUG", root.getObjectId());
 		try {
@@ -293,6 +293,20 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			/*
 			 * put data into parse here
 			 */
+			
+			final TreeNode root = new TreeNode (composeData, null);
+			//root.setImageUrl();
+
+			//		Log.d("DEBUG", root.getObjectId());
+
+				root.saveInBackground(new SaveCallback() {
+					
+					@Override
+					public void done(ParseException arg0) {
+						root.setStoryId(root.getObjectId());
+					}
+				});
+
 			setupTabs(1);
 		} else {
 			getSupportFragmentManager().beginTransaction().remove(composeStoryFragment).commit();
