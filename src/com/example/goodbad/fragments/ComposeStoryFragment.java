@@ -193,18 +193,14 @@ public class ComposeStoryFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.miActionBarComposeIcon:
+		int itemId = item.getItemId();
+		if (itemId == R.id.miActionBarComposeIcon) {
 			// Do Activity menu item stuff here
 			return false;
-		/*case R.id.miPopUpIcon:
-			// Not implemented here
-			return false;*/
-		case R.id.miPostStoryIcon:
+		} else if (itemId == R.id.miPostStoryIcon) {
 			onPostStoryIconClick(item);
 			return true;
-		default:
-			break;
+		} else {
 		}
 
 		return super.onOptionsItemSelected(item);

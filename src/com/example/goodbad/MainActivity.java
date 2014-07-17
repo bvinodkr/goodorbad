@@ -7,8 +7,6 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -22,23 +20,19 @@ import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
- import com.example.goodbad.fragments.ComposeStoryFragment;
+import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
 import com.example.goodbad.fragments.MyStoryListFragment;
 import com.example.goodbad.fragments.NewStoryListFragment;
-import com.example.goodbad.fragments.StoryLineListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
-import com.parse.ParseException;
- 
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
- import com.parse.ParseObject;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.example.goodbad.ComposeDispatchActivity;
  
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
@@ -127,18 +121,11 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	
  	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			/*case R.id.miPopUpIcon:
-				onPopUpIconCick(item);
-				return true;*/
-			case R.id.miActionBarComposeIcon:
-				onComposeIconClick(item);
-				return true;
-		 //	case R.id.miPostStoryIcon:
-				// Not implemented here
-		 	//	return false;
-			default:
-				break;
+		int itemId = item.getItemId();
+		if (itemId == R.id.miActionBarComposeIcon) {
+			onComposeIconClick(item);
+			return true;
+		} else {
 		}
 
 	    return super.onOptionsItemSelected(item);
