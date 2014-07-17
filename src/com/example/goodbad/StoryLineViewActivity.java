@@ -115,6 +115,10 @@ public class StoryLineViewActivity extends FragmentActivity {
 				storyLineFragment.newInstance(leafNodes.get(position));
 				return storyLineFragment;
 			}
+			else
+			{
+				Log.d ("DEBUG", "leaf node is null");
+			}
 			return null;
 		}
 
