@@ -26,11 +26,13 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.goodbad.PopUpImageAdapter;
 import com.example.goodbad.PopUpWindowItem;
 import com.example.goodbad.R;
+import com.parse.ParseUser;
 
 public class ComposeStoryFragment extends Fragment {
 
@@ -41,7 +43,7 @@ public class ComposeStoryFragment extends Fragment {
 	private ImageView ivInsertedImageComposeStory;
 	private EditText etComposeStory;
 	private boolean fromPost = false;
-	
+	private TextView tvUserName;
 	public final static int PICK_PHOTO_CODE = 1046;
 	
 	public interface ComposeStoryFragmentListener {
@@ -68,7 +70,6 @@ public class ComposeStoryFragment extends Fragment {
 		//this is to hide the set up tabs on this fragment that are present on main activity
 		ActionBar actionBar = getActivity().getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
 		setHasOptionsMenu(true);
 	}
 	
@@ -100,8 +101,9 @@ public class ComposeStoryFragment extends Fragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
+ 
 		View composeStoryView = inflater.inflate(R.layout.fragment_compose_story, container, false);
-
+ 
 		fromPost = false;
 		
 		ivInsertedImageComposeStory = (ImageView) composeStoryView.findViewById(R.id.ivInsertedImageComposeStory);
@@ -109,7 +111,8 @@ public class ComposeStoryFragment extends Fragment {
 		ivInsertedImageComposeStory.setContentDescription("some url");
 				
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
-		
+          tvUserName = (TextView) composeStoryView.findViewById(R.id.tvComposeUserName);
+          tvUserName.setText(ParseUser.getCurrentUser().getString("name"));
 		ivComposePopUpItemImage = (ImageView) composeStoryView.findViewById(R.id.ivComposePopUpItemImage);
 
 		ivComposePopUpItemImage.setOnClickListener(new OnClickListener() {
