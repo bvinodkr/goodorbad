@@ -4,10 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.ParseException;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore.Video.Thumbnails;
 import android.support.v4.app.FragmentManager;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +90,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
 		}
 		
-		SmartImageView ivItemImage = (SmartImageView) convertView.findViewById(R.id.ivItemImage);
+		final SmartImageView ivItemImage = (SmartImageView) convertView.findViewById(R.id.ivItemImage);
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
 		vvItemVideo.setVisibility(View.GONE);
 		ivItemImage.setVisibility(View.GONE);
@@ -112,16 +113,17 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.VISIBLE);
 			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
+			
+			//Bitmap bmThumbnail = ThumbnailUtils.createVideoThumbnail("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4", Thumbnails.MINI_KIND);
+	        //ivItemImage.setImageBitmap(bmThumbnail);
+	        //ivItemImage.setVisibility(View.VISIBLE);
+			
 			MediaController mediaController = new MediaController(getContext());
 			mediaController.setAnchorView(vvItemVideo);
 			vvItemVideo.setMediaController(mediaController);
 			vvItemVideo.requestFocus();
-			/*vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
-			    // Close the progress bar and play the video
-			    public void onPrepared(MediaPlayer mp) {*/
-			    	vvItemVideo.start();
-			   /* }
-			});*/
+			vvItemVideo.start();
+			
 		}  else if (position == 4) { 
 			ivItemImage.setVisibility(View.GONE);
 			vvItemVideo.setVisibility(View.VISIBLE);
@@ -141,6 +143,22 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			vvItemVideo.setVisibility(View.GONE);
 		}
 				
+		/*ivItemImage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ivItemImage.setVisibility(View.GONE);
+				vvItemVideo.setVisibility(View.VISIBLE);
+				
+				vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
+				MediaController mediaController = new MediaController(getContext());
+				mediaController.setAnchorView(vvItemVideo);
+				vvItemVideo.setMediaController(mediaController);
+				vvItemVideo.requestFocus();
+				vvItemVideo.start();
+			}
+		});*/
+		
 		 
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
