@@ -215,13 +215,17 @@ public class ComposeStoryFragment extends Fragment {
 	public void onPostStoryIconClick(MenuItem mi) {
 		Toast.makeText(getActivity(), "Post Story", Toast.LENGTH_SHORT).show();			
 		if(etComposeStory.getText()!=null &&
-				etStoryTitleCompose.getText()!=null &&
-				ivInsertedImageComposeStory.getContentDescription()!=null) {
+				etStoryTitleCompose.getText()!=null ) {
 			fromPost = true;
 			
 			String composeData = etComposeStory.getText().toString();
 			String composeStoryTitle = etStoryTitleCompose.getText().toString();
-			String imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();		
+			String imageUrl = "";
+			if(ivInsertedImageComposeStory.getContentDescription() != null)
+			{
+				imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();	
+			}
+	
 			listener.onFinishComposeDialog(composeData, composeStoryTitle, imageUrl, fromPost);
 		}
 	}
