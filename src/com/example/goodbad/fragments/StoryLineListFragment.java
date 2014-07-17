@@ -16,10 +16,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.goodbad.PopUpImageAdapter;
@@ -79,13 +81,16 @@ public class StoryLineListFragment extends BaseListFragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 		View storyLineView = inflater.inflate(R.layout.fragment_story_line, container, false);
+		final ImageView ivStoryLinePost = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePost);
 		
+		ivStoryLinePost.setVisibility(View.INVISIBLE);
+
 		//addNodestoList();
 		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
 
 		TreeNodeAPI api = new TreeNodeAPI ();
 		api.getPathContaining(selectedStory);
-		addParas (api.getPathContaining(selectedStory));
+		addParas (api.getPathContaining(selectedStory)); 
 
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
@@ -93,7 +98,7 @@ public class StoryLineListFragment extends BaseListFragment {
 		/*
 		 * set up the pop up item image 
 		 */
-		ImageView ivStoryLinePopUpImage = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePopUpImage);
+		final ImageView ivStoryLinePopUpImage = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePopUpImage);
 
 		ivStoryLinePopUpImage.setOnClickListener(new OnClickListener() {
 
@@ -104,6 +109,35 @@ public class StoryLineListFragment extends BaseListFragment {
 				v.getLocationOnScreen(location);
 				
 				inflatePopUpWindow(inflater, container, location);
+			}
+		});
+		
+		final EditText etStoryLineCompose = (EditText) storyLineView.findViewById(R.id.etStoryLineCompose);
+		
+		etStoryLineCompose.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ivStoryLinePopUpImage.setVisibility(View.INVISIBLE);
+				ivStoryLinePost.setVisibility(View.VISIBLE);				
+			}
+		});
+		
+		ivStoryLinePost.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+								
+				String data = etStoryLineCompose.getText().toString();
+				
+				etStoryLineCompose.setText("");
+				
+				ivStoryLinePopUpImage.setVisibility(View.VISIBLE);
+				ivStoryLinePost.setVisibility(View.INVISIBLE);		
+				
+				/*
+				 * parse here
+				 */
 			}
 		});
 		

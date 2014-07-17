@@ -27,18 +27,12 @@ import com.example.goodbad.fragments.NewStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import com.parse.ParseAnalytics;
-import com.parse.ParseInstallation;
-import com.parse.PushService;
-import com.example.goodbad.ComposeDispatchActivity;
-
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseTwitterUtils;
 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
@@ -59,21 +53,21 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			//launchComposeDialog();
 		}
 		setupTabs(1);
+
+		Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
+
+		Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
+
+		// Optional - If you don't want to allow Facebook login, you can
+		// remove this line (and other related ParseFacebookUtils calls)
+		ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
+
+		// Optional - If you don't want to allow Twitter login, you can
+		// remove this line (and other related ParseTwitterUtils calls)
+		ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
+				getString(R.string.twitter_consumer_secret));
+
 	}
-
-	Parse.initialize(this, getString(R.string.parse_app_id),getString(R.string.parse_client_key));
-
-	Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
-
-	// Optional - If you don't want to allow Facebook login, you can
-	// remove this line (and other related ParseFacebookUtils calls)
-	ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
-
-	// Optional - If you don't want to allow Twitter login, you can
-	// remove this line (and other related ParseTwitterUtils calls)
-	ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
-			getString(R.string.twitter_consumer_secret));
-
 
 
 	public static void onParseLogin(boolean returnedFromParse) {
@@ -105,7 +99,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			onComposeIconClick(item);
 			return true;
 		} 
-		
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -130,9 +124,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 		// Displaying the popup at the specified location, + offsets.
 		popupWindow.showAtLocation(popUpView,  Gravity.NO_GRAVITY, 100, 110);
-		
+
 		populatePopUpWindowItems();
-		
+
 		GridView gridview = (GridView) popUpView.findViewById(R.id.gvPopUp);		
 		gridview.setAdapter(new PopUpImageAdapter(this, popUpWindowItemList));
 
@@ -243,15 +237,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		}
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(resultCode==RESULT_OK){
-			//if(requestCode==50){
-			Toast.makeText(this, "Logged in. Welcome!", Toast.LENGTH_SHORT).show();
-			//}
-		}
-		//		super.onActivityResult(requestCode, resultCode, data);
-	}
-	private void addDummyData ()
+	private void addDummyData()
 	{
 
 		/*addStory ("story1");
