@@ -27,87 +27,53 @@ import com.example.goodbad.fragments.NewStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseTwitterUtils;
 
- import com.parse.ParseAnalytics;
-import com.parse.ParseInstallation;
-import com.parse.PushService;
-import com.example.goodbad.ComposeDispatchActivity;
-
- 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
- 	private static boolean mReturnedFromParse = false;
- 	private ComposeStoryFragment composeStoryFragment;
- 	
- 	@Override
+	private ComposeStoryFragment composeStoryFragment;
+	private static boolean mReturnedFromParse = false;
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
 		//setBehindContentView(R.layout.activity_main);
-	//	addDummyData();
- 		//setupTabs();
-		
+		//	addDummyData();
+		//setupTabs();
+
 		if(mReturnedFromParse) {
 			//launchComposeDialog();
 		}
- 		setupTabs(1);
- 
-		//		SlidingMenu sm = getSlidingMenu();
-		//		sm.setShadowWidthRes(R.dimen.shadow_width);
-		//		sm.setShadowDrawable(R.drawable.shadow);
-		//		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-		//		sm.setFadeDegree(0.35f);
-		//		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
- 		
-/*		ParseObject testObj = new ParseObject ("testingParse");
-		testObj.put ("test", "foo");
-		testObj.saveInBackground(new SaveCallback() {
-			
-			@Override
-			public void done(ParseException arg0) {
-				if (arg0 == null)
-				{
-					Log.d ("DEBUG", "save succeeded");
-				}
-				else
-				{
-					Log.d ("DEBUG", "error in save " + arg0.getMessage()); 
-				}
-				
-			}
-		});
-		*/
-		
-	    Parse.initialize(this, getString(R.string.parse_app_id),
-	            getString(R.string.parse_client_key));
+		setupTabs(1);
 
-	        Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
+		Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
 
-	        // Optional - If you don't want to allow Facebook login, you can
-	        // remove this line (and other related ParseFacebookUtils calls)
-	        ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
+		Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
 
-	        // Optional - If you don't want to allow Twitter login, you can
-	        // remove this line (and other related ParseTwitterUtils calls)
-	        ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
-	            getString(R.string.twitter_consumer_secret));
+		// Optional - If you don't want to allow Facebook login, you can
+		// remove this line (and other related ParseFacebookUtils calls)
+		ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
+
+		// Optional - If you don't want to allow Twitter login, you can
+		// remove this line (and other related ParseTwitterUtils calls)
+		ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
+				getString(R.string.twitter_consumer_secret));
 
 	}
- 	
- 	public static void onParseLogin(boolean returnedFromParse) {
- 		mReturnedFromParse = returnedFromParse;
- 	}
- 	
- 
- 
+
+
+	public static void onParseLogin(boolean returnedFromParse) {
+		mReturnedFromParse = returnedFromParse;
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.action_bar_items, menu);
@@ -117,24 +83,24 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		Log.d("debug ", "is null " + shareActionProvider);
         shareActionProvider.setShareIntent(getDefaultShareIntent());*/
 		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
-		 if( ParseUser.getCurrentUser() != null ) {
-	         playMenu.setIcon(R.drawable.compose  ) ;
-	    }	else {playMenu.setIcon(R.drawable.login_icon  ) ;
-	    	
-	    }   
+		if( ParseUser.getCurrentUser() != null ) {
+			playMenu.setIcon(R.drawable.compose  ) ;
+		}	else {playMenu.setIcon(R.drawable.login_icon  ) ;
+
+		}   
 		return super.onCreateOptionsMenu(menu);
 	}
-	
- 	@Override
+
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		if (itemId == R.id.miActionBarComposeIcon) {
 			onComposeIconClick(item);
 			return true;
-		} else {
-		}
+		} 
 
-	    return super.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(item);
 	}
 
 
@@ -154,11 +120,11 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		/*// Clear the default translucent background
 		popupWindow.setBackgroundDrawable(new BitmapDrawable());
 		popupWindow.showAsDropDown(getCurrentFocus());*/
-		
+
 
 		// Displaying the popup at the specified location, + offsets.
 		popupWindow.showAtLocation(popUpView,  Gravity.NO_GRAVITY, 100, 110);
-		
+
 		populatePopUpWindowItems();
 
 		GridView gridview = (GridView) popUpView.findViewById(R.id.gvPopUp);		
@@ -193,7 +159,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	private void addStory(String x)
 	{
 		TreeNode root = new TreeNode (x  + " , good-root", null);
-		
+
 
 
 		//		Log.d("DEBUG", root.getObjectId());
@@ -203,16 +169,19 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 			TreeNodeAPI api = new TreeNodeAPI ();
 			TreeNode firstPara = api.addChild(root, x + " bad-para1");
-			
+
+			firstPara.setUser(ParseUser.getCurrentUser());
+			firstPara.setImageUrl("http://practicalveterinarytips.com/wp-content/uploads/2013/04/suspicious-puppy.jpg");
+
 			//save both root and firstPara
 			root.save();
 			firstPara.save();
-			
+
 			TreeNode secondPara = api.addChild(firstPara, x + " good-para2");
-			
+
 			firstPara.save();
 			secondPara.save();
-			
+
 			TreeNode secondParav1 = api.addChild(firstPara, x + " good-para2-v1");
 			secondParav1.save();
 		} catch (ParseException e) {
@@ -242,46 +211,39 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	} 
 
 	private void launchComposeDialog() {
- 	    ParseUser user = ParseUser.getCurrentUser();
+		ParseUser user = ParseUser.getCurrentUser();
 
-	    if(ParseUser.getCurrentUser() != null  ) {
+
+		if(ParseUser.getCurrentUser() != null  ) {
 
 			composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
 			//composeStoryFragment.show(fm, "fragment_compose_tweet");
-			
+
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.flContainer, composeStoryFragment);
 			ft.addToBackStack(null);
 			ft.commit();
 
-	    }else{
-	    Intent i = new Intent(MainActivity.this,
-	    		ComposeDispatchActivity.class);
- 		//	String	username =user.getUsername();
-  		//	i.putExtra("result", username);
+		}else{
+			Intent i = new Intent(MainActivity.this,
+					ComposeDispatchActivity.class);
+			//	String	username =user.getUsername();
+			//	i.putExtra("result", username);
 
-	          i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-	              | Intent.FLAG_ACTIVITY_NEW_TASK);
-	          startActivity(i);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+					| Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(i);
 
-  	    }
- 
-	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(resultCode==RESULT_OK){
-			//if(requestCode==50){
- 			Toast.makeText(this, "Logged in. Welcome!", Toast.LENGTH_SHORT).show();
-  			//}
 		}
- //		super.onActivityResult(requestCode, resultCode, data);
 	}
-	private void addDummyData ()
+
+	private void addDummyData()
 	{
+
 		/*addStory ("story1");
 		addStory ("story2");
 		addStory("story3");
-	
+
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		query.whereEqualTo("parent", JSONObject.NULL);
 		query.findInBackground( new FindCallback<TreeNode>() {
@@ -316,6 +278,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		Log.d("debug ", "crapped out 2");
 
 		actionBar.removeAllTabs();
+
 		Log.d("debug ", "crapped out 3");
 
 		Tab tab1 = actionBar
@@ -329,41 +292,41 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.selectTab(tab1);
 		Log.d("debug ", "crapped out 4");
 
-		Tab tab2 = actionBar
+		/*Tab tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
 				.setTag("FavoriteFragment")
 				.setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
 						"mylist", MyStoryListFragment.class));
-		actionBar.addTab(tab2);
+		actionBar.addTab(tab2);*/
 
 		Log.d("debug ", "crapped out 5");
 
 
-		
+
 		Tab tab3 = actionBar
-			    .newTab()
-			    .setText("New")
-			    .setIcon(R.drawable.ic_favorite)
-			    .setTag("NewFragment")
-			    .setTabListener(new FragmentTabListener<NewStoryListFragment>(R.id.flContainer, this,
-	                        "mylist", NewStoryListFragment.class));
-			actionBar.addTab(tab3); 
-			Log.d("debug ", "crapped out 6");
+				.newTab()
+				.setText("New")
+				.setIcon(R.drawable.ic_favorite)
+				.setTag("NewFragment")
+				.setTabListener(new FragmentTabListener<NewStoryListFragment>(R.id.flContainer, this,
+						"mylist", NewStoryListFragment.class));
+		actionBar.addTab(tab3); 
+		Log.d("debug ", "crapped out 6");
 
 		switch(tabNo) {
-			case 1:
-				actionBar.selectTab(tab1);
-				break;
-			case 2:
-				actionBar.selectTab(tab2);
-				break;
-			case 3:
-				actionBar.selectTab(tab3);
-				break;
-			default:
-				break;
+		case 1:
+			actionBar.selectTab(tab1);
+			break;
+		/*case 2:
+			actionBar.selectTab(tab2);
+			break;*/
+		case 3:
+			actionBar.selectTab(tab3);
+			break;
+		default:
+			break;
 		}	
 		Log.d("debug ", "crapped out 7");
 
@@ -372,48 +335,59 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	@Override
 	public void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost) {
 		if(!fromPost) {
+
+			setupTabs(1);
+		} else {
+			getSupportFragmentManager().beginTransaction().remove(composeStoryFragment).commit();
+
 			/*
 			 * put data into parse here
 			 */
 
 			final TreeNode root = new TreeNode (composeData, null);
+
 			root.setUser(ParseUser.getCurrentUser());
 			root.setImageUrl(imageUrl);
+			root.saveInBackground(new SaveCallback() {
 
-			//		Log.d("DEBUG", root.getObjectId());
+				@Override
+				public void done(ParseException arg0) {
+					root.setStoryId(root.getObjectId());
+				}
+			});
 
-				root.saveInBackground(new SaveCallback() {
+			setupTabs(3);
 
-					@Override
-					public void done(ParseException arg0) {
-						root.setStoryId(root.getObjectId());
-					}
-				});
+			/*NewStoryListFragment newStoryFragment = new NewStoryListFragment();
+			newStoryFragment.newInstance(root);
+			//composeStoryFragment.show(fm, "fragment_compose_tweet");
 
-			setupTabs(1);
-		} else {
-			getSupportFragmentManager().beginTransaction().remove(composeStoryFragment).commit();
-			setupTabs(3); 
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			ft.replace(R.id.flContainer, newStoryFragment);
+			ft.addToBackStack(null);
+			ft.commit();*/
 		}
 	}
 
 	/*
 	@Override
 	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
-	
+
 		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
 		storyLineFragment.newInstance(selectedTrendingItem);
-		
+
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, storyLineFragment);
 		ft.addToBackStack(null);
 		ft.commit();
 	}
-*/
+
+	 */
 
 	@Override
 	public void onSelectedTrendingItem (TreeNode selectedTrendingItem)
 	{
+
 		 Intent i = new Intent (this, StoryLineViewActivity.class);
 		 //pass data
 		 i.putExtra("storyId", selectedTrendingItem.getStoryId());

@@ -92,10 +92,9 @@ public class ComposeStoryFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		
-		String composeData = etComposeStory.getText().toString();
-		String imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();		
-		listener.onFinishComposeDialog(composeData, imageUrl, fromPost);	
+		if(!fromPost) {		
+			listener.onFinishComposeDialog("NA", "NA", fromPost);
+		}
 	}
 	
 	@Override
@@ -108,8 +107,7 @@ public class ComposeStoryFragment extends Fragment {
 		
 		ivInsertedImageComposeStory = (ImageView) composeStoryView.findViewById(R.id.ivInsertedImageComposeStory);
 		ivInsertedImageComposeStory.setVisibility(View.INVISIBLE);
-		ivInsertedImageComposeStory.setContentDescription("some url");
-				
+		
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
           tvUserName = (TextView) composeStoryView.findViewById(R.id.tvComposeUserName);
           tvUserName.setText(ParseUser.getCurrentUser().getString("name"));
@@ -140,8 +138,8 @@ public class ComposeStoryFragment extends Fragment {
 			// Creating the PopupWindow
 			popupWindow = new PopupWindow(getActivity());
 			popupWindow.setContentView(popUpView);
-			popupWindow.setWidth(360);
-			popupWindow.setHeight(220);
+			popupWindow.setWidth(700);
+			popupWindow.setHeight(430);
 			popupWindow.setOutsideTouchable(true);
 			popupWindow.setFocusable(true);									
 
@@ -153,7 +151,7 @@ public class ComposeStoryFragment extends Fragment {
 			//v.getLocationOnScreen(location);
 
 			// Displaying the popup at the specified location, + offsets.
-			popupWindow.showAtLocation(popUpView, Gravity.NO_GRAVITY, location[0]-300, location[1]-220);
+			popupWindow.showAtLocation(popUpView, Gravity.NO_GRAVITY, location[0]-300, location[1]-450);
 
 			populatePopUpWindowItems();
 
@@ -173,12 +171,12 @@ public class ComposeStoryFragment extends Fragment {
 
 	private void populatePopUpWindowItems() {
 		popUpWindowItemList.clear();
-		popUpWindowItemList.add(new PopUpWindowItem("Gallery", R.drawable.gallery1));
-		popUpWindowItemList.add(new PopUpWindowItem("Photo", R.drawable.camera));
-		popUpWindowItemList.add(new PopUpWindowItem("Video", R.drawable.video));
-		popUpWindowItemList.add(new PopUpWindowItem("Audio", R.drawable.voice));
-		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
-		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
+		popUpWindowItemList.add(new PopUpWindowItem("Gallery", R.drawable.gallery4));
+		popUpWindowItemList.add(new PopUpWindowItem("Photo", R.drawable.camera1));
+		popUpWindowItemList.add(new PopUpWindowItem("Video", R.drawable.video1));
+		popUpWindowItemList.add(new PopUpWindowItem("Audio", R.drawable.voice2));
+		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice2));
+		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice2));
 	}
 
 	@Override
@@ -232,7 +230,8 @@ public class ComposeStoryFragment extends Fragment {
 				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
 				
 				// Load the selected image into a preview	        
-		        ivInsertedImageComposeStory.setImageBitmap(selectedImage);  
+		        ivInsertedImageComposeStory.setImageBitmap(selectedImage); 
+		        ivInsertedImageComposeStory.setContentDescription(photoUri.toString());
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

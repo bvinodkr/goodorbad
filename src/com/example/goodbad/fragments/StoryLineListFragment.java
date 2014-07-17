@@ -1,12 +1,17 @@
 package com.example.goodbad.fragments;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,7 +42,10 @@ public class StoryLineListFragment extends BaseListFragment {
 	private StoryLineArrayAdapter aaNodes;
 	private TreeNode selectedStory;
 	private PopupWindow popupWindow = null;
+	private ImageView ivInsertedStoryLineDialog;
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
+	
+	public final static int PICK_PHOTO_CODE = 1046;
 	
 	public void newInstance(TreeNode selectedStory) {
 		this.selectedStory = selectedStory;
@@ -76,22 +85,29 @@ public class StoryLineListFragment extends BaseListFragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 		View storyLineView = inflater.inflate(R.layout.fragment_story_line, container, false);
+		final ImageView ivStoryLinePost = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePost);
 		
+		ivStoryLinePost.setVisibility(View.INVISIBLE);
+
 		//addNodestoList();
 		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
 
 		TreeNodeAPI api = new TreeNodeAPI ();
-		ArrayList<TreeNode> path = api.getPathContaining(selectedStory);
-//		Log.d ("DEBUG", "num of nodes in path = " + path.size());
-		addParas (path);
 
+		ArrayList<TreeNode> path = api.getPathContaining(selectedStory);
+		//Log.d ("DEBUG", "num of nodes in path = " + path.size());
+		addParas (path);
+		
+		/*ivInsertedStoryLineDialog = (ImageView) storyLineView.findViewById(R.id.ivInsertedStoryLineDialog);
+		ivInsertedStoryLineDialog.setVisibility(View.GONE);*/
+		
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
 		
 		/*
 		 * set up the pop up item image 
 		 */
-		ImageView ivStoryLinePopUpImage = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePopUpImage);
+		final ImageView ivStoryLinePopUpImage = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePopUpImage);
 
 		ivStoryLinePopUpImage.setOnClickListener(new OnClickListener() {
 
@@ -102,6 +118,43 @@ public class StoryLineListFragment extends BaseListFragment {
 				v.getLocationOnScreen(location);
 				
 				inflatePopUpWindow(inflater, container, location);
+			}
+		});
+		
+		final EditText etStoryLineCompose = (EditText) storyLineView.findViewById(R.id.etStoryLineCompose);
+		
+		etStoryLineCompose.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ivStoryLinePopUpImage.setVisibility(View.INVISIBLE);
+				ivStoryLinePost.setVisibility(View.VISIBLE);				
+			}
+		});
+		
+		ivStoryLinePost.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+								
+				String data = etStoryLineCompose.getText().toString();
+				
+				etStoryLineCompose.setText("");
+				
+				ivStoryLinePopUpImage.setVisibility(View.VISIBLE);
+				ivStoryLinePost.setVisibility(View.INVISIBLE);		
+				
+				/*
+				 * add to parse
+				 */
+				TreeNodeAPI api = new TreeNodeAPI();
+				TreeNode childNode = api.addChild(selectedStory, data);
+				childNode.saveInBackground();
+				selectedStory.saveInBackground();
+				selectedStory = childNode;
+				
+				storyLineNodeList.add(childNode);
+				aaNodes.notifyDataSetChanged();
 			}
 		});
 		
@@ -167,6 +220,8 @@ public class StoryLineListFragment extends BaseListFragment {
 					InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance("InLineCompose");
 					inlineComposeStoryFragment.show(fm, "dialog_fragment");
 					//composeStoryFragment.setTargetFragment(fragment, requestCode);
+					
+					//onGalleryIconClick(v);
 				}
 			});
 		}
@@ -181,6 +236,37 @@ public class StoryLineListFragment extends BaseListFragment {
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
 	}
+	
+	/*public void onGalleryIconClick(View view) {
+	    // Create intent for picking a photo from the gallery
+	    Intent intent = new Intent(Intent.ACTION_PICK,
+	        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+	    // Bring up gallery to select a photo
+	    startActivityForResult(intent, PICK_PHOTO_CODE);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (data != null) {
+	        Uri photoUri = data.getData();
+	        // Do something with the photo based on Uri
+	        Bitmap selectedImage;
+			try {
+				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+				
+				// Load the selected image into a preview	
+				ivInsertedStoryLineDialog.setVisibility(View.VISIBLE);
+				ivInsertedStoryLineDialog.setImageBitmap(selectedImage); 
+		        ivInsertedStoryLineDialog.setContentDescription(photoUri.toString());
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+	}*/
 	
 	public void addParas(List<TreeNode> nodes)
 	{

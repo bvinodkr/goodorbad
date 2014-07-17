@@ -1,13 +1,22 @@
 package com.example.goodbad;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ParseException;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +26,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.loopj.android.image.SmartImageView; 
+import com.loopj.android.image.SmartImageView;
 
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	
@@ -115,9 +123,24 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		ivItemImage.setVisibility(View.GONE);
 		if (node.getImageUrl() != null)
 		{
-			Log.d ("DEBUG", "image url = " + node.getImageUrl());
+			Log.d ("DEBUG", "image url = " + node.getImageUrl() + " " + node.getObjectId());
 			ivItemImage.setVisibility(View.VISIBLE);
-			ivItemImage.setImageUrl(node.getImageUrl());
+			if(node.getImageUrl().contains("http")) {
+				ivItemImage.setImageUrl(node.getImageUrl());
+			} else {
+				//ivItemImage.setImageUrl(getPath(Uri.parse(node.getImageUrl())));
+				String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
+				try {
+					Bitmap image = BitmapFactory.decodeStream(new URL(path).openConnection().getInputStream());
+					ivItemImage.setImageBitmap(image);
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		/*if(position==1) { 			
 			vvItemVideo.setVisibility(View.GONE);
@@ -232,5 +255,13 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 
 	}
 
+	public String getPath(Uri uri) {
+	    String[] projection = { MediaStore.Images.Media.DATA };
+	    CursorLoader loader = new CursorLoader(getContext(), uri, projection, null, null, null);
+	    Cursor cursor = loader.loadInBackground();
+	    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	    cursor.moveToFirst();
+	    return cursor.getString(column_index);
+	}
 	
 }
