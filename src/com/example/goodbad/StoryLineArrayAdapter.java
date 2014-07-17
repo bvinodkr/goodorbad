@@ -101,7 +101,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			vvItemVideo.setVisibility(View.GONE);
 		}
 		
-		if (imageUrl != null)
+		if (imageUrl != null && !imageUrl.isEmpty())
 		{
 			//Log.d ("DEBUG", "image url = " + node.getImageUrl());
 			if (imageUrl.contains("mp4"))
