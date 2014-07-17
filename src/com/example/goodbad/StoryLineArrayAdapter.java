@@ -64,7 +64,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		if (convertView == null)
 		{
 			LayoutInflater inflator = LayoutInflater.from(getContext());
-			convertView = inflator.inflate(R.layout.treenode_item, parent, false);
+			convertView = inflator.inflate(R.layout.story_line_item, parent, false);
 		} 
 	
 		/*RelativeLayout rlTreeNodeItem = (RelativeLayout) convertView.findViewById(R.id.rlTreeNodeItem);	
@@ -146,8 +146,8 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
 		TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-		TextView tvVersions = (TextView)convertView.findViewById(R.id.tvVersions);
-		TextView tvRelativeTime = (TextView)convertView.findViewById(R.id.tvRelativeTime);
+		TextView tvVersions = (TextView) convertView.findViewById(R.id.tvVersions);
+		TextView tvRelativeTime = (TextView) convertView.findViewById(R.id.tvRelativeTime);
 		String relativeTime = getRelativeTimeAgo (node.getUpdatedAt());
 		tvRelativeTime.setText(relativeTime);
 		
@@ -222,17 +222,15 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			convertView.setBackgroundColor(0xFF99CCFF);
 		} */
 		
-		TreeNodeAPI api = new TreeNodeAPI ();
-		int sibCount = api.getSiblingCount(node);
-		sibCount++;
-		if ( sibCount > 0)
+		if (mScreenNo == 1)
 		{
-			String plural = (sibCount > 1)? "s":"";
-			tvVersions.setText(sibCount + " version" + plural);
+		
 		}
 		else
 		{
-			tvVersions.setVisibility(View.GONE);
+			int endings = node.getNumTreeLeafNodes();
+			String plural = (endings>0)? "s": "";
+			tvVersions.setText(endings + " ending" + plural);
 		}
 		
 //		Log.d ("debug", "in screen 1, adding swipe listeners");

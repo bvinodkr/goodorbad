@@ -338,8 +338,26 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 	}
 
+	public class SaveRootCallback extends SaveCallback {
+
+		TreeNode root;
+		public SaveRootCallback (TreeNode root)
+		{
+			this.root = root;
+		}
+		@Override
+		public void done(ParseException arg0) {
+			
+			if (arg0 == null)
+			{
+				root.setStoryId(root.getObjectId());
+			}
+		}
+		
+	}
+	
 	@Override
-	public void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost) {
+	public void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost) {
 		if(!fromPost) {
 
 			setupTabs(1);
@@ -350,17 +368,16 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			 * put data into parse here
 			 */
 
-			final TreeNode root = new TreeNode (composeData, null);
+			TreeNode root = new TreeNode (composeData, null);
 
 			root.setUser(ParseUser.getCurrentUser());
-			root.setImageUrl(imageUrl);
-			root.saveInBackground(new SaveCallback() {
+			if (imageUrl != null && !imageUrl.isEmpty())
+			{
+				root.setImageUrl(imageUrl);
+			}
 
-				@Override
-				public void done(ParseException arg0) {
-					root.setStoryId(root.getObjectId());
-				}
-			});
+			root.setTitle(composeStoryTitle);
+			root.saveInBackground(new SaveRootCallback(root)); 
 
 			setupTabs(3);
 

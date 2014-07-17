@@ -8,7 +8,7 @@
     <solid android:color="#FFF" />
 
     <stroke
-        android:width="0.5dip"
+        android:width="0.8dip"
         android:color="#CCCCCC" />
 
     <gradient

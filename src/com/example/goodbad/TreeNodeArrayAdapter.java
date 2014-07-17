@@ -128,8 +128,9 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			if(node.getImageUrl().contains("http")) {
 				ivItemImage.setImageUrl(node.getImageUrl());
 			} else {
-				//ivItemImage.setImageUrl(getPath(Uri.parse(node.getImageUrl())));
-/*				String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
+				/*ivItemImage.setImageUrl(getPath(Uri.parse(node.getImageUrl())));
+				String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
+
 				try {
 					Bitmap image = BitmapFactory.decodeStream(new URL(path).openConnection().getInputStream());
 					ivItemImage.setImageBitmap(image);
@@ -139,8 +140,8 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				*/
+				}*/
+
 			}
 		}
 		/*if(position==1) { 			
@@ -175,8 +176,9 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
 		TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-		TextView tvVersions = (TextView)convertView.findViewById(R.id.tvVersions);
-		TextView tvRelativeTime = (TextView)convertView.findViewById(R.id.tvRelativeTime);
+		TextView tvVersions = (TextView) convertView.findViewById(R.id.tvVersions);
+		TextView tvRelativeTime = (TextView) convertView.findViewById(R.id.tvRelativeTime);
+		TextView tvStoryTitle = (TextView) convertView.findViewById(R.id.tvStoryTitle);
 		final TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);		
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
 		ivEmptyHeart.setContentDescription("false");
@@ -215,9 +217,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				tree.saveInBackground();
 			}
 		}); 
-		
-	
- 
+
 		if (node.getUser() != null)
 		{
 			String name = node.getUser().getString("name");
@@ -234,12 +234,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
-		//tvBody.setVisibility(0);
-		
-//		Log.d("debug", node.getText()); 
-		/*if (position%2 == 0) {
-			convertView.setBackgroundColor(0xFF99CCFF);
-		} */
+		tvStoryTitle.setText(node.getTitle());
 		
 		if (mScreenNo == 1)
 		{
