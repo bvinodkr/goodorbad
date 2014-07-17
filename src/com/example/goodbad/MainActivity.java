@@ -38,6 +38,9 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+ import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
+import com.parse.PushService;
 import com.example.goodbad.ComposeDispatchActivity;
  
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
