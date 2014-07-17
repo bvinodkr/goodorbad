@@ -123,7 +123,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		ivItemImage.setVisibility(View.GONE);
 		if (node.getImageUrl() != null && !node.getImageUrl ().isEmpty())
 		{
-			Log.d ("DEBUG", "image url = " + node.getImageUrl() + " " + node.getObjectId());
+//			Log.d ("DEBUG", "image url = " + node.getImageUrl() + " " + node.getObjectId());
 			ivItemImage.setVisibility(View.VISIBLE);
 			if(node.getImageUrl().contains("http")) {
 				ivItemImage.setImageUrl(node.getImageUrl());
@@ -243,7 +243,11 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		else
 		{
 			int endings = node.getNumTreeLeafNodes();
-			String plural = (endings>0)? "s": "";
+			if (endings == 0)
+			{
+				endings = 1;
+			}
+			String plural = (endings>1)? "s": "";
 			tvVersions.setText(endings + " ending" + plural);
 		}
 
