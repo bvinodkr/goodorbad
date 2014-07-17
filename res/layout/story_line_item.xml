@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true" >
 
         <ImageView
-            android:id="@+id/ivProfileImage" 
+            android:id="@+id/ivProfileImage"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="8dp"
-            android:paddingBottom="4dp"
+            android:paddingBottom="10dp"
             android:text="Sentence/Para in story"
             android:textColor="@color/white_color"
             android:textSize="14sp" />
@@ -92,7 +92,7 @@
     <LinearLayout
         android:id="@+id/llFollowers"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
@@ -101,23 +101,23 @@
 
         <ImageView
             android:id="@+id/ivEmptyHeart"
-            android:layout_width="20dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="20dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_action_empty_heart" />
+            android:src="@drawable/empty_heart" />
 
         <TextView
             android:id="@+id/tvLikes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="2dp"
-             android:text="5"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="2dp"
+            android:text="1"
             android:textColor="@color/com_parse_ui_twitter_login_button"
-             android:text="1"
-             android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tvVersions"
@@ -125,10 +125,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="2dp"
-              android:layout_marginLeft="50dp"
-            android:text="5 Endings"
+            android:layout_marginLeft="100dp"
+            android:text="1 Forks"
             android:textColor="@color/com_parse_ui_twitter_login_button"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tvForks"
@@ -136,13 +136,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="50dp"
-             android:layout_marginLeft="100dp"
-             android:text="5 Forks"
-            android:textColor="@color/com_parse_ui_twitter_login_button"
-             android:layout_marginLeft="100dp"
+            android:layout_marginLeft="100dp"
             android:text="1 Forks"
-             android:textSize="12sp" />
+            android:textColor="@color/com_parse_ui_twitter_login_button"
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/ivForkStory"
@@ -151,6 +148,9 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="100dp"
             android:src="@drawable/ic_action_popup" />
+
+        <TextView>
+        </TextView>
     </LinearLayout>
 
 </RelativeLayout>

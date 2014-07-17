@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="8dp"
-            android:paddingBottom="4dp"
+            android:paddingBottom="10dp"
             android:text="Sentence/Para in story"
             android:textColor="@color/white_color"
             android:textSize="14sp" />
@@ -116,11 +116,12 @@
 
         <ImageView
             android:id="@+id/ivEmptyHeart"
-            android:layout_width="13dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="30dp"
-            android:src="@drawable/ic_action_empty_heart" />
+            android:src="@drawable/empty_heart" />
 
         <TextView
             android:id="@+id/tvLikes"
@@ -128,8 +129,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"
+            android:layout_marginLeft="2dp"
             android:text=""
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tvVersions"
@@ -140,7 +142,7 @@
             android:layout_marginLeft="120dp"
             android:text="5 Endings"
             android:textColor="@color/com_parse_ui_twitter_login_button"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <ImageView
             android:id="@+id/ivForkStory"

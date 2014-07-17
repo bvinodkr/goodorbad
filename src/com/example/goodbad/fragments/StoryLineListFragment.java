@@ -1,10 +1,15 @@
 package com.example.goodbad.fragments;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.res.Configuration;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,22 +44,22 @@ public class StoryLineListFragment extends BaseListFragment {
 	private ListView lvNodes;
 	private StoryLineArrayAdapter aaNodes;
 	private TreeNode selectedStory;
+	private TreeNode root;
 	private PopupWindow popupWindow = null;
-	private ImageView ivInsertedStoryLineDialog;
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
-	
+
 	public final static int PICK_PHOTO_CODE = 1046;
 	
-	public void newInstance(TreeNode selectedStory) {
+	public void newInstance(TreeNode selectedStory, TreeNode root) {
 		this.selectedStory = selectedStory;
 	}
-	
+
 	/*private StoryLineListFragmentListener listener;
-	
+
 	public interface StoryLineListFragmentListener {
 		void onSelectedTrendingItem();
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -70,21 +75,21 @@ public class StoryLineListFragment extends BaseListFragment {
 		super.onDetach();
 		listener = null;
 	}*/
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-		
-		
-		
-		 //populateTreeNodes("");
+
+
+
+		//populateTreeNodes("");
 	}
-	
+
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 		View storyLineView = inflater.inflate(R.layout.fragment_story_line, container, false);
 		final ImageView ivStoryLinePost = (ImageView) storyLineView.findViewById(R.id.ivStoryLinePost);
-		
+
 		ivStoryLinePost.setVisibility(View.INVISIBLE);
 
 		//addNodestoList();
@@ -95,13 +100,13 @@ public class StoryLineListFragment extends BaseListFragment {
 		ArrayList<TreeNode> path = api.getPathContaining(selectedStory);
 		//Log.d ("DEBUG", "num of nodes in path = " + path.size());
 		addParas (path);
-		
+
 		/*ivInsertedStoryLineDialog = (ImageView) storyLineView.findViewById(R.id.ivInsertedStoryLineDialog);
 		ivInsertedStoryLineDialog.setVisibility(View.GONE);*/
-		
+
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
-		
+
 		/*
 		 * set up the pop up item image 
 		 */
@@ -114,13 +119,13 @@ public class StoryLineListFragment extends BaseListFragment {
 
 				int location[] = {0,0};
 				v.getLocationOnScreen(location);
-				
+
 				inflatePopUpWindow(inflater, container, location);
 			}
 		});
-		
+
 		final EditText etStoryLineCompose = (EditText) storyLineView.findViewById(R.id.etStoryLineCompose);
-		
+
 		etStoryLineCompose.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -139,28 +144,28 @@ public class StoryLineListFragment extends BaseListFragment {
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 		ivStoryLinePost.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-								
+
 				String data = etStoryLineCompose.getText().toString();
-				
+
 				etStoryLineCompose.setText("");
-				
+
 				ivStoryLinePopUpImage.setVisibility(View.VISIBLE);
 				ivStoryLinePost.setVisibility(View.INVISIBLE);		
-				
+
 				/*
 				 * add to parse
 				 */
@@ -169,15 +174,21 @@ public class StoryLineListFragment extends BaseListFragment {
 				childNode.saveInBackground();
 				selectedStory.saveInBackground();
 				selectedStory = childNode;
+
+				//update root's num leaf nodes
+				int numLeafNodes = root.getNumTreeLeafNodes();
+				numLeafNodes++;
+				root.setNumTreeLeafNodes(numLeafNodes);
+				root.saveInBackground();
 				
 				storyLineNodeList.add(childNode);
 				aaNodes.notifyDataSetChanged();
 			}
 		});
-		
+
 		return storyLineView;		
 	}
-	
+
 	//private RelativeLayout.LayoutParams paramsNotFullscreen; //if you're using RelativeLatout           
 	/*@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -198,14 +209,14 @@ public class StoryLineListFragment extends BaseListFragment {
 			//newConfig.
 		}	
 	}*/
-	
+
 	private void inflatePopUpWindow(LayoutInflater inflater, ViewGroup container, int location[]) {
 		// Inflate the popup_layout.xml
 		if(popupWindow!=null && popupWindow.isShowing()) {
 			popupWindow.dismiss();
 		} else {
 			View popUpView = inflater.inflate(R.layout.pop_up_layout, container, false);
-		
+
 			// Creating the PopupWindow
 			popupWindow = new PopupWindow(getActivity());
 			popupWindow.setContentView(popUpView);
@@ -232,18 +243,16 @@ public class StoryLineListFragment extends BaseListFragment {
 			gridview.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 					Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
-					
-					FragmentManager fm = getActivity().getSupportFragmentManager();
-					InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance("InLineCompose");
-					inlineComposeStoryFragment.show(fm, "dialog_fragment");
+
 					//composeStoryFragment.setTargetFragment(fragment, requestCode);
-					
-					//onGalleryIconClick(v);
+
+					onGalleryIconClick(v);
+					popupWindow.dismiss();
 				}
 			});
 		}
 	}
-	
+
 	private void populatePopUpWindowItems() {
 		popUpWindowItemList.clear();
 		popUpWindowItemList.add(new PopUpWindowItem("Gallery", R.drawable.gallery1));
@@ -253,119 +262,116 @@ public class StoryLineListFragment extends BaseListFragment {
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
 	}
-	
-	/*public void onGalleryIconClick(View view) {
-	    // Create intent for picking a photo from the gallery
-	    Intent intent = new Intent(Intent.ACTION_PICK,
-	        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	    // Bring up gallery to select a photo
-	    startActivityForResult(intent, PICK_PHOTO_CODE);
+
+	public void onGalleryIconClick(View view) {
+		// Create intent for picking a photo from the gallery
+		Intent intent = new Intent(Intent.ACTION_PICK,
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		// Bring up gallery to select a photo
+		startActivityForResult(intent, PICK_PHOTO_CODE);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (data != null) {
-	        Uri photoUri = data.getData();
-	        // Do something with the photo based on Uri
-	        Bitmap selectedImage;
-			try {
-				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-				
-				// Load the selected image into a preview	
-				ivInsertedStoryLineDialog.setVisibility(View.VISIBLE);
-				ivInsertedStoryLineDialog.setImageBitmap(selectedImage); 
-		        ivInsertedStoryLineDialog.setContentDescription(photoUri.toString());
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    }
-	}*/
-	
+		if (data != null) {
+			Uri photoUri = data.getData();
+			// Do something with the photo based on Uri
+			FragmentManager fm = getActivity().getSupportFragmentManager();
+			InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(photoUri);
+			inlineComposeStoryFragment.show(fm, "dialog_fragment");
+		}
+	}
+
 	public void addParas(List<TreeNode> nodes)
 	{
 		storyLineNodeList.clear();
 		for (TreeNode n: nodes)
 		{
 			storyLineNodeList.add(n);
-//			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
+			//			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
 			aaNodes.notifyDataSetChanged();
 		}
 	}
-	
-	
+
+
 	@Override
 	public void populateTreeNodes(String max_id) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {	
 		super.onCreateOptionsMenu(menu, inflater);
-		
-		inflater.inflate(R.menu.action_bar_items, menu);
-		
-		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
-		if( ParseUser.getCurrentUser() != null ) {
-			playMenu.setIcon(R.drawable.ic_read  ) ;
-		}	else {playMenu.setIcon(R.drawable.ic_read  ) ;
+//<<<<<<< HEAD
+//		
+//		inflater.inflate(R.menu.action_bar_items, menu);
+//		
+//		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
+//		if( ParseUser.getCurrentUser() != null ) {
+//			playMenu.setIcon(R.drawable.ic_read  ) ;
+//		}	else {playMenu.setIcon(R.drawable.ic_read  ) ;
+//
+//		}   
+//		return;
+//
+//	}
+// 
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		int itemId = item.getItemId();
+//		if (itemId == R.id.miActionBarComposeIcon) {
+//			//onReadClick(item);
+//			return true;
+//		}
+//		return false; 
+//	}
+//=======
 
-		}   
-		return;
+		inflater.inflate(R.menu.story_line_action_bar, menu);
 
+		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
 	}
- 
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int itemId = item.getItemId();
-		if (itemId == R.id.miActionBarComposeIcon) {
-			//onReadClick(item);
-			return true;
-		}
-		return false; 
-	}
-	private void addNodestoList() {
+
+ 	private void addNodestoList() {
 		TreeNode n1 = new TreeNode ();
 		n1.setText("This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1");
 		storyLineNodeList.add(n1);
-		
+
 		TreeNode n2 = new TreeNode ();
 		n2.setText("This is para 2");
 		storyLineNodeList.add(n2);
-		
+
 		TreeNode n3 = new TreeNode ();
 		n3.setText("This is para 3");
 		storyLineNodeList.add(n3);
-		
+
 		TreeNode n4 = new TreeNode ();
 		n4.setText("This is para 4");
 		storyLineNodeList.add(n4);
-		
+
 		TreeNode n5 = new TreeNode ();
 		n5.setText("This is para 5");
 		storyLineNodeList.add(n5);
-		
+
 		TreeNode n6 = new TreeNode ();
 		n6.setText("This is para 6");
 		storyLineNodeList.add(n6);
-		
+
 		TreeNode n7 = new TreeNode ();
 		n7.setText("This is para 7");
 		storyLineNodeList.add(n7);
-		
+
 		TreeNode n8 = new TreeNode ();
 		n8.setText("This is para 8");
 		storyLineNodeList.add(n8);
-		
+
 		TreeNode n9 = new TreeNode ();
 		n9.setText("This is para 9");
 		storyLineNodeList.add(n9);
-		
+
 		TreeNode n10 = new TreeNode ();
 		n10.setText("This is para 10");
 		storyLineNodeList.add(n10);
