@@ -350,7 +350,13 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			
 			if (arg0 == null)
 			{
+				Log.d ("debug", "root.objectid after save " + root.getObjectId());
 				root.setStoryId(root.getObjectId());
+				root.saveInBackground();
+			}
+			else
+			{
+				Log.d ("debug", "error in saving object");
 			}
 		}
 		
@@ -376,6 +382,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				root.setImageUrl(imageUrl);
 			}
 
+			Log.d ("debug", "root.objectid before save " + root.getObjectId());
 			root.setTitle(composeStoryTitle);
 			root.saveInBackground(new SaveRootCallback(root)); 
 

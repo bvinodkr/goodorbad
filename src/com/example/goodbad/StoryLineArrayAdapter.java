@@ -185,6 +185,15 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			}
 		}); 
 		
+		int likes = node.getLikes();
+		if (likes > 0)
+		{
+			tvLikes.setText(likes + "");
+		}
+		else
+		{
+			tvLikes.setText("");
+		}
 		//tvUserName.setText (node.getUser().getUsername());		 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
@@ -224,13 +233,15 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		
 		if (mScreenNo == 1)
 		{
-		
+			TreeNodeAPI api = new TreeNodeAPI ();
+			int endings = api.getSiblingCount(node);
+
+			String plural = (endings>1)? "s": "";
+			tvVersions.setText(endings + " fork" + plural);
 		}
 		else
 		{
-			int endings = node.getNumTreeLeafNodes();
-			String plural = (endings>0)? "s": "";
-			tvVersions.setText(endings + " ending" + plural);
+	
 		}
 		
 //		Log.d ("debug", "in screen 1, adding swipe listeners");
