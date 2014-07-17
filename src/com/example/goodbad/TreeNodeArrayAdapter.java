@@ -203,12 +203,20 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		}); 
 		
 	
-
+ 
 		if (node.getUser() != null)
 		{
-			tvUserName.setText (node.getUser().getUsername());
+			String name = node.getUser().getString("name");
+			if (name == null || name.isEmpty())
+			{
+				tvUserName.setText (node.getUser().getEmail());
+			}
+			else
+			{
+				tvUserName.setText (node.getUser().getString("name"));
+			}
 		}
-
+ 
 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
 		tvBody.setText (node.getText());
