@@ -377,11 +377,25 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	}
 
 	@Override
-	public void onFinishComposeDialog(String composeData, boolean fromPost) {
+	public void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost) {
 		if(!fromPost) {
 			/*
 			 * put data into parse here
 			 */
+
+			final TreeNode root = new TreeNode (composeData, null);
+			//root.setImageUrl();
+
+			//		Log.d("DEBUG", root.getObjectId());
+
+				root.saveInBackground(new SaveCallback() {
+
+					@Override
+					public void done(ParseException arg0) {
+						root.setStoryId(root.getObjectId());
+					}
+				});
+
 			setupTabs(1);
 		} else {
 			getSupportFragmentManager().beginTransaction().remove(composeStoryFragment).commit();
@@ -389,17 +403,26 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		}
 	}
 
+	/*
 	@Override
 	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
 	
 		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
 		storyLineFragment.newInstance(selectedTrendingItem);
-		/*Bundle args = new Bundle();
-		args.putInt(StoryLineListFragment.ARG_POSITION, position);
-		newFragment.setArguments(args);*/
+		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, storyLineFragment);
 		ft.addToBackStack(null);
 		ft.commit();
+	}
+*/
+
+	@Override
+	public void onSelectedTrendingItem (TreeNode selectedTrendingItem)
+	{
+		 Intent i = new Intent (this, StoryLineViewActivity.class);
+		 //pass data
+		 i.putExtra("storyId", selectedTrendingItem.getStoryId());
+		 startActivity(i);
 	}
 }
