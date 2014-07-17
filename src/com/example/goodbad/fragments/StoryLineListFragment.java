@@ -303,36 +303,35 @@ public class StoryLineListFragment extends BaseListFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {	
 		super.onCreateOptionsMenu(menu, inflater);
-//<<<<<<< HEAD
-//		
-//		inflater.inflate(R.menu.action_bar_items, menu);
-//		
-//		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
-//		if( ParseUser.getCurrentUser() != null ) {
-//			playMenu.setIcon(R.drawable.ic_read  ) ;
-//		}	else {playMenu.setIcon(R.drawable.ic_read  ) ;
-//
-//		}   
-//		return;
-//
-//	}
-// 
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		int itemId = item.getItemId();
-//		if (itemId == R.id.miActionBarComposeIcon) {
-//			//onReadClick(item);
-//			return true;
-//		}
-//		return false; 
-//	}
-//=======
+ 		
+		inflater.inflate(R.menu.action_bar_items, menu);
+		
+		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
+		if( ParseUser.getCurrentUser() != null ) {
+			playMenu.setIcon(R.drawable.ic_read  ) ;
+		}	else {playMenu.setIcon(R.drawable.ic_read  ) ;
 
-		inflater.inflate(R.menu.story_line_action_bar, menu);
+		}   
+		return;
 
-		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
 	}
+ 
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int itemId = item.getItemId();
+		if (itemId == R.id.miActionBarComposeIcon) {
+			//onReadClick(item);
+			return true;
+		}
+		return false; 
+	}
+ 
+
+//		inflater.inflate(R.menu.story_line_action_bar, menu);
+//
+//		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
+//	}
 
 
  	private void addNodestoList() {
