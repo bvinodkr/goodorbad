@@ -121,7 +121,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
 		vvItemVideo.setVisibility(View.GONE);
 		ivItemImage.setVisibility(View.GONE);
-		if (node.getImageUrl() != null)
+		if (node.getImageUrl() != null && !node.getImageUrl ().isEmpty())
 		{
 			Log.d ("DEBUG", "image url = " + node.getImageUrl() + " " + node.getObjectId());
 			ivItemImage.setVisibility(View.VISIBLE);
@@ -129,7 +129,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				ivItemImage.setImageUrl(node.getImageUrl());
 			} else {
 				//ivItemImage.setImageUrl(getPath(Uri.parse(node.getImageUrl())));
-				String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
+/*				String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
 				try {
 					Bitmap image = BitmapFactory.decodeStream(new URL(path).openConnection().getInputStream());
 					ivItemImage.setImageBitmap(image);
@@ -140,6 +140,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				*/
 			}
 		}
 		/*if(position==1) { 			
