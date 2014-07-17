@@ -67,8 +67,8 @@
          <com.loopj.android.image.SmartImageView
              xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/ivItemImage"
-             android:layout_width="300dp"
-             android:layout_height="300dp"
+             android:layout_width="80dp"
+             android:layout_height="80dp"
              android:layout_below="@+id/tvBody"
              android:layout_centerVertical="true"
              android:layout_marginLeft="35dp"

@@ -147,7 +147,7 @@ public class StoryLineViewActivity extends FragmentActivity {
 		@Override
 		public CharSequence getPageTitle(int position) {
 			// TODO Auto-generated method stub
-			return "Page" + (position + 1);
+			return "Story version " + (position + 1);
 		}
 		
 	}

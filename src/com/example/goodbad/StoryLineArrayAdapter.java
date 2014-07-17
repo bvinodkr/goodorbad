@@ -220,15 +220,16 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		
 		TreeNodeAPI api = new TreeNodeAPI ();
 		int sibCount = api.getSiblingCount(node);
+		sibCount++;
 		if ( sibCount > 0)
 		{
 			String plural = (sibCount > 1)? "s":"";
 			tvVersions.setText(sibCount + " version" + plural);
 		}
-		/*else
+		else
 		{
 			tvVersions.setVisibility(View.GONE);
-		}*/
+		}
 		
 //		Log.d ("debug", "in screen 1, adding swipe listeners");
 /*		convertView.setOnTouchListener(new OnSwipeTouchListener(getContext(), node) {
