@@ -122,7 +122,7 @@ public class StoryLineViewActivity extends FragmentActivity {
 			if (leafNodes != null && leafNodes.size() > position)
 			{
 				StoryLineListFragment storyLineFragment = new StoryLineListFragment();
-				storyLineFragment.newInstance(leafNodes.get(position));
+				storyLineFragment.newInstance(leafNodes.get(position), root);
 				return storyLineFragment;
 			}
 			else

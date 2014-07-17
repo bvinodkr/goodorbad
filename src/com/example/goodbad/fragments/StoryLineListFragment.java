@@ -37,13 +37,14 @@ public class StoryLineListFragment extends BaseListFragment {
 	private ListView lvNodes;
 	private StoryLineArrayAdapter aaNodes;
 	private TreeNode selectedStory;
+	private TreeNode root;
 	private PopupWindow popupWindow = null;
 	private ImageView ivInsertedStoryLineDialog;
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
 	
 	public final static int PICK_PHOTO_CODE = 1046;
 	
-	public void newInstance(TreeNode selectedStory) {
+	public void newInstance(TreeNode selectedStory, TreeNode root) {
 		this.selectedStory = selectedStory;
 	}
 	
@@ -167,6 +168,11 @@ public class StoryLineListFragment extends BaseListFragment {
 				childNode.saveInBackground();
 				selectedStory.saveInBackground();
 				selectedStory = childNode;
+				//update root's num leaf nodes
+				int numLeafNodes = root.getNumTreeLeafNodes();
+				numLeafNodes++;
+				root.setNumTreeLeafNodes(numLeafNodes);
+				root.saveInBackground();
 				
 				storyLineNodeList.add(childNode);
 				aaNodes.notifyDataSetChanged();
