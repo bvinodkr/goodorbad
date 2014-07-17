@@ -3,6 +3,7 @@ package com.example.goodbad.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -69,6 +70,9 @@ public class StoryLineListFragment extends BaseListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
+		
+		
+		
 		 //populateTreeNodes("");
 	}
 	
@@ -78,9 +82,9 @@ public class StoryLineListFragment extends BaseListFragment {
 		
 		//addNodestoList();
 		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
-		
+
 		//addNodestoAdapter(storyLineNodeList);
-		
+	/*	
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		query.whereEqualTo("storyid", selectedStory.getStoryId());
 		query.include("user");
@@ -99,16 +103,11 @@ public class StoryLineListFragment extends BaseListFragment {
 				}
 			}
 		});
-		
-		//throw away
-		TreeNode node1 = new TreeNode();
-		node1.setLikes(4);
-		node1.setText("");
-		storyLineNodeList.add(node1);
-		//
 
-		aaNodes.addAll(storyLineNodeList);
+		*/
+
 		
+
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
 		
@@ -130,6 +129,27 @@ public class StoryLineListFragment extends BaseListFragment {
 		});
 		
 		return storyLineView;		
+	}
+	
+	//private RelativeLayout.LayoutParams paramsNotFullscreen; //if you're using RelativeLatout           
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			 /*paramsNotFullscreen=(RelativeLayout.LayoutParams)mVideoView.getLayoutParams();
+		        RelativeLayout.LayoutParams params=new LayoutParams(paramsNotFullscreen);
+		        params.setMargins(0, 0, 0, 0);
+		        params.height=ViewGroup.LayoutParams.MATCH_PARENT;
+		        params.width=ViewGroup.LayoutParams.MATCH_PARENT;
+		        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+		        mVideoView.setLayoutParams(params);
+
+		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+		        mVideoView.setLayoutParams(paramsNotFullscreen);
+		}*/
+			//newConfig.
+		}	
 	}
 	
 	private void inflatePopUpWindow(LayoutInflater inflater, ViewGroup container, int location[]) {

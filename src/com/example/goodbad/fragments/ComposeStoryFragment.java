@@ -47,7 +47,7 @@ public class ComposeStoryFragment extends Fragment {
 	public final static int PICK_PHOTO_CODE = 1046;
 	
 	public interface ComposeStoryFragmentListener {
-		void onFinishComposeDialog(String composeData, boolean fromPost);
+		void onFinishComposeDialog(String composeData, String imageUrl, boolean fromPost);
 	}
 
 	public ComposeStoryFragment() {
@@ -94,8 +94,9 @@ public class ComposeStoryFragment extends Fragment {
 	public void onDestroyView() {
 		super.onDestroyView();
 		
-		String composeData = etComposeStory.getText()  + " : url :"  + ivInsertedImageComposeStory.getContentDescription();		
-		listener.onFinishComposeDialog(composeData, fromPost);	
+		String composeData = etComposeStory.getText().toString();
+		String imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();		
+		listener.onFinishComposeDialog(composeData, imageUrl, fromPost);	
 	}
 	
 	@Override
@@ -212,8 +213,9 @@ public class ComposeStoryFragment extends Fragment {
 	public void onPostStoryIconClick(MenuItem mi) {
 		Toast.makeText(getActivity(), "Post Story", Toast.LENGTH_SHORT).show();	
 		fromPost = true;
-		String composeData = etComposeStory.getText()  + " : url :"  + ivInsertedImageComposeStory.getContentDescription();		
-		listener.onFinishComposeDialog(composeData, fromPost);		
+		String composeData = etComposeStory.getText().toString();
+		String imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();		
+		listener.onFinishComposeDialog(composeData, imageUrl, fromPost);		
 	}
 	
 	public void onGalleryIconClick(View view) {
