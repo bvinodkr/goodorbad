@@ -5,12 +5,10 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,8 +28,7 @@ import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.SaveCallback;
+import com.parse.ParseUser;
 
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
 
@@ -143,7 +140,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	private void addStory(String x)
 	{
 		TreeNode root = new TreeNode (x  + " , good-root", null);
-		
+		root.setImageUrl("http://media1.santabanta.com/full1/Animals/Dogs/dogs-87a.jpg");
 
 
 		//		Log.d("DEBUG", root.getObjectId());
@@ -153,17 +150,20 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 			TreeNodeAPI api = new TreeNodeAPI ();
 			TreeNode firstPara = api.addChild(root, x + " bad-para1");
+			firstPara.setUser(ParseUser.getCurrentUser());
+			firstPara.setImageUrl("http://practicalveterinarytips.com/wp-content/uploads/2013/04/suspicious-puppy.jpg");
 			
 			//save both root and firstPara
 			root.save();
 			firstPara.save();
 			
 			TreeNode secondPara = api.addChild(firstPara, x + " good-para2");
-			
+			secondPara.setUser(ParseUser.getCurrentUser());
 			firstPara.save();
 			secondPara.save();
 			
 			TreeNode secondParav1 = api.addChild(firstPara, x + " good-para2-v1");
+			secondParav1.setUser(ParseUser.getCurrentUser());
 			secondParav1.save();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -205,7 +205,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 	private void addDummyData ()
 	{
-		/*addStory ("story1");
+/*	addStory ("story1");
 		addStory ("story2");
 		addStory("story3");
 	
@@ -300,17 +300,26 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		}
 	}
 
+	/*
 	@Override
 	public void onSelectedTrendingItem(TreeNode selectedTrendingItem) {
 	
 		StoryLineListFragment storyLineFragment = new StoryLineListFragment();
 		storyLineFragment.newInstance(selectedTrendingItem);
-		/*Bundle args = new Bundle();
-		args.putInt(StoryLineListFragment.ARG_POSITION, position);
-		newFragment.setArguments(args);*/
+		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.flContainer, storyLineFragment);
 		ft.addToBackStack(null);
 		ft.commit();
+	}
+*/
+	
+	@Override
+	public void onSelectedTrendingItem (TreeNode selectedTrendingItem)
+	{
+		 Intent i = new Intent (this, StoryLineViewActivity.class);
+		 //pass data
+		 i.putExtra("storyId", selectedTrendingItem.getStoryId());
+		 startActivity(i);
 	}
 }
