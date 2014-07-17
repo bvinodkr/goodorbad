@@ -83,30 +83,9 @@ public class StoryLineListFragment extends BaseListFragment {
 		//addNodestoList();
 		aaNodes = new StoryLineArrayAdapter(getActivity(), storyLineNodeList, 1, getActivity().getSupportFragmentManager());
 
-		//addNodestoAdapter(storyLineNodeList);
-	/*	
-		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereEqualTo("storyid", selectedStory.getStoryId());
-		query.include("user");
-		query.findInBackground( new FindCallback<TreeNode>() {
-
-			public void done(List<TreeNode> items, ParseException arg1) {
-				// TODO Auto-generated method stub
-				if (arg1 == null)
-				{
-					TreeNodeAPI api = new TreeNodeAPI ();
-					TreeNode root = api.toTree(items);
-					Log.d ("DEBUG", "root object id" + root.getObjectId());
-					List<TreeNode> leafNodes = api.getLeafNodes(items);
-					Log.d ("DEBUG", "num of lead nodes " + leafNodes.size());
-					addParas (api.getPathContaining(leafNodes.get(0)));
-				}
-			}
-		});
-
-		*/
-
-		
+		TreeNodeAPI api = new TreeNodeAPI ();
+		api.getPathContaining(selectedStory);
+		addParas (api.getPathContaining(selectedStory));
 
 		lvNodes = (ListView) storyLineView.findViewById(R.id.lvStoryLineFragment);
 		lvNodes.setAdapter(aaNodes);
@@ -209,6 +188,7 @@ public class StoryLineListFragment extends BaseListFragment {
 	{
 		for (TreeNode n: nodes)
 		{
+			storyLineNodeList.clear();
 			storyLineNodeList.add(n);
 //			Log.d ("DEBUG", "addParas called with text = " + n.getText ());
 			aaNodes.notifyDataSetChanged();
