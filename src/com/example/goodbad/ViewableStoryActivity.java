@@ -124,7 +124,7 @@ public class ViewableStoryActivity extends ActionBarActivity {
 			if (leafNodes != null && leafNodes.size() > position)
 			{
 				StoryLineListFragment storyLineFragment = new StoryLineListFragment();
-				storyLineFragment.newInstance(leafNodes.get(position));
+				//storyLineFragment.newInstance(leafNodes.get(position));
 				return storyLineFragment;
 			}
 			else
