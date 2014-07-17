@@ -417,6 +417,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		 Intent i = new Intent (this, StoryLineViewActivity.class);
 		 //pass data
 		 i.putExtra("storyId", selectedTrendingItem.getStoryId());
+		 i.putExtra("title", selectedTrendingItem.getTitle());
 		 startActivity(i);
 	}
 }
