@@ -192,10 +192,13 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		}
 		else
 		{
-			tvLikes.setText("");
+			tvLikes.setText("0");
 		}
 		//tvUserName.setText (node.getUser().getUsername());		 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
+		/*if(node.getText().equals("")) {
+			tvBody.setVisibility(View.GONE);
+		}*/
 		tvBody.setText (node.getText());
 		
 		ImageView ivForkStory = (ImageView) convertView.findViewById(R.id.ivForkStory);

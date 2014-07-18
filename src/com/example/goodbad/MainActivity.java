@@ -270,7 +270,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			}
 		});*/
 	}
-
+ 
 	private void setupTabs(int tabNo) {
 		Log.d("debug ", "crapped out 1");
 
@@ -294,7 +294,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 				.setTabListener(new FragmentTabListener<TrendingStoryListFragment>(R.id.flContainer, this,
 						"home", TrendingStoryListFragment.class));
 		actionBar.addTab(tab1);	
-		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#2DAAE2")));
+		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
 		actionBar.selectTab(tab1);
 		Log.d("debug ", "crapped out 4");
 

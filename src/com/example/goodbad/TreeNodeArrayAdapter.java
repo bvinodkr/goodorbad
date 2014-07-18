@@ -25,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -110,8 +111,9 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		}*/
 		
 		if(mScreenNo == 0) {
-			convertView.setBackgroundResource(R.drawable.border_ui);
-			convertView.findViewById(R.id.llFollowers).setBackgroundColor(Color.LTGRAY);
+			//convertView.setBackgroundResource(R.drawable.border_ui);
+			convertView.setBackgroundResource(R.drawable.round_edges);
+			//convertView.findViewById(R.id.llFollowers).setBackgroundColor(Color.LTGRAY);
 		} else if(mScreenNo == 1) {
 			convertView.setBackgroundResource(R.drawable.round_edges);
 			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
@@ -121,29 +123,51 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
 		vvItemVideo.setVisibility(View.GONE);
 		ivItemImage.setVisibility(View.GONE);
-		if (node.getImageUrl() != null && !node.getImageUrl ().isEmpty())
+		
+		String imageUrl = node.getImageUrl(); {
+			ivItemImage.setVisibility(View.GONE);
+			vvItemVideo.setVisibility(View.GONE);
+		}
+		
+		if (imageUrl != null && !imageUrl.isEmpty())
 		{
-//			Log.d ("DEBUG", "image url = " + node.getImageUrl() + " " + node.getObjectId());
-			ivItemImage.setVisibility(View.VISIBLE);
-			if(node.getImageUrl().contains("http")) {
-				ivItemImage.setImageUrl(node.getImageUrl());
-			} else {
-				/*ivItemImage.setImageUrl(getPath(Uri.parse(node.getImageUrl())));
-				String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
+			//Log.d ("DEBUG", "image url = " + node.getImageUrl());
+			if (imageUrl.contains("mp4"))
+			{
+				vvItemVideo.setVisibility(View.VISIBLE);
+				ivItemImage.setVisibility(View.GONE);
+				vvItemVideo.setVideoPath(imageUrl);
+				MediaController mediaController = new MediaController(getContext());
+				mediaController.setAnchorView(vvItemVideo);
+				vvItemVideo.setMediaController(mediaController);
+				vvItemVideo.requestFocus();
+				vvItemVideo.start();
+			}
+			else
+			{
+				ivItemImage.setVisibility(View.VISIBLE);
+				vvItemVideo.setVisibility(View.GONE);
+				if(node.getImageUrl().contains("http")) {
+					ivItemImage.setImageUrl(node.getImageUrl());
+				} else {
+					ivItemImage.setImageUrl(getPath(Uri.parse(node.getImageUrl())));
+					String path = "file://" + getPath(Uri.parse(node.getImageUrl()));
 
-				try {
-					Bitmap image = BitmapFactory.decodeStream(new URL(path).openConnection().getInputStream());
-					ivItemImage.setImageBitmap(image);
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
+					try {
+						Bitmap image = BitmapFactory.decodeStream(new URL(path).openConnection().getInputStream());
+						ivItemImage.setImageBitmap(image);
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
+				}
 			}
 		}
+		
 		/*if(position==1) { 			
 			vvItemVideo.setVisibility(View.GONE);
 			ivItemImage.setVisibility(View.VISIBLE);
@@ -233,8 +257,22 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
  
 
 		//ivProfileImage.setImageResource(android.R.color.transparent);
+		/*if(node.getText().equals("")) {
+			tvBody.setVisibility(View.GONE);
+		}*/
+		
 		tvBody.setText (node.getText());
 		tvStoryTitle.setText(node.getTitle());
+		
+		int likes = node.getLikes();
+		if (likes > 0)
+		{
+			tvLikes.setText(likes + "");
+		}
+		else
+		{
+			tvLikes.setText("0");
+		}
 		
 		if (mScreenNo == 1)
 		{

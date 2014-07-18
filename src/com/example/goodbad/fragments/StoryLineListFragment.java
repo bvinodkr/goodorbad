@@ -220,8 +220,8 @@ public class StoryLineListFragment extends BaseListFragment {
 			// Creating the PopupWindow
 			popupWindow = new PopupWindow(getActivity());
 			popupWindow.setContentView(popUpView);
-			popupWindow.setWidth(360);
-			popupWindow.setHeight(220);
+			popupWindow.setWidth(700);
+			popupWindow.setHeight(430);
 			popupWindow.setOutsideTouchable(true);
 			popupWindow.setFocusable(true);									
 
@@ -233,7 +233,7 @@ public class StoryLineListFragment extends BaseListFragment {
 			//v.getLocationOnScreen(location);
 
 			// Displaying the popup at the specified location, + offsets.
-			popupWindow.showAtLocation(popUpView, Gravity.NO_GRAVITY, location[0]-300, location[1]-220);
+			popupWindow.showAtLocation(popUpView, Gravity.NO_GRAVITY, location[0]-300, location[1]-450);
 
 			populatePopUpWindowItems();
 

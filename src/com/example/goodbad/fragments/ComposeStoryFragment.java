@@ -143,7 +143,7 @@ public class ComposeStoryFragment extends Fragment {
 			popupWindow.dismiss();
 		} else {
 			View popUpView = inflater.inflate(R.layout.pop_up_layout, container, false);
-		
+		 
 			// Creating the PopupWindow
 			popupWindow = new PopupWindow(getActivity());
 			popupWindow.setContentView(popUpView);

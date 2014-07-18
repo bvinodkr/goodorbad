@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">GoodBad</string>
+    <string name="app_name">Story Tellers</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_story_line_view">Browse story</string>
     <string name="image_desc">User Name</string>
@@ -13,5 +13,5 @@
     <string name="facebook_app_id">1536078459949152</string>
     <string name="twitter_consumer_key">ueE7e9wACqs40kOwpvaztiXEW</string>
     <string name="twitter_consumer_secret">jfJbWWWAWx2wtLcAwX4jYw0kM8vRnZnLeepRNnf6nkcRmzYaXu</string>
-	
+
 </resources>

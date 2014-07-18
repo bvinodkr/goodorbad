@@ -63,16 +63,16 @@ public class NewStoryListFragment extends BaseListFragment {
 		super.onAttach(activity);
 		if(activity instanceof TrendingStoryListFragmentListener) {
 			listener = (TrendingStoryListFragmentListener) activity;
-		} else {
+		} else { 
 			throw new ClassCastException(activity.toString() + "must implement NewStoryListFragment");
 		}
 	}
-
+ 
 	@Override
 	public void onDetach() {	
 		super.onDetach();
 		listener = null;
-	}*/
+	}*/ 
 	
 	
 	@Override
@@ -82,7 +82,7 @@ public class NewStoryListFragment extends BaseListFragment {
 
 	private void getStories() {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 12*60*60*1000l));
+		query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 36*60*60*1000l));
 		query.whereEqualTo("parentid", JSONObject.NULL);
 		query.include("user");
 

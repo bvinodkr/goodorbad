@@ -119,22 +119,22 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/ivItemImage"
             android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:layout_below="@+id/tvBody"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="75dp"
             android:layout_marginTop="5dp"
             android:paddingBottom="5dp"
             android:src="@drawable/ic_launcher" />
 
         <VideoView
             android:id="@+id/vvItemVideo"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="270dp"
+            android:layout_height="300dp"
             android:layout_below="@+id/tvBody"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/ivItemImage" />
     </RelativeLayout>
