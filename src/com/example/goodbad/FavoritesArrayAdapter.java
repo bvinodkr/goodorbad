@@ -1,5 +1,6 @@
 package com.example.goodbad;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,33 +20,36 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.CursorLoader;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.loopj.android.image.SmartImageView;
 
-public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
+public class FavoritesArrayAdapter extends ArrayAdapter<Favorites> {
 	
 	private int mScreenNo;
 
-	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo) {
-		super(context, R.layout.treenode_item, treeNodes);
+	public FavoritesArrayAdapter(Context context, List<Favorites> favorites, int screenNo) {
+		super(context, R.layout.favnode_item, favorites);
 		this.mScreenNo = screenNo;
 		Log.d ("DEBUG", "screen no " + mScreenNo);
 	}
 	
  
 
-	public void addStory (List<TreeNode> nodes)
+	public void addStory (List<Favorites> nodes)
 	{
 		this.clear();
 		this.addAll(nodes);
@@ -88,11 +92,11 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TreeNode node = getItem (position);
+		Favorites node = getItem (position);
 		if (convertView == null)
 		{
 			LayoutInflater inflator = LayoutInflater.from(getContext());
-			convertView = inflator.inflate(R.layout.treenode_item, parent, false);
+			convertView = inflator.inflate(R.layout.favnode_item, parent, false);
 		} 
 	
 		/*RelativeLayout rlTreeNodeItem = (RelativeLayout) convertView.findViewById(R.id.rlTreeNodeItem);	
@@ -202,18 +206,20 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		}
 		*/
 		
-		 
+		 RelativeLayout rlHeader=(RelativeLayout) convertView.findViewById(R.id.rlHeader);
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
 		TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+		TextView tvOrigBody = (TextView) convertView.findViewById(R.id.tvOrigBody);
+
 		TextView tvVersions = (TextView) convertView.findViewById(R.id.tvVersions);
 		TextView tvRelativeTime = (TextView) convertView.findViewById(R.id.tvRelativeTime);
 		TextView tvStoryTitle = (TextView) convertView.findViewById(R.id.tvStoryTitle);
 		final TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);		
 		final ImageView ivEmptyHeart = (ImageView) convertView.findViewById(R.id.ivEmptyHeart);
-		ivEmptyHeart.setContentDescription("false");
-		
-		String relativeTime = getRelativeTimeAgo (node.getUpdatedAt());
+		ivEmptyHeart.setContentDescription("true");
+		ivEmptyHeart.setImageResource(R.drawable.full_heart); //make default as set to show red , being a favorite
+		String relativeTime = getRelativeTimeAgo (node.getParseObject("FavNodeId").getUpdatedAt());// (node.getUpdatedAt());
 		tvRelativeTime.setText(relativeTime);
 		
 		ivEmptyHeart.setTag(node);
@@ -242,22 +248,26 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 					ivEmptyHeart.setImageResource(R.drawable.full_heart);
 					tvLikes.setText(likes+"");
 				}
-				TreeNode tree = (TreeNode)v.getTag();
+				
+				Favorites tree = (Favorites)v.getTag();
 				tree.setLikes(likes);
 				tree.saveInBackground();
 			}
 		}); 
 
-		if (node.getUser() != null)
+		if ( node.getUser() != null)
 		{
-			String name = node.getUser().getString("name");
+			//String name =   node.getUser().getString("name");
+			String name =   node.getParseObject("FavNodeId").getParseObject("user").getString("name");
+			Log.d ("DEBUG", "user game " + name);
 			if (name == null || name.isEmpty())
 			{
 				tvUserName.setText (node.getUser().getEmail());
 			}
 			else
 			{
-				tvUserName.setText (node.getUser().getString("name"));
+				//tvUserName.setText (node.getUser().getString("name"));
+ 				tvUserName.setText(name);
 			}
 		}
  
@@ -266,11 +276,38 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		/*if(node.getText().equals("")) {
 			tvBody.setVisibility(View.GONE);
 		}*/
-		
-		tvBody.setText (node.getText());
-		tvStoryTitle.setText(node.getTitle());
-		Log.d ("DEBUG", "title" + node.getTitle());
-		int likes = node.getLikes();
+		String oText;
+		String favText  ;
+	  //  LayoutParams params = rlHeader.getLayoutParams();
+
+		if(node.getParseObject("FavNodeId").getString("storyid1")==
+			node.getParseObject("FavNodeId").getString("parentid"))
+		{
+			  oText="";
+//			  View b = convertView.findViewById(R.id.tvOrigBody);
+//			  b.setVisibility(View.GONE);
+			    tvOrigBody.setVisibility(View.GONE);
+			  //  params.height = 35;
+			   // rlHeader.setLayoutParams(params);
+		}
+		else{
+			 tvOrigBody.setVisibility(View.VISIBLE);
+		  oText=  node.getParseObject("FavNodeId").getParseObject("storyid1").getString("text")  +"\n ----\n------\n"  ;
+		  //  params.height = 70;
+		//    rlHeader.setLayoutParams(params);
+
+		}
+ 
+		 favText=node.getParseObject("FavNodeId").getString("text");
+		 tvBody.setText  ( favText) ;
+		 tvOrigBody.setText(oText);
+		 // tvBody.setText  (Html.fromHtml(oText)+favText) ;//getText());
+	//	tvBody.setText  (node.getString("FavNodeId.text")) ;//getText());
+
+		//tvStoryTitle.setText (node.getTitle());  
+		String oTitle=node.getParseObject("FavNodeId").getParseObject("storyid1").getString("title");
+		tvStoryTitle.setText(oTitle);
+		int likes = node.getParseObject("FavNodeId").getInt("likes");//node.getLikes();
 		if (likes > 0)
 		{
 			tvLikes.setText(likes + "");
@@ -286,7 +323,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		}
 		else
 		{
-			int endings = node.getNumTreeLeafNodes();
+			int endings = node.getParseObject("FavNodeId").getInt("numTreeLeafNodes");//node.getNumTreeLeafNodes();
 			if (endings == 0)
 			{
 				endings = 1;

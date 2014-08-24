@@ -142,6 +142,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 
 		query.whereEqualTo("parentid", JSONObject.NULL);
 		query.include("user");
+		query.orderByDescending("likes");
 
 		query.findInBackground( new FindCallback<TreeNode>() {
 

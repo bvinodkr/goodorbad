@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
+import com.example.goodbad.fragments.FavStoryListFragment;
 import com.example.goodbad.fragments.MyStoryListFragment;
 import com.example.goodbad.fragments.NewStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
@@ -298,17 +299,18 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.selectTab(tab1);
 		Log.d("debug ", "crapped out 4");
 
-		/*Tab tab2 = actionBar
+		if( ParseUser.getCurrentUser() != null ){
+		 Tab tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
 				.setTag("FavoriteFragment")
-				.setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
-						"mylist", MyStoryListFragment.class));
-		actionBar.addTab(tab2);*/
+				.setTabListener(new FragmentTabListener<FavStoryListFragment>(R.id.flContainer, this,
+						"mylist", FavStoryListFragment.class));
+		actionBar.addTab(tab2); 
 
 		Log.d("debug ", "crapped out 5");
-
+		}
 
 
 		Tab tab3 = actionBar

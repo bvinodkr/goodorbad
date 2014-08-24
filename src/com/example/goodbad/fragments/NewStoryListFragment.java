@@ -11,12 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
 import com.example.goodbad.TreeNodeArrayAdapter;
+import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -28,11 +31,16 @@ public class NewStoryListFragment extends BaseListFragment {
 	private ListView lvNodes;
 	private TreeNodeArrayAdapter aaNodes;
 	private TreeNode mAddedTreeNode;
-	
+	private TreeNode selectedTrendingItem;
+	private ArrayList<TreeNode> storyItemList = new ArrayList<TreeNode>();
+	private TrendingStoryListFragmentListener listener;
+
 	/*public interface TrendingStoryListFragmentListener {
 		void onSelectedTrendingItem(TreeNode selectedTrendingItem);
 	}*/
-	
+	public interface TrendingStoryListFragmentListener {
+		void onSelectedTrendingItem(TreeNode selectedTrendingItem);
+	}
 	public NewStoryListFragment newInstance(TreeNode treeNode) {
 		
 		mAddedTreeNode = treeNode;
@@ -50,7 +58,7 @@ public class NewStoryListFragment extends BaseListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View newStoriesView = inflater.inflate(R.layout.fragment_new_list, container, false);
 		
-		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 1);
+		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 3);
 		
 		lvNodes = (ListView) newStoriesView.findViewById(R.id.lvNewListFragment);
 		lvNodes.setAdapter(aaNodes);
@@ -74,6 +82,27 @@ public class NewStoryListFragment extends BaseListFragment {
 		listener = null;
 	}*/ 
 	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		//addNodestoList();
+		//addNodestoAdapter(storyList);
+		
+		lvNodes.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				
+				selectedTrendingItem = storyItemList.get(position);
+				//Toast.makeText(getActivity(), position+"", Toast.LENGTH_SHORT).show();
+				
+				listener.onSelectedTrendingItem(selectedTrendingItem);
+			}
+		});		
+	}
+	
 	
 	@Override
 	public void populateTreeNodes(String max_id) {
@@ -82,7 +111,8 @@ public class NewStoryListFragment extends BaseListFragment {
 
 	private void getStories() {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
-		query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 36*60*60*1000l));
+		//query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 36*60*60*1000l));
+		query.orderByDescending("createdAt");
 		query.whereEqualTo("parentid", JSONObject.NULL);
 		query.include("user");
 
