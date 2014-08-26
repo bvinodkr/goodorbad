@@ -21,6 +21,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 public class FavStoryListFragment extends BaseListFragment {
 	
@@ -85,11 +86,14 @@ public class FavStoryListFragment extends BaseListFragment {
 		ParseQuery<Favorites> query = ParseQuery.getQuery(Favorites.class);
 		//query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 36*60*60*1000l));
 		query.orderByDescending("createdAt");
-		query.whereEqualTo("parentid", JSONObject.NULL);
+	//	query.whereEqualTo("parentid", JSONObject.NULL);
 	 	query.include("FavUserId");
+	 	//query.include("FavUserId.objectid");
 		query.include("FavNodeId");
 		query.include("FavNodeId.storyid1");
 		query.include("FavNodeId.user");
+ 
+		query.whereEqualTo("objectid", ParseUser.getCurrentUser().getObjectId());		
 
 		query.findInBackground( new FindCallback<Favorites>() {
 

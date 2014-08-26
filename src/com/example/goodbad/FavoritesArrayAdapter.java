@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.loopj.android.image.SmartImageView;
+import com.parse.ParseUser;
 
 public class FavoritesArrayAdapter extends ArrayAdapter<Favorites> {
 	
@@ -260,6 +261,7 @@ public class FavoritesArrayAdapter extends ArrayAdapter<Favorites> {
 			//String name =   node.getUser().getString("name");
 			String name =   node.getParseObject("FavNodeId").getParseObject("user").getString("name");
 			Log.d ("DEBUG", "user game " + name);
+			Log.d ("DEBUG", "MAINUSER: "+ ParseUser.getCurrentUser().getObjectId()  ); 
 			if (name == null || name.isEmpty())
 			{
 				tvUserName.setText (node.getUser().getEmail());
