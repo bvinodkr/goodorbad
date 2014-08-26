@@ -6,11 +6,11 @@ import android.support.v4.app.FragmentManager;
 
 import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.parse.ui.ParseLoginDispatchActivity;
- 
+
 public class ComposeDispatchActivity extends ParseLoginDispatchActivity {
  		  @Override
 		  protected Class<?> getTargetClass() {
- 		 	  
+ 			  
  			  MainActivity.onParseLogin(true);
  			  
 		    return 	MainActivity.class;

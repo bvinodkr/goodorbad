@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 import com.example.goodbad.PopUpImageAdapter;
 import com.example.goodbad.PopUpWindowItem;
 import com.example.goodbad.R;
+import com.example.goodbad.TreeNode;
 import com.parse.ParseUser;
 
 public class ComposeStoryFragment extends Fragment {
@@ -49,34 +51,37 @@ public class ComposeStoryFragment extends Fragment {
 	private boolean fromPost = false;
 	private TextView tvUserName;
 	public final static int PICK_PHOTO_CODE = 1046;
-	
+	private static TreeNode mParentNode;
+
 	public interface ComposeStoryFragmentListener {
-		void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost);
+		void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost, TreeNode parentNode);
 	}
 
 	public ComposeStoryFragment() {
 		// Empty constructor required for DialogFragment
 	}
 
-	public static ComposeStoryFragment newInstance(String title) {
+	public static ComposeStoryFragment newInstance(String title, TreeNode node) {
 		ComposeStoryFragment frag = new ComposeStoryFragment();
 		Bundle args = new Bundle();
 		args.putString("title", title);
 		frag.setArguments(args);
 
+		mParentNode = node;
+		
 		return frag;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		//this is to hide the set up tabs on this fragment that are present on main activity
 		ActionBar actionBar = getActivity().getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		setHasOptionsMenu(true);
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -92,34 +97,34 @@ public class ComposeStoryFragment extends Fragment {
 		super.onDetach();
 		listener = null;
 	}
-	
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		if(!fromPost) {		
-			listener.onFinishComposeDialog("NA", "NA", "NA", fromPost);
+			listener.onFinishComposeDialog("NA", "NA", "NA", fromPost, null);
 		}
 	}
-	
+
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
- 
+
 		View composeStoryView = inflater.inflate(R.layout.fragment_compose_story, container, false);
- 
+
 		fromPost = false;
-		
+
 		ivInsertedImageComposeStory = (ImageView) composeStoryView.findViewById(R.id.ivInsertedImageComposeStory);
 		ivInsertedImageComposeStory.setVisibility(View.INVISIBLE);
-		
+
 		etStoryTitleCompose = (EditText) composeStoryView.findViewById(R.id.etStoryTitleCompose);
 		InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(etStoryTitleCompose, 0);
 		etStoryTitleCompose.requestFocus();
-		
+
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
-          tvUserName = (TextView) composeStoryView.findViewById(R.id.tvComposeUserName);
-          tvUserName.setText(ParseUser.getCurrentUser().getString("name"));
+		tvUserName = (TextView) composeStoryView.findViewById(R.id.tvComposeUserName);
+		tvUserName.setText(ParseUser.getCurrentUser().getString("name"));
 		ivComposePopUpItemImage = (ImageView) composeStoryView.findViewById(R.id.ivComposePopUpItemImage);
 
 		ivComposePopUpItemImage.setOnClickListener(new OnClickListener() {
@@ -129,21 +134,32 @@ public class ComposeStoryFragment extends Fragment {
 
 				int location[] = {0,0};
 				v.getLocationOnScreen(location);
-				
+
 				inflatePopUpWindow(inflater, container, location);
 			}
 		});
 
+
+		Button btnPost = (Button) composeStoryView.findViewById(R.id.btnPost);
+		btnPost.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				onPostStoryIconClick(null);			
+				getFragmentManager().popBackStackImmediate();
+			}
+		});
+		
 		return composeStoryView;
 	}
-	
+
 	private void inflatePopUpWindow(LayoutInflater inflater, ViewGroup container, int location[]) {
 		// Inflate the popup_layout.xml
 		if(popupWindow!=null && popupWindow.isShowing()) {
 			popupWindow.dismiss();
 		} else {
 			View popUpView = inflater.inflate(R.layout.pop_up_layout, container, false);
-		 
+
 			// Creating the PopupWindow
 			popupWindow = new PopupWindow(getActivity());
 			popupWindow.setContentView(popUpView);
@@ -174,7 +190,7 @@ public class ComposeStoryFragment extends Fragment {
 					ivInsertedImageComposeStory.setVisibility(View.VISIBLE);
 					popupWindow.dismiss();
 				}
-			});
+			});			
 		}
 	}
 
@@ -193,16 +209,20 @@ public class ComposeStoryFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 
 		inflater.inflate(R.menu.compose_action_bar, menu);
-		
+
 		//this is to hide the menu item of main activity on this fragment
-		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
-		menu.findItem(R.id.miPostStoryIcon).setVisible(true);
+		if(menu.findItem(R.id.miActionBarComposeIcon)!=null) {
+			menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
+		}
+		if(menu.findItem(R.id.miPostStoryIcon)!=null){
+			menu.findItem(R.id.miPostStoryIcon).setVisible(true);
+		}
 
 		MenuItem  playMenu = menu.findItem(R.id.miPostStoryIcon);
-		 
- 	 playMenu.setTitle(Html.fromHtml("<font color='#FFFFFF'>Post</font>"));
 
-	}
+		playMenu.setTitle(Html.fromHtml("<font color='#FFFFFF'>Post</font>"));
+
+	} 
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -226,11 +246,11 @@ public class ComposeStoryFragment extends Fragment {
 				etStoryTitleCompose.getText()!=null ||
 				ivInsertedImageComposeStory.getContentDescription()!=null) {
 			fromPost = true;
-			
+
 			String composeData;
 			String composeStoryTitle;
 			String imageUrl;
-			
+
 			if(etComposeStory.getText()!=null) {
 				composeData = etComposeStory.getText().toString();
 			} else {
@@ -246,31 +266,63 @@ public class ComposeStoryFragment extends Fragment {
 			} else {
 				imageUrl = "";
 			}
-			
-			listener.onFinishComposeDialog(composeData, composeStoryTitle, imageUrl, fromPost);
+
+			listener.onFinishComposeDialog(composeData, composeStoryTitle, imageUrl, fromPost, mParentNode);
 		}
 	}
 	
+	public void onPostStoryIconClickToo(View v) {
+		Toast.makeText(getActivity(), "Post Story Too", Toast.LENGTH_SHORT).show();			
+
+		if(etComposeStory.getText()!=null ||
+				etStoryTitleCompose.getText()!=null ||
+				ivInsertedImageComposeStory.getContentDescription()!=null) {
+			fromPost = true;
+
+			String composeData;
+			String composeStoryTitle;
+			String imageUrl;
+
+			if(etComposeStory.getText()!=null) {
+				composeData = etComposeStory.getText().toString();
+			} else {
+				composeData = "";
+			}
+			if(etStoryTitleCompose.getText()!=null) {
+				composeStoryTitle = etStoryTitleCompose.getText().toString();
+			} else {
+				composeStoryTitle = "";
+			}
+			if(ivInsertedImageComposeStory.getContentDescription()!=null) {
+				imageUrl = ivInsertedImageComposeStory.getContentDescription().toString();
+			} else {
+				imageUrl = "";
+			}
+
+			listener.onFinishComposeDialog(composeData, composeStoryTitle, imageUrl, fromPost, mParentNode);
+		}
+	}
+
 	public void onGalleryIconClick(View view) {
-	    // Create intent for picking a photo from the gallery
-	    Intent intent = new Intent(Intent.ACTION_PICK,
-	        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	    // Bring up gallery to select a photo
-	    startActivityForResult(intent, PICK_PHOTO_CODE);
+		// Create intent for picking a photo from the gallery
+		Intent intent = new Intent(Intent.ACTION_PICK,
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		// Bring up gallery to select a photo
+		startActivityForResult(intent, PICK_PHOTO_CODE);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (data != null) {
-	        Uri photoUri = data.getData();
-	        // Do something with the photo based on Uri
-	        Bitmap selectedImage;
+		if (data != null) {
+			Uri photoUri = data.getData();
+			// Do something with the photo based on Uri
+			Bitmap selectedImage;
 			try {
 				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-				
+
 				// Load the selected image into a preview	        
-		        ivInsertedImageComposeStory.setImageBitmap(selectedImage); 
-		        ivInsertedImageComposeStory.setContentDescription(photoUri.toString());
+				ivInsertedImageComposeStory.setImageBitmap(selectedImage); 
+				ivInsertedImageComposeStory.setContentDescription(photoUri.toString());
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -278,7 +330,7 @@ public class ComposeStoryFragment extends Fragment {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    }
+		}
 	}
 
 }

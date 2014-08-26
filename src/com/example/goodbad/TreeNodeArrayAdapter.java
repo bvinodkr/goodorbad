@@ -4,20 +4,23 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ParseException;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.CursorLoader;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -25,10 +28,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.loopj.android.image.SmartImageView;
@@ -36,15 +41,15 @@ import com.loopj.android.image.SmartImageView;
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	
 	private int mScreenNo;
+	private List<TreeNode> mTreeNodes;
 
 	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo) {
 		super(context, R.layout.treenode_item, treeNodes);
 		this.mScreenNo = screenNo;
+		this.mTreeNodes = treeNodes;
 		Log.d ("DEBUG", "screen no " + mScreenNo);
 	}
 	
- 
-
 	public void addStory (List<TreeNode> nodes)
 	{
 		this.clear();
@@ -87,7 +92,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		TreeNode node = getItem (position);
 		if (convertView == null)
 		{
@@ -221,25 +226,92 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		ivEmptyHeart.setOnClickListener(new OnClickListener() {
 			
 			@Override 
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				int likes = 0;
 				if (!tvLikes.getText().toString().isEmpty())
 				{
 				  likes = Integer.parseInt(tvLikes.getText().toString());
 				}
+				 
+				//this is for animation
+				ObjectAnimator animator1 = ObjectAnimator.ofFloat(v, "translationY", -30).setDuration(1000);
+				ObjectAnimator animator2 = ObjectAnimator.ofFloat(v, "alpha", 0).setDuration(1000);
+				AnimatorSet set1 = new AnimatorSet();
+				AnimatorSet set2 = new AnimatorSet();
+				animator1.setRepeatCount(1);
+				animator1.setRepeatMode(Animation.REVERSE);
+				animator2.setRepeatCount(1);
+				animator2.setRepeatMode(Animation.REVERSE);
+				set1.setStartDelay(200);
+				set2.setStartDelay(200);
 				
 				boolean isLiked = Boolean.parseBoolean(ivEmptyHeart.getContentDescription().toString());
 				if(isLiked) {
-					if(likes > 0) { 
+					if(likes > 0) { 						
+						set1.addListener(new AnimatorListener() {
+							
+							@Override
+							public void onAnimationStart(Animator animation) {
+								ivEmptyHeart.setImageResource(R.drawable.empty_heart_anime);
+								Toast.makeText(getContext(), "start", Toast.LENGTH_SHORT).show();								
+							}
+							
+							@Override
+							public void onAnimationRepeat(Animator animation) {
+								
+							}
+							
+							@Override
+							public void onAnimationEnd(Animator animation) {
+								ivEmptyHeart.setImageResource(R.drawable.empty_heart);				
+							}
+							
+							@Override
+							public void onAnimationCancel(Animator animation) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+						set1.play(animator1);
+						set2.play(animator2);
+						set1.start();
+						set2.start();
+						
 						likes--;
-						ivEmptyHeart.setContentDescription("false");
-						ivEmptyHeart.setImageResource(R.drawable.empty_heart);
+						ivEmptyHeart.setContentDescription("false");						
 						tvLikes.setText(likes+"");
 					}
-				} else {
+				} else {					
+					set1.addListener(new AnimatorListener() {					
+						@Override
+						public void onAnimationStart(Animator animation) {
+							ivEmptyHeart.setImageResource(R.drawable.full_heart_anime);							
+							Toast.makeText(getContext(), "start", Toast.LENGTH_SHORT).show();							
+						}
+						
+						@Override
+						public void onAnimationRepeat(Animator animation) {
+							
+						}
+						
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							ivEmptyHeart.setImageResource(R.drawable.full_heart);
+						}
+						
+						@Override
+						public void onAnimationCancel(Animator animation) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+					set1.play(animator1);
+					set2.play(animator2);
+					set1.start();
+					set2.start();
+					
 					likes++;
-					ivEmptyHeart.setContentDescription("true");				
-					ivEmptyHeart.setImageResource(R.drawable.full_heart);
+					ivEmptyHeart.setContentDescription("true");													
 					tvLikes.setText(likes+"");
 				}
 				TreeNode tree = (TreeNode)v.getTag();
@@ -269,7 +341,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		
 		tvBody.setText (node.getText());
 		tvStoryTitle.setText(node.getTitle());
-		Log.d ("DEBUG", "title" + node.getTitle());
+		
 		int likes = node.getLikes();
 		if (likes > 0)
 		{

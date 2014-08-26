@@ -141,8 +141,9 @@ public class TrendingStoryListFragment extends BaseListFragment {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 
 		query.whereEqualTo("parentid", JSONObject.NULL);
+		query.whereGreaterThan("likes", 0);
+		query.addDescendingOrder("likes");		
 		query.include("user");
-		query.orderByDescending("likes");
 
 		query.findInBackground( new FindCallback<TreeNode>() {
 
@@ -205,9 +206,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 						break;
 					}
 					
-				}
-				else
-				{
+				} else {
 					Log.d ("DEBUG", "error in getting stories " + arg1.getMessage());
 				}
 			}

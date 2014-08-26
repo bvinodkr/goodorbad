@@ -4,13 +4,17 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore.Video.Thumbnails;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,21 +26,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.InlineComposeDialogFragment;
 import com.loopj.android.image.SmartImageView;
+import com.parse.ParseUser;
 
 public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 	
 	private int mScreenNo;
 	private FragmentManager mFragmentManager;
-
+	private List<TreeNode> storyLineNodeList;
+	private ImageView ivForkStory;
+	
 	public StoryLineArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo, FragmentManager fragmentManager) {
 		super(context, R.layout.treenode_item, treeNodes);
 		this.mScreenNo = screenNo;
 		this.mFragmentManager = fragmentManager;
-//		LinearLayout llFollowers;
-//		llFollowers= (LinearLayout)  ((View) fragmentManager).findViewById(R.id.llFollowers);
-//		llFollowers.setVisibility(0);
+		this.storyLineNodeList = treeNodes;
 	}
 	
 	public void addStory (List<TreeNode> nodes)
@@ -58,9 +64,13 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		return relativeDate;
 	}
 	
+	public ImageView getIvForkItem() {
+		return ivForkStory;
+	}
+	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		TreeNode node = getItem (position);
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		final TreeNode node = getItem (position);
 		if (convertView == null)
 		{
 			LayoutInflater inflator = LayoutInflater.from(getContext());
@@ -201,16 +211,40 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		}*/
 		tvBody.setText (node.getText());
 		
-		ImageView ivForkStory = (ImageView) convertView.findViewById(R.id.ivForkStory);
+		ivForkStory = (ImageView) convertView.findViewById(R.id.ivForkStory);
 		ivForkStory.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(null);
-				inlineComposeStoryFragment.show(mFragmentManager, "dialog_fragment");				
+				
+				/*InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(null);
+				inlineComposeStoryFragment.show(mFragmentManager, "dialog_fragment");*/
+				
+				ParseUser user = ParseUser.getCurrentUser();
+
+				//if(ParseUser.getCurrentUser() != null  ) {
+
+					ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story", node);
+					//composeStoryFragment.show(mFragmentManager, "fragment_compose_tweet");
+
+					//FragmentActivity fmActivity = new FragmentActivity();
+					FragmentTransaction ft = mFragmentManager.beginTransaction();
+					ft.replace(R.id.rlStoryLineViewPager, composeStoryFragment);
+					ft.addToBackStack(null);
+					ft.commit();
+
+				//}else{
+					/*Intent i = new Intent(MainActivity.this, ComposeDispatchActivity.class);
+					//	String	username =user.getUsername();
+					//	i.putExtra("result", username);
+
+					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+							| Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(i); */
+				//}
 			}
 		});
-		
+				
 		if (node.getUser () != null)
 		{
 			String name = node.getUser().getString("name");
@@ -289,7 +323,5 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 		*/
 		return convertView;
 
-	}
-
-	
+	}	
 }

@@ -200,6 +200,9 @@ public class TreeNode extends ParseObject {
 		setParentId(parent);
 		setLeafNode(true);
 		setUser (ParseUser.getCurrentUser());
+		setImageUrl("");
+		setLikes(0);
+		setStoryLikes(0);
 		if (parent == null)
 		{
 			setNumTreeLeafNodes(1);
@@ -213,7 +216,9 @@ public class TreeNode extends ParseObject {
 		setParentId(parent);
 		setLeafNode(true);
 		setStoryId(rootid);
-		setUser (ParseUser.getCurrentUser());
+		if(ParseUser.getCurrentUser()!=null) {
+			setUser (ParseUser.getCurrentUser());
+		}
 		children = new ArrayList<TreeNode> ();
 	}
 	

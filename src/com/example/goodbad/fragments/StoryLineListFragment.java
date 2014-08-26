@@ -1,12 +1,10 @@
 package com.example.goodbad.fragments;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -52,6 +50,7 @@ public class StoryLineListFragment extends BaseListFragment {
 	
 	public void newInstance(TreeNode selectedStory, TreeNode root) {
 		this.selectedStory = selectedStory;
+		this.root = root;
 	}
 
 	/*private StoryLineListFragmentListener listener;
@@ -183,6 +182,9 @@ public class StoryLineListFragment extends BaseListFragment {
 				
 				storyLineNodeList.add(childNode);
 				aaNodes.notifyDataSetChanged();
+				
+				//scroll to the bottom of list to show the added item
+				lvNodes.setSelection(aaNodes.getCount()-1);
 			}
 		});
 
@@ -273,12 +275,48 @@ public class StoryLineListFragment extends BaseListFragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		InlineComposeDialogFragment inlineComposeStoryFragment = null;
+		
 		if (data != null) {
 			Uri photoUri = data.getData();
 			// Do something with the photo based on Uri
 			FragmentManager fm = getActivity().getSupportFragmentManager();
-			InlineComposeDialogFragment inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(photoUri);
+			inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(photoUri);
+			
+			//this is how the two fragments would communicate
+			inlineComposeStoryFragment.setTargetFragment(this, 100);
 			inlineComposeStoryFragment.show(fm, "dialog_fragment");
+		}
+		
+		if(requestCode==100 && resultCode==Activity.RESULT_OK) {
+			
+			inlineComposeStoryFragment.dismiss();
+			
+			TreeNodeAPI api = new TreeNodeAPI();
+			String inlineTextData = data.getStringExtra("inlineTextData");
+			String inlineImageUrl = data.getStringExtra("inlineImageUrl");
+			
+			TreeNode childNode = api.addChild(selectedStory, inlineTextData);
+			if (inlineImageUrl != null && !inlineImageUrl.isEmpty()){
+				childNode.setImageUrl(inlineImageUrl);
+			}
+
+			childNode.saveInBackground();
+			selectedStory.saveInBackground();
+			selectedStory = childNode;
+
+			//update root's num leaf nodes
+			int numLeafNodes = root.getNumTreeLeafNodes(); 
+			numLeafNodes++;
+			root.setNumTreeLeafNodes(numLeafNodes); 
+			root.saveInBackground();
+			
+			storyLineNodeList.add(childNode);
+			aaNodes.notifyDataSetChanged();
+
+			//scroll to the bottom of list to show the added item
+			lvNodes.setSelection(aaNodes.getCount()-1);
 		}
 	}
 
@@ -300,7 +338,7 @@ public class StoryLineListFragment extends BaseListFragment {
 
 	}
 
-	@Override
+	/*@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {	
 		super.onCreateOptionsMenu(menu, inflater);
  		
@@ -325,7 +363,7 @@ public class StoryLineListFragment extends BaseListFragment {
 			return true;
 		}
 		return false; 
-	}
+	}*/
  
 
 //		inflater.inflate(R.menu.story_line_action_bar, menu);
@@ -375,5 +413,7 @@ public class StoryLineListFragment extends BaseListFragment {
 		n10.setText("This is para 10");
 		storyLineNodeList.add(n10);
 	}
+
+
 
 }

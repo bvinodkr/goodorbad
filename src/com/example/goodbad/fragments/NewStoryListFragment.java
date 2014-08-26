@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +20,6 @@ import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
 import com.example.goodbad.TreeNodeArrayAdapter;
-import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -27,22 +27,17 @@ import com.parse.ParseQuery;
 public class NewStoryListFragment extends BaseListFragment {
 	
 	private ArrayList<TreeNode> newStoryItemList = new ArrayList<TreeNode>();
-	//private TrendingStoryListFragmentListener listener;	
+	private NewStoryListFragmentListener listener;	
 	private ListView lvNodes;
 	private TreeNodeArrayAdapter aaNodes;
+	private TreeNode selectedNewItem;
 	private TreeNode mAddedTreeNode;
-	private TreeNode selectedTrendingItem;
-	private ArrayList<TreeNode> storyItemList = new ArrayList<TreeNode>();
-	private TrendingStoryListFragmentListener listener;
-
-	/*public interface TrendingStoryListFragmentListener {
-		void onSelectedTrendingItem(TreeNode selectedTrendingItem);
-	}*/
-	public interface TrendingStoryListFragmentListener {
-		void onSelectedTrendingItem(TreeNode selectedTrendingItem);
+	
+	public interface NewStoryListFragmentListener {
+		void onSelectedNewItem(TreeNode selectedNewItem);
 	}
-	public NewStoryListFragment newInstance(TreeNode treeNode) {
-		
+	
+	public NewStoryListFragment newInstance(TreeNode treeNode) {		
 		mAddedTreeNode = treeNode;
 		
 		return null;
@@ -58,7 +53,7 @@ public class NewStoryListFragment extends BaseListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View newStoriesView = inflater.inflate(R.layout.fragment_new_list, container, false);
 		
-		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 3);
+		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 1);
 		
 		lvNodes = (ListView) newStoriesView.findViewById(R.id.lvNewListFragment);
 		lvNodes.setAdapter(aaNodes);
@@ -66,11 +61,11 @@ public class NewStoryListFragment extends BaseListFragment {
 		return newStoriesView;
 	}
 	
-	/*@Override
+	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if(activity instanceof TrendingStoryListFragmentListener) {
-			listener = (TrendingStoryListFragmentListener) activity;
+		if(activity instanceof NewStoryListFragmentListener) {
+			listener = (NewStoryListFragmentListener) activity;
 		} else { 
 			throw new ClassCastException(activity.toString() + "must implement NewStoryListFragment");
 		}
@@ -80,14 +75,11 @@ public class NewStoryListFragment extends BaseListFragment {
 	public void onDetach() {	
 		super.onDetach();
 		listener = null;
-	}*/ 
+	} 
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
-		//addNodestoList();
-		//addNodestoAdapter(storyList);
 		
 		lvNodes.setOnItemClickListener(new OnItemClickListener() {
 
@@ -95,10 +87,10 @@ public class NewStoryListFragment extends BaseListFragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				
-				selectedTrendingItem = storyItemList.get(position);
+				selectedNewItem = newStoryItemList.get(position);
 				//Toast.makeText(getActivity(), position+"", Toast.LENGTH_SHORT).show();
 				
-				listener.onSelectedTrendingItem(selectedTrendingItem);
+				listener.onSelectedNewItem(selectedNewItem);
 			}
 		});		
 	}
@@ -108,12 +100,14 @@ public class NewStoryListFragment extends BaseListFragment {
 	public void populateTreeNodes(String max_id) {
 		getStories();
 	}
+	
+	
 
 	private void getStories() {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		//query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 36*60*60*1000l));
-		query.orderByDescending("createdAt");
 		query.whereEqualTo("parentid", JSONObject.NULL);
+		query.whereEqualTo("likes", 0);
 		query.include("user");
 
 		query.findInBackground( new FindCallback<TreeNode>() {
