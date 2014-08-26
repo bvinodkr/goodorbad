@@ -25,9 +25,9 @@ import android.widget.Toast;
 
 import com.example.goodbad.fragments.ComposeStoryFragment;
 import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
-import com.example.goodbad.fragments.FavStoryListFragment;
 import com.example.goodbad.fragments.MyStoryListFragment;
 import com.example.goodbad.fragments.NewStoryListFragment;
+import com.example.goodbad.fragments.NewStoryListFragment.NewStoryListFragmentListener;
 import com.example.goodbad.fragments.TrendingStoryListFragment;
 import com.example.goodbad.fragments.TrendingStoryListFragment.TrendingStoryListFragmentListener;
 import com.example.goodbad.listeners.FragmentTabListener;
@@ -37,8 +37,9 @@ import com.parse.SaveCallback;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseTwitterUtils;
-
-public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, TrendingStoryListFragmentListener {
+import com.example.goodbad.fragments.FavStoryListFragment;
+public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, 
+						TrendingStoryListFragmentListener, NewStoryListFragmentListener {
 
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
 	private ComposeStoryFragment composeStoryFragment;
@@ -220,7 +221,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 		if(ParseUser.getCurrentUser() != null  ) {
 
-			composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story");
+			composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story", null);
 			//composeStoryFragment.show(fm, "fragment_compose_tweet");
 
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -298,19 +299,20 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
 		actionBar.selectTab(tab1);
 		Log.d("debug ", "crapped out 4");
+		Tab tab2 = null;
+		 		if( ParseUser.getCurrentUser() != null ){
 
-		if( ParseUser.getCurrentUser() != null ){
-		 Tab tab2 = actionBar
+		   tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
 				.setTag("FavoriteFragment")
 				.setTabListener(new FragmentTabListener<FavStoryListFragment>(R.id.flContainer, this,
-						"mylist", FavStoryListFragment.class));
-		actionBar.addTab(tab2); 
+						"faclist", FavStoryListFragment.class));
+		actionBar.addTab(tab2);
 
 		Log.d("debug ", "crapped out 5");
-		}
+		 		}
 
 
 		Tab tab3 = actionBar
@@ -327,9 +329,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		case 1:
 			actionBar.selectTab(tab1);
 			break;
-		/*case 2:
+		 case 2:
 			actionBar.selectTab(tab2);
-			break;*/
+			break; 
 		case 3:
 			actionBar.selectTab(tab3);
 			break;
@@ -365,7 +367,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 	}
 	
 	@Override
-	public void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost) {
+	public void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost, TreeNode parentNode) {
 		if(!fromPost) {
 
 			setupTabs(1);
@@ -424,6 +426,16 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		 //pass data
 		 i.putExtra("storyId", selectedTrendingItem.getStoryId());
 		 i.putExtra("title", selectedTrendingItem.getTitle());
+		 startActivity(i);
+	}
+
+
+	@Override
+	public void onSelectedNewItem(TreeNode selectedNewItem) {
+		 Intent i = new Intent (this, StoryLineViewActivity.class);
+		 //pass data
+		 i.putExtra("storyId", selectedNewItem.getStoryId());
+		 i.putExtra("title", selectedNewItem.getTitle());
 		 startActivity(i);
 	}
 }

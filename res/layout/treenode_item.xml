@@ -165,7 +165,6 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="2dp"
             android:text=""
-            android:textColor="@color/com_parse_ui_twitter_login_button"
             android:textSize="13sp" />
 
         <TextView

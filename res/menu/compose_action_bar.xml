@@ -5,7 +5,7 @@
     <item
         android:id="@+id/miPostStoryIcon"
         android:icon="@drawable/post_icon"
-        android:title="Postt"
+        android:title="Post"
         app:showAsAction="ifRoom|withText">
     </item>
 

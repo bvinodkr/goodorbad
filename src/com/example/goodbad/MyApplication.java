@@ -15,7 +15,8 @@ public class MyApplication extends Application {
 		super.onCreate();
 		//before initialize
 		ParseObject.registerSubclass(TreeNode.class);
-		ParseObject.registerSubclass(Favorites.class);
+		 	ParseObject.registerSubclass(Favorites.class);
+
 		Parse.initialize(this, "i6BacXY95FaVkJ8D71BFxZxE8ONXjYfOCpE3oZlt", "IFQWFl3V8CkVofzZ7FNzDG5B5Ud9Ud49a8W0oOun");
 
 //		ParseUser.enableAutomaticUser();

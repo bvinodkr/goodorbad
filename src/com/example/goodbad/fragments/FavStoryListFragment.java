@@ -93,7 +93,7 @@ public class FavStoryListFragment extends BaseListFragment {
 		query.include("FavNodeId.storyid1");
 		query.include("FavNodeId.user");
  
-		query.whereEqualTo("objectid", ParseUser.getCurrentUser().getObjectId());		
+	//	query.whereEqualTo("objectid", ParseUser.getCurrentUser().getObjectId());		
 
 		query.findInBackground( new FindCallback<Favorites>() {
 

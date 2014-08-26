@@ -21,13 +21,14 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.goodbad.fragments.ComposeStoryFragment.ComposeStoryFragmentListener;
 import com.example.goodbad.fragments.StoryLineListFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-public class StoryLineViewActivity extends FragmentActivity {
+public class StoryLineViewActivity extends FragmentActivity implements ComposeStoryFragmentListener{
 
 	TreeNode root;
 	int numEndings;
@@ -35,6 +36,9 @@ public class StoryLineViewActivity extends FragmentActivity {
 	ListView lvNodes;
 	ArrayList<String> items;
 	ArrayAdapter<String> itemsAdapter;
+	ContentPagerAdapter adapter;
+	String storyId;
+	
 	/*
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +68,15 @@ public class StoryLineViewActivity extends FragmentActivity {
 				}
 			}
 		});
-		
+
 		lvNodes = (ListView)findViewById(R.id.listView1);
 		items = new ArrayList<String> ();
 		itemsAdapter = new ArrayAdapter<String> (this,
 				android.R.layout.simple_list_item_1, items);
 		lvNodes.setAdapter(itemsAdapter);
 	}
-	*/
-	
+	 */
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,29 +84,33 @@ public class StoryLineViewActivity extends FragmentActivity {
 
 		String title = getIntent().getStringExtra("title");
 		ActionBar actionBar = getActionBar();
-		
+
 		if (title != null && !title.isEmpty())
 		{	getActionBar().setTitle(title);
-			String s ="<font color='#FFFFFF'>"+ actionBar.getTitle().toString()+ "</font>";
-			actionBar.setTitle(Html.fromHtml((s)));
+		String s ="<font color='#FFFFFF'>"+ actionBar.getTitle().toString()+ "</font>";
+		actionBar.setTitle(Html.fromHtml((s)));
 		}
 		else
 		{
 			actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Story Tellers</font>"));
 		}
-//		LinearLayout llFollowers;
-//		llFollowers= (LinearLayout) findViewById(R.id.llFollowers);
-//		llFollowers.setVisibility(0);
-				//actionBar.setTitle("Story Tellers");
-	//	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		//		LinearLayout llFollowers;
+		//		llFollowers= (LinearLayout) findViewById(R.id.llFollowers);
+		//		llFollowers.setVisibility(0);
+		//actionBar.setTitle("Story Tellers");
+		//	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
-		 actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
 
-		 
-		String storyId = getIntent().getStringExtra("storyId");
+		storyId = getIntent().getStringExtra("storyId");
+		makeStoryTreeForThisStory(storyId, false);
+	}
+	
+	private void makeStoryTreeForThisStory(String storyId, final boolean isAfterFork) {
 		Log.d ("DEBUG", "story id in storyline view =" + storyId);
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		query.whereEqualTo("storyid", storyId);
+		query.addAscendingOrder("createdAt");
 		query.include("user");
 		query.findInBackground( new FindCallback<TreeNode>() {
 
@@ -119,8 +127,11 @@ public class StoryLineViewActivity extends FragmentActivity {
 					Log.d ("DEBUG", "num of leaf nodes " + leafNodes.size());
 
 					ViewPager vpPager = (ViewPager)findViewById(R.id.vpPager);
-					ContentPagerAdapter adapter = new ContentPagerAdapter(getSupportFragmentManager());
+					adapter = new ContentPagerAdapter(getSupportFragmentManager());
 					vpPager.setAdapter(adapter);
+					if(isAfterFork) {
+						vpPager.setCurrentItem(leafNodes.size()-1, true);
+					}
 				}
 				else
 				{
@@ -128,22 +139,25 @@ public class StoryLineViewActivity extends FragmentActivity {
 				}
 			}
 		});
-	
 	}
-	@Override
+	
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.action_bar_items, menu);
+		getMenuInflater().inflate(R.menu.compose_action_bar, menu);
 
-		/*MenuItem miActionBarShareIcon = menu.findItem(R.id.miActionBarShareIcon);
+		MenuItem miActionBarShareIcon = menu.findItem(R.id.miActionBarShareIcon);
 		ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(miActionBarShareIcon);
 		Log.d("debug ", "is null " + shareActionProvider);
-        shareActionProvider.setShareIntent(getDefaultShareIntent());*/
-		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
+        shareActionProvider.setShareIntent(getDefaultShareIntent());
+		
+		MenuItem  playMenu = menu.findItem(R.id.miPostStoryIcon);
+		playMenu.setVisible(false);
+		
 		if( ParseUser.getCurrentUser() != null ) {
 			playMenu.setIcon(R.drawable.ic_read  ) ;
 		}	else {playMenu.setIcon(R.drawable.ic_read  ) ;
 
-		}   
+		}    
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -151,8 +165,8 @@ public class StoryLineViewActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
-		if (itemId == R.id.miActionBarComposeIcon) {
-		//	onReadClick(item);
+		if (itemId == R.id.miPostStoryIcon) {
+			//	onReadClick(item);
 			LinearLayout llFollowers;
 			llFollowers= (LinearLayout) findViewById(R.id.llFollowers);
 			llFollowers.setVisibility(0);
@@ -160,17 +174,18 @@ public class StoryLineViewActivity extends FragmentActivity {
 		} 
 
 		return super.onOptionsItemSelected(item);
-	}
-//	private void onReadClick(MenuItem item) {
-// 		 Intent i = new Intent (this, ViewableStoryActivity.class);
-//		 //pass data
-//		 i.putExtra("storyId", "l7o9gDTsIu");
-//		 i.putExtra("title", "The Horse");
-//		 startActivity(i);
-//
-//	}
+	}*/
+	
+	//	private void onReadClick(MenuItem item) {
+	// 		 Intent i = new Intent (this, ViewableStoryActivity.class);
+	//		 //pass data
+	//		 i.putExtra("storyId", "l7o9gDTsIu");
+	//		 i.putExtra("title", "The Horse");
+	//		 startActivity(i);
+	//
+	//	}
 	public class ContentPagerAdapter extends FragmentPagerAdapter {
-
+		
 		public ContentPagerAdapter(FragmentManager fm) {
 			super(fm);
 			// TODO Auto-generated constructor stub
@@ -202,14 +217,15 @@ public class StoryLineViewActivity extends FragmentActivity {
 				return 0;
 			}
 		}
-		
+
 		@Override
 		public CharSequence getPageTitle(int position) {
 			// TODO Auto-generated method stub
- 			return "Story version " + (position + 1);
- 		}
-		
+			return "Story version " + (position + 1);
+		}
+
 	}
+	
 	/*
 	public void addParas (List<TreeNode> nodes)
 	{
@@ -220,5 +236,42 @@ public class StoryLineViewActivity extends FragmentActivity {
 			itemsAdapter.notifyDataSetChanged();
 		}
 	}
-	*/
+	 */
+	
+	@Override
+	public void onFinishComposeDialog(String composeData, String composeStoryTitle,
+			String imageUrl, boolean fromPost, TreeNode parentNode) {
+		
+		if(fromPost) {
+
+			TreeNodeAPI api = new TreeNodeAPI();
+	
+			TreeNode childNode = api.addChild(parentNode, composeData);
+			if (imageUrl != null && !imageUrl.isEmpty()){
+				childNode.setImageUrl(imageUrl);
+			}
+	
+			childNode.saveInBackground();
+			parentNode.saveInBackground();
+	
+			//update root's num leaf nodes
+			int numLeafNodes = root.getNumTreeLeafNodes(); 
+			numLeafNodes++;
+			root.setNumTreeLeafNodes(numLeafNodes); 
+			root.saveInBackground();
+			
+			//This is the right way to do it. For this to work we would need to update the in memory tree
+			/*leafNodes.add(childNode);
+			adapter.notifyDataSetChanged();*/
+			
+			//But for now do the dirty way. Load everything again
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			makeStoryTreeForThisStory(storyId, true);
+		}
+	}
 }
