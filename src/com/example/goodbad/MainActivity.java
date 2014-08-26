@@ -221,7 +221,7 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 
 		if(ParseUser.getCurrentUser() != null  ) {
 
-			composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story", null);
+			composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story", null, false);
 			//composeStoryFragment.show(fm, "fragment_compose_tweet");
 
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

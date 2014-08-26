@@ -1,5 +1,6 @@
 package com.example.goodbad.fragments;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,9 +12,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,10 +37,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.goodbad.DrawingActivity;
 import com.example.goodbad.PopUpImageAdapter;
 import com.example.goodbad.PopUpWindowItem;
 import com.example.goodbad.R;
 import com.example.goodbad.TreeNode;
+import com.example.goodbad.TreeNodeAPI;
 import com.parse.ParseUser;
 
 public class ComposeStoryFragment extends Fragment {
@@ -48,10 +54,19 @@ public class ComposeStoryFragment extends Fragment {
 	private ImageView ivInsertedImageComposeStory;
 	private EditText etStoryTitleCompose;
 	private EditText etComposeStory;
+	private Button btnPost;
 	private boolean fromPost = false;
 	private TextView tvUserName;
-	public final static int PICK_PHOTO_CODE = 1046;
 	private static TreeNode mParentNode;
+	private static boolean mIsComingFromFork;
+	
+	public final static int RESULT_FROM_GALLERY_CODE = 1046;
+	public final static int RESULT_FROM_DRAWING_CODE = 1047;
+	public final static int RESULT_FROM_COMPOSE_DIALOG_CODE = 1048;
+	public final static int RESULT_FROM_CAPTURE_IMAGE_ACTIVITY_CODE = 1034;
+
+	public final String APP_TAG = "MyCustomApp";
+	public String photoFileName = "photo.jpg";
 
 	public interface ComposeStoryFragmentListener {
 		void onFinishComposeDialog(String composeData, String composeStoryTitle, String imageUrl, boolean fromPost, TreeNode parentNode);
@@ -61,13 +76,14 @@ public class ComposeStoryFragment extends Fragment {
 		// Empty constructor required for DialogFragment
 	}
 
-	public static ComposeStoryFragment newInstance(String title, TreeNode node) {
+	public static ComposeStoryFragment newInstance(String title, TreeNode node, boolean isComingFromFork) {
 		ComposeStoryFragment frag = new ComposeStoryFragment();
 		Bundle args = new Bundle();
 		args.putString("title", title);
 		frag.setArguments(args);
 
 		mParentNode = node;
+		mIsComingFromFork = isComingFromFork;
 		
 		return frag;
 	}
@@ -122,6 +138,11 @@ public class ComposeStoryFragment extends Fragment {
 		imm.showSoftInput(etStoryTitleCompose, 0);
 		etStoryTitleCompose.requestFocus();
 
+		btnPost = (Button) composeStoryView.findViewById(R.id.btnPost);
+		if(!mIsComingFromFork) {
+			btnPost.setVisibility(View.GONE);
+		}
+		
 		etComposeStory = (EditText) composeStoryView.findViewById(R.id.etComposeStory);
 		tvUserName = (TextView) composeStoryView.findViewById(R.id.tvComposeUserName);
 		tvUserName.setText(ParseUser.getCurrentUser().getString("name"));
@@ -186,7 +207,13 @@ public class ComposeStoryFragment extends Fragment {
 			gridview.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 					Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
-					onGalleryIconClick(v);
+					if(position == 0) {
+						onGalleryIconClick(v);
+					} else if (position == 1) {
+						onCameraIconClick(v);
+					} else if(position == 2) {
+						onDrawingIconClick(v);	
+					}
 					ivInsertedImageComposeStory.setVisibility(View.VISIBLE);
 					popupWindow.dismiss();
 				}
@@ -308,29 +335,64 @@ public class ComposeStoryFragment extends Fragment {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		// Bring up gallery to select a photo
-		startActivityForResult(intent, PICK_PHOTO_CODE);
+		startActivityForResult(intent, RESULT_FROM_GALLERY_CODE);
+	}
+
+	public void onDrawingIconClick(View v) {
+		Intent intent = new Intent(getActivity(), DrawingActivity.class);
+		intent.putExtra("title", etStoryTitleCompose!=null?etStoryTitleCompose.getText().toString():"New Story");
+		startActivityForResult(intent, RESULT_FROM_DRAWING_CODE);
+	}
+
+	public void onCameraIconClick(View v) {
+		// create Intent to take a picture and return control to the calling application
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
+		// Start the image capture intent to take photo
+		startActivityForResult(intent, RESULT_FROM_CAPTURE_IMAGE_ACTIVITY_CODE);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (data != null) {
-			Uri photoUri = data.getData();
-			// Do something with the photo based on Uri
+		
+		try { 
 			Bitmap selectedImage;
-			try {
-				selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-
-				// Load the selected image into a preview	        
-				ivInsertedImageComposeStory.setImageBitmap(selectedImage); 
-				ivInsertedImageComposeStory.setContentDescription(photoUri.toString());
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Uri photoUri = null;
+			if (requestCode==RESULT_FROM_GALLERY_CODE && data != null) {
+				photoUri = data.getData();
 			}
+			if(requestCode==RESULT_FROM_DRAWING_CODE && data!=null) {
+				String drawingImageUrl = data.getStringExtra("drawingImageUrl");
+				photoUri = Uri.parse("file://"+drawingImageUrl);
+				 
+			}
+			if(requestCode==RESULT_FROM_CAPTURE_IMAGE_ACTIVITY_CODE && resultCode==Activity.RESULT_OK) {
+				photoUri = getPhotoFileUri(photoFileName);
+			} 
+			
+			selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+	
+			// Load the selected image into a preview	        
+			ivInsertedImageComposeStory.setImageBitmap(selectedImage); 
+			ivInsertedImageComposeStory.setContentDescription(photoUri.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+	
+	//Returns the Uri for a photo stored on disk given the fileName
+	public Uri getPhotoFileUri(String fileName) {
+		// Get safe storage directory for photos
+		File mediaStorageDir = new File(
+				Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+		// Create the storage directory if it does not exist
+		if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+			Log.d(APP_TAG, "failed to create directory");
+		}
+
+		// Return the file target for the photo based on filename
+		return Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator + fileName));
 	}
 
 }

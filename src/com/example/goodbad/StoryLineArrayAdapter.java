@@ -243,7 +243,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 
 				//if(ParseUser.getCurrentUser() != null  ) {
 
-					ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story", node);
+					ComposeStoryFragment composeStoryFragment = ComposeStoryFragment.newInstance("Compose Story", node, true);
 					//composeStoryFragment.show(mFragmentManager, "fragment_compose_tweet");
 
 					//FragmentActivity fmActivity = new FragmentActivity();

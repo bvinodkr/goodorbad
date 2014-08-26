@@ -118,15 +118,7 @@ public class FavoritesArrayAdapter extends ArrayAdapter<Favorites> {
 			imageView.setLayoutParams(lpImageView);
 			rlTreeNodeItemBody.addView(imageView);
 		}*/
-		
-		if(mScreenNo == 0) {
-			//convertView.setBackgroundResource(R.drawable.border_ui);
-			convertView.setBackgroundResource(R.drawable.round_edges);
-			//convertView.findViewById(R.id.llFollowers).setBackgroundColor(Color.LTGRAY);
-		} else if(mScreenNo == 1) {
-			convertView.setBackgroundResource(R.drawable.round_edges);
-			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
-		}
+		convertView.setBackgroundResource(R.drawable.round_edges);
 		
 		SmartImageView ivItemImage = (SmartImageView) convertView.findViewById(R.id.ivItemImage);
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);

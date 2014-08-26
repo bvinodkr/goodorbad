@@ -1,5 +1,7 @@
 package com.example.goodbad;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -119,14 +121,16 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 			rlTreeNodeItemBody.addView(imageView);
 		}*/
 		
-		if(mScreenNo == 0) {
+		/*if(mScreenNo == 0) {
 			//convertView.setBackgroundResource(R.drawable.border_ui);
 			convertView.setBackgroundResource(R.drawable.round_edges);
 			//convertView.findViewById(R.id.llFollowers).setBackgroundColor(Color.LTGRAY);
 		} else if(mScreenNo == 1) {
 			convertView.setBackgroundResource(R.drawable.round_edges);
 			//convertView.findViewById(R.id.llFollowers).setBackgroundResource(R.drawable.footer);
-		}
+		}*/
+		
+		convertView.setBackgroundResource(R.drawable.round_edges);
 		
 		SmartImageView ivItemImage = (SmartImageView) convertView.findViewById(R.id.ivItemImage);
 		final VideoView vvItemVideo = (VideoView) convertView.findViewById(R.id.vvItemVideo);
@@ -165,22 +169,15 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				if(node.getImageUrl().contains("http")) {
 					ivItemImage.setImageUrl(node.getImageUrl());
 				} else {
-					String path = getPath(Uri.parse(node.getImageUrl()));
-					if(path!=null) {
-						ivItemImage.setImageUrl(path);
-						String pathNew = "file://" + getPath(Uri.parse(node.getImageUrl()));
-	
-						try {
-							Bitmap image = BitmapFactory.decodeStream(new URL(pathNew).openConnection().getInputStream());
-							ivItemImage.setImageBitmap(image);
-						} catch (MalformedURLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}	
+					Bitmap imageBitmap;
+					try {
+						imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).getPath());
+						ivItemImage.setImageBitmap(imageBitmap);
+						ivItemImage.setContentDescription(imageUrl);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -373,5 +370,43 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	    	return null;  
 	    }
 	}
+	
+	private Bitmap loadPrescaledBitmap(String filename) throws IOException {
+  	  // Facebook image size
+  	  final int IMAGE_MAX_SIZE = 630;
+
+  	  File file = null;
+  	  FileInputStream fis;
+
+  	  BitmapFactory.Options opts;
+  	  int resizeScale;
+  	  Bitmap bmp;
+
+  	  file = new File(filename);
+
+  	  // This bit determines only the width/height of the bitmap without loading the contents
+  	  opts = new BitmapFactory.Options();
+  	  opts.inJustDecodeBounds = true;
+  	  fis = new FileInputStream(file);
+  	  BitmapFactory.decodeStream(fis, null, opts);
+  	  fis.close();
+
+  	  // Find the correct scale value. It should be a power of 2
+  	  resizeScale = 1;
+
+  	  if (opts.outHeight > IMAGE_MAX_SIZE || opts.outWidth > IMAGE_MAX_SIZE) {
+  	    resizeScale = (int)Math.pow(2, (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(opts.outHeight, opts.outWidth)) / Math.log(0.5)));
+  	  }
+
+  	  // Load pre-scaled bitmap
+  	  opts = new BitmapFactory.Options();
+  	  opts.inSampleSize = resizeScale;
+  	  fis = new FileInputStream(file);
+  	  bmp = BitmapFactory.decodeStream(fis, null, opts);
+
+  	  fis.close();
+
+  	  return bmp;
+  	} 
 	
 }
