@@ -107,6 +107,8 @@ public class StoryLineViewActivity extends FragmentActivity implements ComposeSt
 	}
 	
 	private void makeStoryTreeForThisStory(String storyId, final boolean isAfterFork) {
+		
+		final boolean mIsAfterFork = isAfterFork;
 		Log.d ("DEBUG", "story id in storyline view =" + storyId);
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		query.whereEqualTo("storyid", storyId);
@@ -129,7 +131,7 @@ public class StoryLineViewActivity extends FragmentActivity implements ComposeSt
 					ViewPager vpPager = (ViewPager)findViewById(R.id.vpPager);
 					adapter = new ContentPagerAdapter(getSupportFragmentManager());
 					vpPager.setAdapter(adapter);
-					if(isAfterFork) {
+					if(mIsAfterFork) {
 						vpPager.setCurrentItem(leafNodes.size()-1, true);
 					}
 				}
