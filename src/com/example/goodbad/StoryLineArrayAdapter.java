@@ -143,7 +143,8 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 					try {
 						//imageBitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(Uri.parse(imageUrl)));						
 						//imageBitmap = BitmapFactory.decodeFile(Uri.parse(imageUrl).getPath());
-						imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).getPath());
+						//imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).toString());
+						imageBitmap=BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream((Uri.parse(imageUrl))));
 						ivItemImage.setImageBitmap(imageBitmap);
 						ivItemImage.setContentDescription(imageUrl);
 					} catch (Exception e) {

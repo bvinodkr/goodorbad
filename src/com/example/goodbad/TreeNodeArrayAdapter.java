@@ -171,7 +171,8 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				} else {
 					Bitmap imageBitmap;
 					try {
-						imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).getPath());
+						//imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).toString());
+						imageBitmap=BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream((Uri.parse(imageUrl))));
 						ivItemImage.setImageBitmap(imageBitmap);
 						ivItemImage.setContentDescription(imageUrl);
 					} catch (IOException e) {

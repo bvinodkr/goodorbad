@@ -135,7 +135,7 @@ public class ComposeStoryFragment extends Fragment {
 
 		etStoryTitleCompose = (EditText) composeStoryView.findViewById(R.id.etStoryTitleCompose);
 		if(mIsComingFromFork) {
-			etStoryTitleCompose.setVisibility(View.GONE);
+			etStoryTitleCompose.setVisibility(View.INVISIBLE);
 		}
 		InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(etStoryTitleCompose, 0);
