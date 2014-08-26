@@ -388,6 +388,12 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 			root.setTitle(composeStoryTitle);
 			root.saveInBackground(new SaveRootCallback(root)); 
 
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			setupTabs(3);
 
 			/*NewStoryListFragment newStoryFragment = new NewStoryListFragment();

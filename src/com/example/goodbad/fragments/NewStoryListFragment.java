@@ -108,6 +108,7 @@ public class NewStoryListFragment extends BaseListFragment {
 		//query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 36*60*60*1000l));
 		query.whereEqualTo("parentid", JSONObject.NULL);
 		query.whereEqualTo("likes", 0);
+		query.addDescendingOrder("createdAt");
 		query.include("user");
 
 		query.findInBackground( new FindCallback<TreeNode>() {

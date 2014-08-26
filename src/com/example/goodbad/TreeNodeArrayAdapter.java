@@ -13,11 +13,10 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.ParseException;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -36,13 +35,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.hipmob.gifanimationdrawable.GifAnimationDrawable;
 import com.loopj.android.image.SmartImageView;
 
 public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	
 	private int mScreenNo;
 	private List<TreeNode> mTreeNodes;
-
+	
 	public TreeNodeArrayAdapter(Context context, List<TreeNode> treeNodes, int screenNo) {
 		super(context, R.layout.treenode_item, treeNodes);
 		this.mScreenNo = screenNo;
@@ -93,7 +93,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 	
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		TreeNode node = getItem (position);
+		final TreeNode node = mTreeNodes.get(position);
 		if (convertView == null)
 		{
 			LayoutInflater inflator = LayoutInflater.from(getContext());
@@ -152,9 +152,15 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				vvItemVideo.requestFocus();
 				vvItemVideo.start();
 			}
-			else
+			else if(imageUrl.contains(".gif")) 
 			{
 				ivItemImage.setVisibility(View.VISIBLE);
+				vvItemVideo.setVisibility(View.GONE);
+				loadGifIntoImageView(ivItemImage, R.drawable.got);
+			}
+			else 
+			{
+				ivItemImage.setVisibility(View.VISIBLE); 
 				vvItemVideo.setVisibility(View.GONE);
 				if(node.getImageUrl().contains("http")) {
 					ivItemImage.setImageUrl(node.getImageUrl());
@@ -178,35 +184,6 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 				}
 			}
 		}
-		
-		/*if(position==1) { 			
-			vvItemVideo.setVisibility(View.GONE);
-			ivItemImage.setVisibility(View.VISIBLE);
-			ivItemImage.setImageResource(R.drawable.yosemite);
-		} else if (position==3) { 			
-			vvItemVideo.setVisibility(View.GONE);
-			ivItemImage.setVisibility(View.VISIBLE);
-			ivItemImage.setImageResource(R.drawable.football);			
-		} else if (position == 3) { 
-			ivItemImage.setVisibility(View.GONE);
-			vvItemVideo.setVisibility(View.VISIBLE);
-			vvItemVideo.setVideoPath("http://ia600204.us.archive.org/2/items/Pbtestfilemp4videotestmp4/video_test.mp4");
-			MediaController mediaController = new MediaController(getContext());
-			mediaController.setAnchorView(vvItemVideo);
-			vvItemVideo.setMediaController(mediaController);
-			vvItemVideo.requestFocus();
-			vvItemVideo.setOnPreparedListener(new OnPreparedListener() {
-			    // Close the progress bar and play the video
-			    public void onPrepared(MediaPlayer mp) {
-			    	vvItemVideo.start();
-			    }
-			});
-		} else {
-			ivItemImage.setVisibility(View.GONE);
-			vvItemVideo.setVisibility(View.GONE);
-		}
-		*/
-		
 		 
 		//ImageView ivProfileImage = (ImageView)v.findViewById(R.id.ivProfileImage);
 		TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
@@ -222,7 +199,7 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		tvRelativeTime.setText(relativeTime);
 		
 		ivEmptyHeart.setTag(node);
-		convertView.setTag(node);
+		//convertView.setTag(node);
 		ivEmptyHeart.setOnClickListener(new OnClickListener() {
 			
 			@Override 
@@ -314,10 +291,10 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 					ivEmptyHeart.setContentDescription("true");													
 					tvLikes.setText(likes+"");
 				}
-				TreeNode tree = (TreeNode)v.getTag();
+				TreeNode tree = (TreeNode)ivEmptyHeart.getTag();
 				tree.setLikes(likes);
 				tree.saveInBackground();
-			}
+			} 
 		}); 
 
 		if (node.getUser() != null)
@@ -370,6 +347,19 @@ public class TreeNodeArrayAdapter extends ArrayAdapter<TreeNode> {
 		return convertView;
 
 	}
+	
+	// Loads a GIF from the specified raw resource folder into an ImageView
+    protected void loadGifIntoImageView(ImageView ivImage, int rawId) {
+        try {
+            GifAnimationDrawable anim = new GifAnimationDrawable(getContext().getResources().openRawResource(rawId));
+            ivImage.setImageDrawable(anim);
+            ((GifAnimationDrawable) ivImage.getDrawable()).setVisible(true, true);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	public String getPath(Uri uri) {
 	    String[] projection = { MediaStore.Images.Media.DATA };

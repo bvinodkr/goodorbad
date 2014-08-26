@@ -1,21 +1,23 @@
 package com.example.goodbad.fragments;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -28,13 +30,13 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.example.goodbad.DrawingActivity;
 import com.example.goodbad.PopUpImageAdapter;
 import com.example.goodbad.PopUpWindowItem;
 import com.example.goodbad.R;
 import com.example.goodbad.StoryLineArrayAdapter;
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeAPI;
-import com.parse.ParseUser;
 
 public class StoryLineListFragment extends BaseListFragment {
 
@@ -46,8 +48,14 @@ public class StoryLineListFragment extends BaseListFragment {
 	private PopupWindow popupWindow = null;
 	private ArrayList<PopUpWindowItem> popUpWindowItemList = new ArrayList<PopUpWindowItem>();
 
-	public final static int PICK_PHOTO_CODE = 1046;
-	
+	public final static int RESULT_FROM_GALLERY_CODE = 1046;
+	public final static int RESULT_FROM_DRAWING_CODE = 1047;
+	public final static int RESULT_FROM_COMPOSE_DIALOG_CODE = 1048;
+	public final static int RESULT_FROM_CAPTURE_IMAGE_ACTIVITY_CODE = 1034;
+
+	public final String APP_TAG = "MyCustomApp";
+	public String photoFileName = "photo.jpg";
+
 	public void newInstance(TreeNode selectedStory, TreeNode root) {
 		this.selectedStory = selectedStory;
 		this.root = root;
@@ -179,10 +187,10 @@ public class StoryLineListFragment extends BaseListFragment {
 				numLeafNodes++;
 				root.setNumTreeLeafNodes(numLeafNodes);
 				root.saveInBackground();
-				
+
 				storyLineNodeList.add(childNode);
 				aaNodes.notifyDataSetChanged();
-				
+
 				//scroll to the bottom of list to show the added item
 				lvNodes.setSelection(aaNodes.getCount()-1);
 			}
@@ -247,8 +255,13 @@ public class StoryLineListFragment extends BaseListFragment {
 					Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
 
 					//composeStoryFragment.setTargetFragment(fragment, requestCode);
-
-					onGalleryIconClick(v);
+					if(position == 0) {
+						onGalleryIconClick(v);
+					} else if (position == 1) {
+						onCameraIconClick(v);
+					} else if(position == 2) {
+						onDrawingIconClick(v);	
+					}
 					popupWindow.dismiss();
 				}
 			});
@@ -270,39 +283,81 @@ public class StoryLineListFragment extends BaseListFragment {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		// Bring up gallery to select a photo
-		startActivityForResult(intent, PICK_PHOTO_CODE);
+		startActivityForResult(intent, RESULT_FROM_GALLERY_CODE);
+	}
+
+	public void onDrawingIconClick(View v) {
+		Intent intent = new Intent(getActivity(), DrawingActivity.class);
+		intent.putExtra("title", root.getTitle());
+		startActivityForResult(intent, RESULT_FROM_DRAWING_CODE);
+	}
+
+	public void onCameraIconClick(View v) {
+		// create Intent to take a picture and return control to the calling application
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
+		// Start the image capture intent to take photo
+		startActivityForResult(intent, RESULT_FROM_CAPTURE_IMAGE_ACTIVITY_CODE);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		InlineComposeDialogFragment inlineComposeStoryFragment = null;
-		
-		if (data != null) {
+
+		if (requestCode==RESULT_FROM_GALLERY_CODE && data != null) {
 			Uri photoUri = data.getData();
 			// Do something with the photo based on Uri
 			FragmentManager fm = getActivity().getSupportFragmentManager();
-			inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(photoUri);
-			
+			inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(photoUri, getActivity().getContentResolver());
+
 			//this is how the two fragments would communicate
-			inlineComposeStoryFragment.setTargetFragment(this, 100);
+			inlineComposeStoryFragment.setTargetFragment(this, RESULT_FROM_COMPOSE_DIALOG_CODE);
+			inlineComposeStoryFragment.show(fm, "dialog_fragment");
+		}
+
+		if(requestCode==RESULT_FROM_DRAWING_CODE && data!=null) {
+			String drawingImageUrl = data.getStringExtra("drawingImageUrl");
+			Uri imageUri = Uri.parse("file://"+drawingImageUrl);
+
+			// Do something with the photo based on Uri
+			FragmentManager fm = getActivity().getSupportFragmentManager();
+			inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(imageUri, getActivity().getContentResolver());
+
+			//this is how the two fragments would communicate
+			inlineComposeStoryFragment.setTargetFragment(this, RESULT_FROM_COMPOSE_DIALOG_CODE);
 			inlineComposeStoryFragment.show(fm, "dialog_fragment");
 		}
 		
-		if(requestCode==100 && resultCode==Activity.RESULT_OK) {
-			
-			inlineComposeStoryFragment.dismiss();
-			
+		if(requestCode==RESULT_FROM_CAPTURE_IMAGE_ACTIVITY_CODE && resultCode==Activity.RESULT_OK) {
+			Uri takenPhotoUri = getPhotoFileUri(photoFileName);
+			FragmentManager fm = getActivity().getSupportFragmentManager();
+			inlineComposeStoryFragment = InlineComposeDialogFragment.newInstance(takenPhotoUri, getActivity().getContentResolver());
+
+			//this is how the two fragments would communicate
+			inlineComposeStoryFragment.setTargetFragment(this, RESULT_FROM_COMPOSE_DIALOG_CODE);
+			inlineComposeStoryFragment.show(fm, "dialog_fragment");
+
+			/* // by this point we have the camera photo on disk
+	         Bitmap takenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+	         // Load the taken image into a preview
+	         ImageView ivPreview = (ImageView) findViewById(R.id.ivPreview);
+	         ivPreview.setImageBitmap(takenImage);   */
+		} 
+
+		if(requestCode==RESULT_FROM_COMPOSE_DIALOG_CODE && resultCode==Activity.RESULT_OK && data!=null) {
+
 			TreeNodeAPI api = new TreeNodeAPI();
 			String inlineTextData = data.getStringExtra("inlineTextData");
 			String inlineImageUrl = data.getStringExtra("inlineImageUrl");
-			
+
 			TreeNode childNode = api.addChild(selectedStory, inlineTextData);
 			if (inlineImageUrl != null && !inlineImageUrl.isEmpty()){
 				childNode.setImageUrl(inlineImageUrl);
 			}
 
 			childNode.saveInBackground();
+			selectedStory.setLeafNode(false);
 			selectedStory.saveInBackground();
 			selectedStory = childNode;
 
@@ -311,7 +366,7 @@ public class StoryLineListFragment extends BaseListFragment {
 			numLeafNodes++;
 			root.setNumTreeLeafNodes(numLeafNodes); 
 			root.saveInBackground();
-			
+
 			storyLineNodeList.add(childNode);
 			aaNodes.notifyDataSetChanged();
 
@@ -319,6 +374,22 @@ public class StoryLineListFragment extends BaseListFragment {
 			lvNodes.setSelection(aaNodes.getCount()-1);
 		}
 	}
+
+	//Returns the Uri for a photo stored on disk given the fileName
+	public Uri getPhotoFileUri(String fileName) {
+		// Get safe storage directory for photos
+		File mediaStorageDir = new File(
+				Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+		// Create the storage directory if it does not exist
+		if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+			Log.d(APP_TAG, "failed to create directory");
+		}
+
+		// Return the file target for the photo based on filename
+		return Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator + fileName));
+	}
+
 
 	public void addParas(List<TreeNode> nodes)
 	{
@@ -341,9 +412,9 @@ public class StoryLineListFragment extends BaseListFragment {
 	/*@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {	
 		super.onCreateOptionsMenu(menu, inflater);
- 		
+
 		inflater.inflate(R.menu.action_bar_items, menu);
-		
+
 		MenuItem  playMenu = menu.findItem(R.id.miActionBarComposeIcon);
 		if( ParseUser.getCurrentUser() != null ) {
 			playMenu.setIcon(R.drawable.ic_read  ) ;
@@ -353,7 +424,7 @@ public class StoryLineListFragment extends BaseListFragment {
 		return;
 
 	}
- 
+
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -364,15 +435,15 @@ public class StoryLineListFragment extends BaseListFragment {
 		}
 		return false; 
 	}*/
- 
-
-//		inflater.inflate(R.menu.story_line_action_bar, menu);
-//
-//		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
-//	}
 
 
- 	private void addNodestoList() {
+	//		inflater.inflate(R.menu.story_line_action_bar, menu);
+	//
+	//		menu.findItem(R.id.miActionBarComposeIcon).setVisible(false);
+	//	}
+
+
+	private void addNodestoList() {
 		TreeNode n1 = new TreeNode ();
 		n1.setText("This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1 This is para 1");
 		storyLineNodeList.add(n1);

@@ -1,33 +1,31 @@
 package com.example.goodbad;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore.Video.Thumbnails;
-import android.support.v4.app.FragmentActivity;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.goodbad.fragments.ComposeStoryFragment;
-import com.example.goodbad.fragments.InlineComposeDialogFragment;
+import com.hipmob.gifanimationdrawable.GifAnimationDrawable;
 import com.loopj.android.image.SmartImageView;
 import com.parse.ParseUser;
 
@@ -128,10 +126,31 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 				vvItemVideo.requestFocus();
 				vvItemVideo.start();
 			}
+			else if(imageUrl.contains(".gif")) 
+			{
+				ivItemImage.setVisibility(View.VISIBLE);
+				vvItemVideo.setVisibility(View.GONE);
+				loadGifIntoImageView(ivItemImage, R.drawable.got);
+			}
 			else
 			{
 				ivItemImage.setVisibility(View.VISIBLE);
-				ivItemImage.setImageUrl(imageUrl);
+				vvItemVideo.setVisibility(View.GONE);
+				if(imageUrl.contains("http")) {
+					ivItemImage.setImageUrl(imageUrl);
+				} else {
+					Bitmap imageBitmap;
+					try {
+						//imageBitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(Uri.parse(imageUrl)));						
+						//imageBitmap = BitmapFactory.decodeFile(Uri.parse(imageUrl).getPath());
+						imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).getPath());
+						ivItemImage.setImageBitmap(imageBitmap);
+						ivItemImage.setContentDescription(imageUrl);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 
@@ -322,6 +341,58 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 			});
 		*/
 		return convertView;
-
 	}	
+	
+	// Loads a GIF from the specified raw resource folder into an ImageView
+    protected void loadGifIntoImageView(ImageView ivImage, int rawId) {
+        try {
+            GifAnimationDrawable anim = new GifAnimationDrawable(getContext().getResources().openRawResource(rawId));
+            ivImage.setImageDrawable(anim);
+            ((GifAnimationDrawable) ivImage.getDrawable()).setVisible(true, true);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private Bitmap loadPrescaledBitmap(String filename) throws IOException {
+    	  // Facebook image size
+    	  final int IMAGE_MAX_SIZE = 630;
+
+    	  File file = null;
+    	  FileInputStream fis;
+
+    	  BitmapFactory.Options opts;
+    	  int resizeScale;
+    	  Bitmap bmp;
+
+    	  file = new File(filename);
+
+    	  // This bit determines only the width/height of the bitmap without loading the contents
+    	  opts = new BitmapFactory.Options();
+    	  opts.inJustDecodeBounds = true;
+    	  fis = new FileInputStream(file);
+    	  BitmapFactory.decodeStream(fis, null, opts);
+    	  fis.close();
+
+    	  // Find the correct scale value. It should be a power of 2
+    	  resizeScale = 1;
+
+    	  if (opts.outHeight > IMAGE_MAX_SIZE || opts.outWidth > IMAGE_MAX_SIZE) {
+    	    resizeScale = (int)Math.pow(2, (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(opts.outHeight, opts.outWidth)) / Math.log(0.5)));
+    	  }
+
+    	  // Load pre-scaled bitmap
+    	  opts = new BitmapFactory.Options();
+    	  opts.inSampleSize = resizeScale;
+    	  fis = new FileInputStream(file);
+    	  bmp = BitmapFactory.decodeStream(fis, null, opts);
+
+    	  fis.close();
+
+    	  return bmp;
+    	} 
 }
+
+

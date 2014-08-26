@@ -1,5 +1,6 @@
 package com.example.goodbad.fragments;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -39,7 +41,8 @@ public class InlineComposeDialogFragment extends DialogFragment{
 	private static Uri mPhotoUri = null;
 	private ImageView ivInsertedDialog;
 	private TextView tvUserNameInlineCompose;	
-			
+	private static ContentResolver mContentResolver;		
+	
 	/*private InlineComposeDialogFragmentListener listener;
 	
 	public interface InlineComposeDialogFragmentListener {
@@ -50,7 +53,7 @@ public class InlineComposeDialogFragment extends DialogFragment{
 		// Empty constructor required for DialogFragment
 	}
 
-	public static InlineComposeDialogFragment newInstance(Uri photoUri) {
+	public static InlineComposeDialogFragment newInstance(Uri photoUri, ContentResolver contentResolver) {
 		InlineComposeDialogFragment frag = new InlineComposeDialogFragment();
 		Bundle args = new Bundle();
 		if(photoUri!=null)
@@ -61,6 +64,7 @@ public class InlineComposeDialogFragment extends DialogFragment{
 		frag.setArguments(args);
 
 		mPhotoUri = photoUri;
+		mContentResolver = contentResolver;
 		
 		return frag;
 	}
@@ -124,14 +128,24 @@ public class InlineComposeDialogFragment extends DialogFragment{
 				Intent i = new Intent();
 				i.putExtra("inlineTextData", inlineTextData);
 				i.putExtra("inlineImageUrl", inlineImageUrl);
-				getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);				
+				getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
+				
+				dismiss();
 			}
 		});
 		
 		if(mPhotoUri==null) {
 			ivInsertedDialog.setVisibility(View.GONE);
 		} else {
-			String path = "file://" + getPath(mPhotoUri);
+			try {
+				Bitmap imageBitmap=BitmapFactory.decodeStream(mContentResolver.openInputStream(mPhotoUri));
+				ivInsertedDialog.setImageBitmap(imageBitmap);
+				ivInsertedDialog.setContentDescription(mPhotoUri.toString());	
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/*String path = "file://" + getPath(mPhotoUri);
 			try {
 				Bitmap image = BitmapFactory.decodeStream(new URL(path).openConnection().getInputStream());
 				ivInsertedDialog.setImageBitmap(image);
@@ -142,7 +156,7 @@ public class InlineComposeDialogFragment extends DialogFragment{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 		
 		return inLineComposeView;

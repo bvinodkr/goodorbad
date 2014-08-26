@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ComposeDispatchActivity"
+            android:name="com.example.goodbad.ComposeDispatchActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop" >
         </activity>
@@ -93,6 +93,11 @@
                 <category android:name="com.example.goodbad" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="com.example.goodbad.DrawingActivity"
+            android:label="@string/title_activity_drawing" >
+        </activity>
     </application>
 
 </manifest>
