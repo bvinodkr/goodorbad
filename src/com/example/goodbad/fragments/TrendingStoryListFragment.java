@@ -145,7 +145,7 @@ public class TrendingStoryListFragment extends BaseListFragment {
 		query.whereGreaterThan("likes", 0);
 		query.addDescendingOrder("likes");		
 		query.include("user");
-
+		query.orderByDescending("likes");
 		query.findInBackground( new FindCallback<TreeNode>() {
 
 			public void done(List<TreeNode> items, ParseException arg1) {			

@@ -37,7 +37,7 @@ import com.parse.SaveCallback;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseTwitterUtils;
-
+import com.example.goodbad.fragments.FavStoryListFragment;
 public class MainActivity extends ActionBarActivity implements ComposeStoryFragmentListener, 
 						TrendingStoryListFragmentListener, NewStoryListFragmentListener {
 
@@ -299,18 +299,20 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
 		actionBar.selectTab(tab1);
 		Log.d("debug ", "crapped out 4");
+		Tab tab2 = null;
+		 		if( ParseUser.getCurrentUser() != null ){
 
-		/*Tab tab2 = actionBar
+		   tab2 = actionBar
 				.newTab()
 				.setText("Favorites")
 				.setIcon(R.drawable.ic_favorite)
 				.setTag("FavoriteFragment")
-				.setTabListener(new FragmentTabListener<MyStoryListFragment>(R.id.flContainer, this,
-						"mylist", MyStoryListFragment.class));
-		actionBar.addTab(tab2);*/
+				.setTabListener(new FragmentTabListener<FavStoryListFragment>(R.id.flContainer, this,
+						"faclist", FavStoryListFragment.class));
+		actionBar.addTab(tab2);
 
 		Log.d("debug ", "crapped out 5");
-
+		 		}
 
 
 		Tab tab3 = actionBar
@@ -327,9 +329,9 @@ public class MainActivity extends ActionBarActivity implements ComposeStoryFragm
 		case 1:
 			actionBar.selectTab(tab1);
 			break;
-		/*case 2:
+		 case 2:
 			actionBar.selectTab(tab2);
-			break;*/
+			break; 
 		case 3:
 			actionBar.selectTab(tab3);
 			break;

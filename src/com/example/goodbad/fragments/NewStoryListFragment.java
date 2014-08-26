@@ -53,7 +53,7 @@ public class NewStoryListFragment extends BaseListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View newStoriesView = inflater.inflate(R.layout.fragment_new_list, container, false);
 		
-		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 1);
+		aaNodes = new TreeNodeArrayAdapter(getActivity(), newStoryItemList, 3);
 		
 		lvNodes = (ListView) newStoriesView.findViewById(R.id.lvNewListFragment);
 		lvNodes.setAdapter(aaNodes);
@@ -106,6 +106,7 @@ public class NewStoryListFragment extends BaseListFragment {
 	private void getStories() {
 		ParseQuery<TreeNode> query = ParseQuery.getQuery(TreeNode.class);
 		//query.whereGreaterThanOrEqualTo("createdAt", new Date(System.currentTimeMillis() - 36*60*60*1000l));
+		query.orderByDescending("createdAt");
 		query.whereEqualTo("parentid", JSONObject.NULL);
 		query.whereEqualTo("likes", 0);
 		query.addDescendingOrder("createdAt");

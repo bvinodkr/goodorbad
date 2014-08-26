@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 
 import com.example.goodbad.TreeNode;
 import com.example.goodbad.TreeNodeArrayAdapter;
+ import com.example.goodbad.Favorites;
+ 
+ import com.example.goodbad.FavoritesArrayAdapter;
 
 public abstract class BaseListFragment extends Fragment {
 	/*private ArrayList<TreeNode> nodesList;
@@ -30,5 +33,5 @@ public abstract class BaseListFragment extends Fragment {
 
     
     public abstract void populateTreeNodes (String max_id);
-
+//  public abstract void populateFavorites (String max_id);
 }
