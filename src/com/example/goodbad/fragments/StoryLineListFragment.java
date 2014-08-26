@@ -272,7 +272,7 @@ public class StoryLineListFragment extends BaseListFragment {
 		popUpWindowItemList.clear();
 		popUpWindowItemList.add(new PopUpWindowItem("Gallery", R.drawable.gallery1));
 		popUpWindowItemList.add(new PopUpWindowItem("Photo", R.drawable.camera));
-		popUpWindowItemList.add(new PopUpWindowItem("Video", R.drawable.video));
+		popUpWindowItemList.add(new PopUpWindowItem("Draw", R.drawable.colors));
 		popUpWindowItemList.add(new PopUpWindowItem("Audio", R.drawable.voice));
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice));

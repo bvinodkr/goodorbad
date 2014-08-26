@@ -228,7 +228,7 @@ public class ComposeStoryFragment extends Fragment {
 		popUpWindowItemList.clear();
 		popUpWindowItemList.add(new PopUpWindowItem("Gallery", R.drawable.gallery4));
 		popUpWindowItemList.add(new PopUpWindowItem("Photo", R.drawable.camera1));
-		popUpWindowItemList.add(new PopUpWindowItem("Video", R.drawable.video1));
+		popUpWindowItemList.add(new PopUpWindowItem("Draw", R.drawable.colors));
 		popUpWindowItemList.add(new PopUpWindowItem("Audio", R.drawable.voice2));
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice2));
 		popUpWindowItemList.add(new PopUpWindowItem("TBD", R.drawable.voice2));
