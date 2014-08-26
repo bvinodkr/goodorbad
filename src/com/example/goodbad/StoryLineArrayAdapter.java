@@ -143,8 +143,7 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
 					try {
 						//imageBitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(Uri.parse(imageUrl)));						
 						//imageBitmap = BitmapFactory.decodeFile(Uri.parse(imageUrl).getPath());
-						//imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).toString());
-						imageBitmap=BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream((Uri.parse(imageUrl))));
+						imageBitmap = loadPrescaledBitmap(Uri.parse(imageUrl).toString());
 						ivItemImage.setImageBitmap(imageBitmap);
 						ivItemImage.setContentDescription(imageUrl);
 					} catch (Exception e) {
@@ -368,14 +367,15 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
     	  int resizeScale;
     	  Bitmap bmp;
 
-    	  file = new File(filename);
+    	  //file = new File(filename);
 
     	  // This bit determines only the width/height of the bitmap without loading the contents
     	  opts = new BitmapFactory.Options();
     	  opts.inJustDecodeBounds = true;
-    	  fis = new FileInputStream(file);
-    	  BitmapFactory.decodeStream(fis, null, opts);
-    	  fis.close();
+    	  //fis = new FileInputStream(file);
+    	  BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream((Uri.parse(filename))), null, opts);
+    	  //BitmapFactory.decodeStream(fis, null, opts);
+    	  //fis.close();
 
     	  // Find the correct scale value. It should be a power of 2
     	  resizeScale = 1;
@@ -387,10 +387,11 @@ public class StoryLineArrayAdapter extends ArrayAdapter<TreeNode> {
     	  // Load pre-scaled bitmap
     	  opts = new BitmapFactory.Options();
     	  opts.inSampleSize = resizeScale;
-    	  fis = new FileInputStream(file);
-    	  bmp = BitmapFactory.decodeStream(fis, null, opts);
-
-    	  fis.close();
+    	  //fis = new FileInputStream(file);
+    	  //bmp = BitmapFactory.decodeStream(fis, null, opts);
+    	  bmp = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream((Uri.parse(filename))), null, opts);
+    	 
+    	  //fis.close();
 
     	  return bmp;
     	} 
